@@ -8,7 +8,7 @@ import linkedinIcon from "../../public/Assets/linkedin-icon.svg";
 
 
 const Footer = () => (
-  <div className="bg-footerorange px-16 py-6 flex items-start justify-between">
+  <div className="bg-footerorange px-16 py-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6 font-source-sans">
     <FooterMenuItems
       title="Project Portico"
       items={[
