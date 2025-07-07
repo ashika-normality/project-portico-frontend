@@ -1,5 +1,6 @@
 import { Inter, Raleway, Source_Sans_3} from "next/font/google";
 import "./globals.css";
+import { AppProvider } from "./components/AppContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,7 +26,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.variable} ${raleway.variable} ${sourceSansPro.variable} antialiased`}
       >
-        {children}
+        <AppProvider>
+          {children}
+        </AppProvider>
       </body>
     </html>
   );
