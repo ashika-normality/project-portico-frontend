@@ -17,7 +17,7 @@ const SignupForm = () => {
   const [cities, setCities] = useState([]);
 
   // State for selected values
-  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("AU");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
