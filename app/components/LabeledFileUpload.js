@@ -72,14 +72,12 @@ const LabeledFileUpload = ({
         role="button"
         aria-label="File upload dropzone"
       >
-        
         {icon ? icon : ""}
         <span className="font-source-sans text-sm text-gray-700">
-          <span className="font-semibold text-primary">Upload a File</span>{required ? <span className="text-red-700">*</span> : ""}
+          <span className="font-semibold text-primary">{label}</span>{required ? <span className="text-red-700">*</span> : ""}
         </span>
         <span className="text-xs text-greyfortext mt-1">Click to Upload or Drag and Drop Files here</span>
       </div>
-  
     </div>
   );
 };

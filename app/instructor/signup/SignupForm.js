@@ -6,7 +6,8 @@ import LabeledSelect from "@/app/components/LabeledSelect";
 import LabeledTextbox from "@/app/components/LabeledTextbox";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import { MdCloudUpload } from "react-icons/md";
- 
+import axiosInstance from '@/app/utils/axiosInterceptor';
+import { Toaster, toast } from "react-hot-toast";
 
 const SignupForm = () => {
     const API_KEY = process.env.NEXT_PUBLIC_COUNTRY_API_KEY; // <-- Replace with your real API key
@@ -20,6 +21,11 @@ const SignupForm = () => {
   const [selectedCountry, setSelectedCountry] = useState("AU");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
+
+  const [formStatus, setFormStatus] = useState({ loading: false, error: '', success: '' });
+
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
 
   // Fetch countries on mount
   useEffect(() => {
@@ -53,6 +59,7 @@ const SignupForm = () => {
         } catch (error) {
           setStates([]);
           setCities([]);
+          toast.error("Failed to fetch states. Please try again later.");
           console.error("Error fetching states:", error);
         }
       } else {
@@ -79,6 +86,7 @@ const SignupForm = () => {
           setCities(data);
         } catch (error) {
           setCities([]);
+          toast.error("Failed to fetch cities. Please try again later.");
           console.error("Error fetching cities:", error);
         }
       } else {
@@ -90,8 +98,62 @@ const SignupForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCountry, selectedState]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus({ loading: true, error: '', success: '' });
+    // Collect form data
+    const formData = {
+      firstName: e.target.first_name.value,
+      lastName: e.target.last_name.value,
+      email: e.target.email_address.value,
+      mobile: e.target.mobile.value,
+      address: {
+        line1: e.target.address_line_1.value,
+        line2: e.target.address_line_2.value,
+        city: e.target.city.value,
+        state: e.target.state.value,
+        country: e.target.country.value,
+        postcode: e.target.postcode.value,
+      },
+      drivingLicenseNumber: e.target.driving_license_number.value,
+      instructorLicenseNumber: e.target.instructor_license_number.value,
+      wwccNumber: e.target.wwcc_number.value,
+      drivingSchoolName: e.target.driving_school_name.value,
+      website: e.target.website.value,
+      bio: e.target.bio.value,
+      // photographUrl: handle file upload separately if needed
+    };
+    try {
+      const response = await axiosInstance.post(
+        'http://localhost:7002/api/auth/register-instructor',
+        formData
+      );
+      setFormStatus({ loading: false, error: '', success: response.data.message });
+      toast.success("Signup successful.");
+    } catch (error) {
+      setFormStatus({ loading: false, error: error.response?.data?.message || 'Signup failed', success: '' });
+      toast.error(error.response?.data?.message || 'Signup failed. Please try again later.');
+    }
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    setPhotoFile(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPhotoPreview(null);
+    }
+  };
+
   return (
-    <form className="flex flex-col space-y-4 w-full py-3 px-6">
+    
+    <form className="flex flex-col space-y-4 w-full py-3 px-6" onSubmit={handleSubmit}>
+      <Toaster />
       <div className="full flex justify-between items-center space-x-4">
         <LabeledInput 
           label={"First Name"}
@@ -228,13 +290,19 @@ const SignupForm = () => {
         rows={3}
       />
       <LabeledFileUpload
-        label="Upload Photograph"
+        label={photoPreview?"Change Image":"Upload Image"}
         icon={<MdCloudUpload size={40} />}
         name="photograph"
         required
         tooltip="Accepted formats: PDF, JPG, PNG. Max size: 5MB."
         accept=".pdf,.jpg,.jpeg,.png"
+        onChange={handlePhotoChange}
       />
+      {photoPreview && (
+        <div className="mt-2 flex justify-center">
+          <img src={photoPreview} alt="Photograph Preview" className="max-h-40 rounded shadow" />
+        </div>
+      )}
       <div className="flex items-center space-x-2 pt-2 pb-4">
         <input type="checkbox" id="terms" name="terms" className="mr-2" required />
         <label htmlFor="terms" className="text-sm font-source-sans">
