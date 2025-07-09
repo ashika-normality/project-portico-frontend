@@ -5,8 +5,7 @@ import googleIcon from "../../../public/Assets/google-icon.svg";
 import facebookIcon from "../../../public/Assets/fb-black.svg";
 import TextInTheMiddle from "@/app/components/TextInTheMiddle";
 import MildOrangeButton from "@/app/components/MildOrangeButton";
-import PrimaryButton from "@/app/components/PrimaryButton";
-import LabeledInput from "../../components/LabeledInput";
+import LoginForm from "./LoginForm";
 
 const Login = (props) => {
 
@@ -27,16 +26,7 @@ const Login = (props) => {
                         <p>Login</p>
                     </div>
                     <div>
-                        <form className="flex flex-col gap-4 my-8">
-                            <LabeledInput
-                                label="Email or Phone Number"
-                                name="email_phone"
-                                type="text"
-                                placeholder="Enter your Email or Phone number"
-                                required
-                            />
-                            <PrimaryButton text="Continue" type="submit" />
-                        </form>
+                        <LoginForm />
                         <TextInTheMiddle text="or continue with" color="greyforline"/>
                         <div className="flex gap-6 mt-2">
                             <MildOrangeButton icon={googleIcon} altIcon="Google Icon" text="Google" />
