@@ -11,7 +11,7 @@ const Login = (props) => {
 
   return(
     <div className="flex w-full justify-center items-center py-4">
-        <div className="flex mx-16 w-full bg-white rounded-portico-main shadow-forbox">
+        <div className="flex mx-4 md:mx-16 w-full bg-white rounded-portico-main shadow-forbox">
             <div className="w-2/5 hidden md:block">
                 <Image
                     src={carImage}

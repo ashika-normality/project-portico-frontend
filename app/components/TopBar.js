@@ -2,7 +2,7 @@ import Image from "next/image";
 import carLogo from "../../public/Assets/car-icon.svg";
 
 const TopBar = () => (
-  <div className="bg-white outline-[1px] outline-greyforoutline px-16 py-4 flex items-center space-x-6">
+  <div className="bg-white outline-[1px] outline-greyforoutline px-4 md:px-16 py-4 flex items-center space-x-6">
     <div className="flex items-center space-x-2 font-bold text-lg">
         <Image
             src={carLogo}
