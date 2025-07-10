@@ -2,23 +2,44 @@
 import { useState } from "react";
 import LabeledInput from "../../components/LabeledInput";
 import PrimaryButton from "../../components/PrimaryButton";
+import  MildOrangeButton  from "../../components/MildOrangeButton";
+import TextInTheMiddle from "@/app/components/TextInTheMiddle";
 import axiosInstance from "../../utils/axiosInterceptor";
 import toast, { Toaster } from "react-hot-toast";
+import googleIcon from "../../../public/Assets/google-icon.svg";
+import facebookIcon from "../../../public/Assets/fb-black.svg";
 
 function EmailPhoneForm({ value, onChange, onSubmit, loading, error }) {
   return (
+    <>
+    <div className="py-3 text-primary w-2/3 text-2xl md:text-3xl font-raleway font-bold">
+      <p>Instructor Login</p>
+    </div>
     <form className="flex flex-col gap-4 my-8" onSubmit={onSubmit}>
       <LabeledInput
-        label="Email or Phone Number"
+        label="Email"
         name="email_phone"
         type="text"
-        placeholder="Enter your Email or Phone number"
+        placeholder="Enter your Email"
         value={value}
         onChange={onChange}
         required
       />
       <PrimaryButton text={loading ? "Sending..." : "Continue"} type="submit" disabled={loading} />
+      <div className="pt-4">
+        <TextInTheMiddle text="or continue with" color="greyforline"/>
+      </div>
+        <div className="flex gap-6 mt-2">
+            <MildOrangeButton icon={googleIcon} altIcon="Google Icon" text="Google" bgColor={'mildorange'}/>
+            <MildOrangeButton icon={facebookIcon} altIcon="Facebook Icon" text="Facebook" bgColor={'mildorange'}/>
+        </div>
+        <div>
+          <p className="text-sm font-raleway mt-6 text-center">
+            Don&apos;t have an account? <a href="signup" className="text-primary font-semibold hover:underline cursor-pointer">Sign Up</a>
+          </p>
+        </div>
     </form>
+    </>
   );
 }
 
@@ -39,9 +60,13 @@ function OtpForm({ identifier, value, onChange, onSubmit, onBack, loading, error
   };
 
   return (
+    <>
+    <div className="py-3 text-primary w-2/3 text-xl md:text-3xl font-raleway font-bold">
+      <p>One Time Password</p>
+    </div>
     <form className="flex flex-col gap-4 my-8" onSubmit={onSubmit}>
       <LabeledInput
-        label={`Enter the 6-digit code sent to ${identifier}`}
+        label={`Please enter the code we've sent to your email address or mobile number`}
         name="otp"
         type="text"
         placeholder="Enter the 6-digit code"
@@ -66,6 +91,7 @@ function OtpForm({ identifier, value, onChange, onSubmit, onBack, loading, error
         </a>
       </span>
     </form>
+    </>
   );
 }
 

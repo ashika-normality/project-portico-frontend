@@ -12,7 +12,7 @@ const PrimaryButton = ({icon, altIcon, text, type}) => (
                 height={12}
             />
         )}
-        <span className="font-raleway">{text}</span>
+        <span className="font-raleway font-bold">{text}</span>
     </button>  
     );
 
