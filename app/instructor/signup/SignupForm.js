@@ -10,9 +10,9 @@ import axiosInstance from '@/app/utils/axiosInterceptor';
 import { Toaster, toast } from "react-hot-toast";
 import { useAppContext } from "@/app/components/AppContext";
 
+
 const SignupForm = () => {
     const API_KEY = process.env.NEXT_PUBLIC_COUNTRY_API_KEY; // <-- Replace with your real API key
-    console.log(API_KEY);
   const { countries, states, cities, fetchStates, fetchCities } = useAppContext();
   const [selectedCountry, setSelectedCountry] = useState("AU");
   const [selectedState, setSelectedState] = useState("");

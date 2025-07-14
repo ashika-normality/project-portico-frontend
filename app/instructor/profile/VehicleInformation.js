@@ -5,6 +5,9 @@ import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
 import LabeledFileUpload from "@/app/components/LabeledFileUpload";
 import TextInTheMiddle from "@/app/components/TextInTheMiddle";
+import MildOrangeButton from "@/app/components/MildOrangeButton";
+import { IoAddOutline } from "react-icons/io5";
+
 
 const vehicleTypes = [
   { value: "sedan", label: "Sedan" },
@@ -166,7 +169,7 @@ function VehicleInformation() {
     <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
       <h1 className="text-tonedblack text-lg font-bold font-raleway">Vehicle Information</h1>
       {vehicles.map((vehicle, idx) => (
-        <>
+        <div key={idx} >
             {idx > 0 && <TextInTheMiddle text={`Vehicle ${idx+1}`}  />}
             <VehicleForm
                 key={idx}
@@ -174,15 +177,18 @@ function VehicleInformation() {
                 onChange={updated => handleVehicleChange(idx, updated)}
                 countries={countries}
             />
-        </>
+        </div>
       ))}
-      <button
-        type="button"
-        className="w-full mt-2 p-2 bg-primary text-white rounded-md font-bold hover:bg-primary-overlay transition"
-        onClick={addVehicle}
-      >
-        Add Another Vehicle
-      </button>
+      <div className="w-full flex justify-end">
+        <div className="">
+          <MildOrangeButton
+          text="Add Vehicle"
+          border='primary'
+          icon={<IoAddOutline className="text-black" /> }
+          onClick={addVehicle}
+        />
+        </div>
+      </div>
     </div>
   );
 }

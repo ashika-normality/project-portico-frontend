@@ -7,15 +7,19 @@ import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
 import LabeledFileUpload from "@/app/components/LabeledFileUpload";
 import Image from "next/image";
+import { useAppContext } from "@/app/components/AppContext";
+
+import { useFormContext } from "react-hook-form";
 
 function DrivingLicenseInfo() {
+    const { states } = useAppContext();
     const [licenseNumber, setLicenseNumber] = useState("");
     const [expiry, setExpiry] = useState("");
     const [cardStockNumber, setCardStockNumber] = useState("");
     const [stateIssued, setStateIssued] = useState("");
     const [licensePhoto, setLicensePhoto] = useState(null);
 
-
+    const { register, setValue, watch } = useFormContext();
 
     function handlePhotoChange(e) {
         setLicensePhoto(e.target.files[0]);
@@ -35,15 +39,15 @@ function DrivingLicenseInfo() {
                     />
                 </div>
                 <div className="w-1/2">
-                    <LabeledDatePicker
-                        label="Expiry"
+                <LabeledDatePicker
+                        label={"Expiry"}
                         name="expiry"
-                        value={expiry}
-                        onChange={e => setExpiry(e.target.value)}
+                        register = {register}
                         showDay={true}
                         showMonth={true}
                         showYear={true}
                         required={true}
+                        {...register("expiry", { required: true })}
                     />
                 </div>
             </div>
@@ -58,12 +62,15 @@ function DrivingLicenseInfo() {
                     />
                 </div>
                 <div className="w-1/2">
-                    <LabeledInput
+                    <LabeledSelect
                         label="State Issued"
                         name="stateIssued"
                         value={stateIssued}
                         onChange={e => setStateIssued(e.target.value)}
+                        options={states.map(s => ({ value: s.iso2, label: s.name }))}
                         required={true}
+                        setValue={() => {}}
+                        placeholder="Select State"
                     />
                 </div>
             </div>

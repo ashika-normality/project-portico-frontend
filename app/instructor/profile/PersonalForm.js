@@ -7,22 +7,22 @@ import LabeledTextbox from "@/app/components/LabeledTextbox";
 import { useFormContext } from "react-hook-form";
 
 const PersonalForm = () => {
-    const { countries, states, cities, fetchStates, fetchCities } = useAppContext();
-    const [selectedCountry, setSelectedCountry] = useState("AU");
-    const [selectedState, setSelectedState] = useState("");
-    const [selectedCity, setSelectedCity] = useState("");
+    const { countries, states, cities, fetchStates, fetchCities, selectedCountry, setSelectedCountry, selectedState, setSelectedState, selectedCity, setSelectedCity } = useAppContext();
     const { register, setValue, watch } = useFormContext();
 
-    // Sync react-hook-form values with local state for selects
+    // Remove local gender state
+    // const [gender, setGender] = useState("");
+
+    // Sync react-hook-form values with context state for selects
     useEffect(() => {
-        fetchStates(selectedCountry);
+        fetchStates(selectedCountry || "AU");
         setSelectedState("");
         setSelectedCity("");
-        setValue("country", selectedCountry);
+        setValue("country", selectedCountry || "AU");
     }, [selectedCountry]);
 
     useEffect(() => {
-        fetchCities(selectedCountry, selectedState);
+        fetchCities(selectedCountry || "AU", selectedState);
         setSelectedCity("");
         setValue("state", selectedState);
     }, [selectedCountry, selectedState]);
@@ -33,6 +33,7 @@ const PersonalForm = () => {
 
     // Watch for form value changes (optional, for debugging)
     // const formValues = watch();
+    const gender = watch("gender") || "";
 
     return(
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
@@ -68,16 +69,16 @@ const PersonalForm = () => {
                     name={"gender"}
                     register = {register}
                     setValue={setValue}
+                    value={gender}
                     onChange={e => {
-                        setSelectedCountry(e.target.value);
-                        setValue("country", e.target.value); // keep form state in sync
+                        setValue("gender", e.target.value); // keep form state in sync
                       }}
                     options={[
                         {value: "male", label:"Male"},
                         {value: "female", label:"Female"},
                         {value: "not_to_say", label:"Prefer not to say"}
                     ]}
-                    {...register("gender")}
+                    // {...register("gender")}
                 />
             </div>
             <div className="flex space-x-3">
@@ -139,7 +140,7 @@ const PersonalForm = () => {
                     name="country"
                     register = {register}
                     options={countries.map(c => ({ value: c.iso2, label: c.name }))}
-                    value={selectedCountry}
+                    value={selectedCountry || "AU"}
                     setValue={setValue}
                     onChange={e => {
                         setSelectedCountry(e.target.value);

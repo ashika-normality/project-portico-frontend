@@ -15,6 +15,9 @@ export function AppProvider({ children }) {
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
 
   // Fetch countries on mount
   useEffect(() => {
@@ -77,7 +80,10 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider value={{
       countries, states, cities,
-      fetchStates, fetchCities
+      fetchStates, fetchCities,
+      selectedCountry, setSelectedCountry,
+      selectedState, setSelectedState,
+      selectedCity, setSelectedCity
     }}>
       {children}
     </AppContext.Provider>
