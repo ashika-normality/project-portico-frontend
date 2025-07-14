@@ -5,6 +5,7 @@ const LabeledInput = ({
   placeholder,
   value,
   register,
+  disabled,
   onChange,
   required = false,
 }) => (
@@ -17,6 +18,7 @@ const LabeledInput = ({
       type={type}
       name={name}
       id={name}
+      disabled={disabled}
       {...(register ? register(name) : {})}
       placeholder={placeholder}
       value={value}

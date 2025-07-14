@@ -82,7 +82,7 @@ const PersonalForm = () => {
                 />
             </div>
             <div className="flex space-x-3">
-                <div className="w-full md:w-3/5">
+                <div className="w-full md:w-1/2">
                     <LabeledInput
                         label={"Mobile"}
                         name="mobile"
@@ -92,7 +92,7 @@ const PersonalForm = () => {
                         
                     />
                 </div>
-                <div className="w-full md:w-2/5">
+                <div className="w-full md:w-1/2">
                     <LabeledDatePicker
                         label={"Date of Birth"}
                         name="dob"

@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LabeledDatePicker from "@/app/components/LabeledDatePicker";
 import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
+import { useFormContext } from "react-hook-form";
 
 function AdditionalDetails() {
+    const { register, setValue, watch } = useFormContext();
     const [experienceDate, setExperienceDate] = useState("");
-    const [totalExperience, setTotalExperience] = useState("");
+    // Remove local totalExperience state
+    // const [totalExperience, setTotalExperience] = useState("");
 
     // Calculate years of experience when experienceDate changes
     function calculateExperience(dateStr) {
@@ -21,8 +24,20 @@ function AdditionalDetails() {
     function handleExperienceDateChange(e) {
         const value = e.target.value;
         setExperienceDate(value);
-        setTotalExperience(calculateExperience(value));
+        setValue("experienceDate", value);
+        // setValue("totalExperience", calculateExperience(value));
     }
+
+    const watchedExperienceDate = watch("experienceDate") || "";
+    const totalExperience = watch("totalExperience") || "";
+
+    useEffect(() => {
+        if (watchedExperienceDate) {
+            setValue("totalExperience", calculateExperience(watchedExperienceDate));
+        } else {
+            setValue("totalExperience", "");
+        }
+    }, [watchedExperienceDate, setValue]);
 
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
@@ -37,6 +52,8 @@ function AdditionalDetails() {
                         showYear={true}
                         value={experienceDate}
                         onChange={handleExperienceDateChange}
+                        register={register}
+                        {...register("experienceDate", { required: true })}
                     />
                 </div>
                 <div className="w-1/2">
@@ -47,6 +64,8 @@ function AdditionalDetails() {
                         value={totalExperience}
                         required={false}
                         disabled={true}
+                        register={register}
+                        {...register("totalExperience")}
                     />
                 </div>
             </div>
@@ -54,18 +73,22 @@ function AdditionalDetails() {
                 <LabeledSelect
                     label="Business Type"
                     name="businessType"
-                    setValue={() => {}}
+                    setValue={setValue}
+                    register={register}
                     options={[
                         { value: "individual", label: "Individual" },
                         { value: "company", label: "Company" },
                     ]}
                     required={true}
+                    
                 />
                 <LabeledInput
                     label="Business/Trading Name"
                     name="businessName"
                     type="text"
                     required={false}
+                    register={register}
+                    {...register("businessName")}
                 />
             </div>
             <div className="w-full flex space-x-3">
@@ -74,11 +97,18 @@ function AdditionalDetails() {
                     name="abn"
                     type="text"
                     required={true}
+                    register={register}
+                    {...register("abn", { required: true })}
                 />
                 <LabeledSelect
                     label="Languages"
                     name="languages"
-                    setValue={() => {}}
+                    setValue={setValue}
+                    value={watch("languages") || ""}
+                    register={register}
+                    onChange={(e) => {
+                        setValue("languages", e.target.value);
+                    }}
                     options={[
                         { value: "english", label: "English" },
                         { value: "arabic", label: "Arabic" },
@@ -94,6 +124,7 @@ function AdditionalDetails() {
                         { value: "german", label: "German" },
                         { value: "italian", label: "Italian" },
                     ]}
+                
                 />
             </div>
         </div>
