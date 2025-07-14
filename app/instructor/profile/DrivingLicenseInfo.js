@@ -6,6 +6,7 @@ import LabeledDatePicker from "@/app/components/LabeledDatePicker";
 import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
 import LabeledFileUpload from "@/app/components/LabeledFileUpload";
+import Image from "next/image";
 
 function DrivingLicenseInfo() {
     const [licenseNumber, setLicenseNumber] = useState("");
@@ -74,9 +75,18 @@ function DrivingLicenseInfo() {
                         onChange={handlePhotoChange}
                         required={true}
                         accept="image/*"
-                        decription="Upload a copy of your driving license."
+                        decription={licensePhoto?`Change Driving License Photo`:"Upload a copy of your driving license."}
                     />
             </div>
+            {licensePhoto && (
+                <div className="w-full flex justify-center mt-2">
+                    <img
+                        src={URL.createObjectURL(licensePhoto)}
+                        alt="License Preview"
+                        className=" max-h-40 rounded shadow border"
+                    />
+                </div>
+            )}
         </div>
     );
 }

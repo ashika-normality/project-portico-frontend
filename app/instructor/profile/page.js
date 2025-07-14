@@ -14,6 +14,9 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import MildOrangeButton from "@/app/components/MildOrangeButton";
 import AdditionalDetails from "./AdditionalDetails";
 import DrivingLicenseInfo from "./DrivingLicenseInfo";
+import VehicleInformation from "./VehicleInformation";
+import InstructorLicenseInfo from "./InstructorLicenseInfo";
+import WWCCInfo from "./WWCCInfo";
 
 
 const Profile = () => {
@@ -91,6 +94,9 @@ const Profile = () => {
                 {activeTab === 'vehicleLicense' && (
                     <div className="w-full pb-24 pl-4 md:pl-8 space-y-6">
                         <DrivingLicenseInfo />
+                        <VehicleInformation />
+                        <InstructorLicenseInfo />
+                        <WWCCInfo />
                     </div>
                 )}
             <div>
