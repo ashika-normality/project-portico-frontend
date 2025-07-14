@@ -8,95 +8,31 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import { MdCloudUpload } from "react-icons/md";
 import axiosInstance from '@/app/utils/axiosInterceptor';
 import { Toaster, toast } from "react-hot-toast";
+import { useAppContext } from "@/app/components/AppContext";
 
 const SignupForm = () => {
     const API_KEY = process.env.NEXT_PUBLIC_COUNTRY_API_KEY; // <-- Replace with your real API key
     console.log(API_KEY);
-  // State for options
-  const [countries, setCountries] = useState([]);
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-
-  // State for selected values
+  const { countries, states, cities, fetchStates, fetchCities } = useAppContext();
   const [selectedCountry, setSelectedCountry] = useState("AU");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
+
+  useEffect(() => {
+    fetchStates(selectedCountry);
+    setSelectedState("");
+    setSelectedCity("");
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    fetchCities(selectedCountry, selectedState);
+    setSelectedCity("");
+  }, [selectedCountry, selectedState]);
 
   const [formStatus, setFormStatus] = useState({ loading: false, error: '', success: '' });
 
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
-
-  // Fetch countries on mount
-  useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const res = await fetch("https://api.countrystatecity.in/v1/countries", {
-          headers: { "X-CSCAPI-KEY": API_KEY }
-        });
-        if (!res.ok) throw new Error("Failed to fetch countries");
-        const data = await res.json();
-        setCountries(data);
-      } catch (error) {
-        setCountries([]);
-        console.error("Error fetching countries:", error);
-      }
-    };
-    fetchCountries();
-  }, []);
-
-  // Fetch states when country changes
-  useEffect(() => {
-    const fetchStates = async () => {
-      if (selectedCountry) {
-        try {
-          const res = await fetch(`https://api.countrystatecity.in/v1/countries/${selectedCountry}/states`, {
-            headers: { "X-CSCAPI-KEY": API_KEY }
-          });
-          if (!res.ok) throw new Error("Failed to fetch states");
-          const data = await res.json();
-          setStates(data);
-        } catch (error) {
-          setStates([]);
-          setCities([]);
-          toast.error("Failed to fetch states. Please try again later.");
-          console.error("Error fetching states:", error);
-        }
-      } else {
-        setStates([]);
-        setCities([]);
-      }
-      setSelectedState("");
-      setSelectedCity("");
-    };
-    fetchStates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCountry]);
-
-  // Fetch cities when state changes
-  useEffect(() => {
-    const fetchCities = async () => {
-      if (selectedCountry && selectedState) {
-        try {
-          const res = await fetch(`https://api.countrystatecity.in/v1/countries/${selectedCountry}/states/${selectedState}/cities`, {
-            headers: { "X-CSCAPI-KEY": API_KEY }
-          });
-          if (!res.ok) throw new Error("Failed to fetch cities");
-          const data = await res.json();
-          setCities(data);
-        } catch (error) {
-          setCities([]);
-          toast.error("Failed to fetch cities. Please try again later.");
-          console.error("Error fetching cities:", error);
-        }
-      } else {
-        setCities([]);
-      }
-      setSelectedCity("");
-    };
-    fetchCities();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCountry, selectedState]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -297,6 +233,7 @@ const SignupForm = () => {
         tooltip="Accepted formats: PDF, JPG, PNG. Max size: 5MB."
         accept=".pdf,.jpg,.jpeg,.png"
         onChange={handlePhotoChange}
+        decription="Click to Upload or Drag and Drop Files here"
       />
       {photoPreview && (
         <div className="mt-2 flex justify-center">

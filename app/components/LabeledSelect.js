@@ -3,6 +3,8 @@ const LabeledSelect = ({
   name,
   options = [],
   value,
+  setValue,
+  register,
   onChange,
   required = false,
   placeholder = "Select an option",

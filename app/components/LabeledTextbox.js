@@ -3,6 +3,7 @@ const LabeledTextbox = ({
   name,
   value,
   onChange,
+  register,
   required = false,
   placeholder = "",
   rows = 4,
@@ -17,6 +18,7 @@ const LabeledTextbox = ({
       value={value}
       onChange={onChange}
       required={required}
+      {...(register ? register(name) : {})}
       placeholder={placeholder}
       rows={rows}
       className="border border-greyforoutline font-source-sans rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary resize-y"

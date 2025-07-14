@@ -30,8 +30,8 @@ function EmailPhoneForm({ value, onChange, onSubmit, loading, error }) {
         <TextInTheMiddle text="or continue with" color="greyforline"/>
       </div>
         <div className="flex gap-6 mt-2">
-            <MildOrangeButton icon={googleIcon} altIcon="Google Icon" text="Google" bgColor={'mildorange'}/>
-            <MildOrangeButton icon={facebookIcon} altIcon="Facebook Icon" text="Facebook" bgColor={'mildorange'}/>
+            <MildOrangeButton icon={googleIcon} altIcon="Google Icon" text="Google" bgColor={'mildorange'} alignment={'center'}/>
+            <MildOrangeButton icon={facebookIcon} altIcon="Facebook Icon" text="Facebook" bgColor={'mildorange'} alignment={'center'}/>
         </div>
         <div>
           <p className="text-sm font-raleway mt-6 text-center">

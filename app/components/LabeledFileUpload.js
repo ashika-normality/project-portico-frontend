@@ -6,7 +6,9 @@ import { MdCloudUpload } from "react-icons/md";
 const LabeledFileUpload = ({
   label,
   name,
+  register,
   icon,
+  decription,
   onChange,
   required = false,
   tooltip = "",
@@ -41,7 +43,7 @@ const LabeledFileUpload = ({
   return (
     <div className="flex flex-col space-y-1.5 w-full">
       <label className="text-sm font-source-sans font-semibold flex items-center space-x-1" htmlFor={name}>
-        <span>{label}{required ? <span className="text-red-700">*</span> : ""}</span>
+        <span>{label}{required && label!="" ? <span className="text-red-700">*</span> : ""}</span>
         {tooltip && (
           <span className="relative group cursor-pointer">
             <span className="ml-1 w-4 h-4 inline-flex items-center justify-center rounded-full bg-gray-200 text-gray-700 text-xs font-bold">i</span>
@@ -58,6 +60,7 @@ const LabeledFileUpload = ({
         ref={inputRef}
         onChange={onChange}
         required={required}
+        {...(register ? register(name) : {})}
         accept={accept}
         className="hidden"
       />
@@ -74,9 +77,9 @@ const LabeledFileUpload = ({
       >
         {icon ? icon : ""}
         <span className="font-source-sans text-sm text-gray-700">
-          <span className="font-semibold text-primary">{label}</span>{required ? <span className="text-red-700">*</span> : ""}
+          <span className="font-semibold text-primary">Upload File</span>
         </span>
-        <span className="text-xs text-greyfortext mt-1">Click to Upload or Drag and Drop Files here</span>
+        <span className="text-xs text-greyfortext mt-1">{decription}</span>
       </div>
     </div>
   );
