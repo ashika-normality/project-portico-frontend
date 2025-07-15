@@ -1,13 +1,12 @@
-import { useState } from "react";
 import { useAppContext } from "@/app/components/AppContext";
-import LabeledDatePicker from "@/app/components/LabeledDatePicker";
 import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
 import LabeledFileUpload from "@/app/components/LabeledFileUpload";
 import TextInTheMiddle from "@/app/components/TextInTheMiddle";
 import MildOrangeButton from "@/app/components/MildOrangeButton";
 import { IoAddOutline } from "react-icons/io5";
-
+import { useFormContext, useFieldArray } from "react-hook-form";
+import { useEffect } from "react";
 
 const vehicleTypes = [
   { value: "sedan", label: "Sedan" },
@@ -33,26 +32,29 @@ const fuelTypes = [
   { value: "cng", label: "CNG" },
 ];
 
-function VehicleForm({ vehicle, onChange, countries }) {
+function VehicleForm({ countries, register, setValue, index, watch }) {
+  const vehicleTypeValue = watch(`vehicles[${index}].vehicleType`);
+  const transmissionTypeValue = watch(`vehicles[${index}].transmissionType`);
+  const countryOfOriginValue = watch(`vehicles[${index}].countryOfOrigin`);
+  const fuelTypeValue = watch(`vehicles[${index}].fuelType`);
+
   return (
     <div className="w-full flex flex-col space-y-3 pb-4 mb-4">
       <div className="w-full flex space-x-3">
         <div className="w-1/2">
           <LabeledInput
             label="Make"
-            name="make"
-            value={vehicle.make}
-            onChange={e => onChange({ ...vehicle, make: e.target.value })}
+            name={`vehicles[${index}].make`}
             required={true}
+            register={register}
           />
         </div>
         <div className="w-1/2">
           <LabeledInput
             label="Model"
-            name="model"
-            value={vehicle.model}
-            onChange={e => onChange({ ...vehicle, model: e.target.value })}
+            name={`vehicles[${index}].model`}
             required={true}
+            register={register}
           />
         </div>
       </div>
@@ -60,21 +62,19 @@ function VehicleForm({ vehicle, onChange, countries }) {
         <div className="w-1/2">
           <LabeledInput
             label="Registration Number"
-            name="registrationNumber"
-            value={vehicle.registrationNumber}
-            onChange={e => onChange({ ...vehicle, registrationNumber: e.target.value })}
+            name={`vehicles[${index}].registrationNumber`}
             required={true}
+            register={register}
           />
         </div>
         <div className="w-1/2">
           <LabeledInput
             label="Year of Manufacturing"
-            name="yearOfManufacturing"
-            value={vehicle.yearOfManufacturing}
-            onChange={e => onChange({ ...vehicle, yearOfManufacturing: e.target.value })}
+            name={`vehicles[${index}].yearOfManufacturing`}
             required={true}
             type="number"
             placeholder="YYYY"
+            register={register}
           />
         </div>
       </div>
@@ -82,23 +82,25 @@ function VehicleForm({ vehicle, onChange, countries }) {
         <div className="w-1/2">
           <LabeledSelect
             label="Vehicle Type"
-            name="vehicleType"
-            value={vehicle.vehicleType}
-            onChange={e => onChange({ ...vehicle, vehicleType: e.target.value })}
+            name={`vehicles[${index}].vehicleType`}
             options={vehicleTypes}
+            setValue={setValue}
+            value={vehicleTypeValue}
+            onChange={e => setValue(`vehicles[${index}].vehicleType`, e.target.value)}
             required={true}
-            setValue={() => {}}
+            register={register}
           />
         </div>
         <div className="w-1/2">
           <LabeledSelect
             label="Transmission Type"
-            name="transmissionType"
-            value={vehicle.transmissionType}
-            onChange={e => onChange({ ...vehicle, transmissionType: e.target.value })}
+            name={`vehicles[${index}].transmissionType`}
+            setValue={setValue}
             options={transmissionTypes}
+            value={transmissionTypeValue}
+            onChange={e => setValue(`vehicles[${index}].transmissionType`, e.target.value)}
             required={true}
-            setValue={() => {}}
+            register={register}
           />
         </div>
       </div>
@@ -106,23 +108,25 @@ function VehicleForm({ vehicle, onChange, countries }) {
         <div className="w-1/2">
           <LabeledSelect
             label="Vehicle Country of Origin"
-            name="countryOfOrigin"
-            value={vehicle.countryOfOrigin}
-            onChange={e => onChange({ ...vehicle, countryOfOrigin: e.target.value })}
+            name={`vehicles[${index}].countryOfOrigin`}
             options={countries.map(c => ({ value: c.iso2, label: c.name }))}
             required={true}
-            setValue={() => {}}
+            setValue={setValue}
+            value={countryOfOriginValue}
+            onChange={e => setValue(`vehicles[${index}].countryOfOrigin`, e.target.value)}
+            register={register}
           />
         </div>
         <div className="w-1/2">
           <LabeledSelect
             label="Fuel Type"
-            name="fuelType"
-            value={vehicle.fuelType}
-            onChange={e => onChange({ ...vehicle, fuelType: e.target.value })}
+            name={`vehicles[${index}].fuelType`}
             options={fuelTypes}
             required={true}
-            setValue={() => {}}
+            setValue={setValue}
+            value={fuelTypeValue}
+            onChange={e => setValue(`vehicles[${index}].fuelType`, e.target.value)}
+            register={register}
           />
         </div>
       </div>
@@ -132,27 +136,16 @@ function VehicleForm({ vehicle, onChange, countries }) {
 
 function VehicleInformation() {
   const { countries } = useAppContext();
-  const [vehicles, setVehicles] = useState([
-    {
-      make: "",
-      model: "",
-      registrationNumber: "",
-      yearOfManufacturing: "",
-      vehicleType: "",
-      transmissionType: "",
-      countryOfOrigin: "",
-      fuelType: "",
-    },
-  ]);
+  const { register, setValue, control, watch } = useFormContext();
+  const { fields, append } = useFieldArray({
+    control,
+    name: "vehicles",
+  });
 
-  const handleVehicleChange = (idx, updatedVehicle) => {
-    setVehicles(vehicles => vehicles.map((v, i) => (i === idx ? updatedVehicle : v)));
-  };
-
-  const addVehicle = () => {
-    setVehicles([
-      ...vehicles,
-      {
+  useEffect(() => {
+    // Only append if there are no vehicles in both fields and form state
+    if (fields.length === 0 && (!control._formValues.vehicles || control._formValues.vehicles.length === 0)) {
+      append({
         make: "",
         model: "",
         registrationNumber: "",
@@ -161,21 +154,37 @@ function VehicleInformation() {
         transmissionType: "",
         countryOfOrigin: "",
         fuelType: "",
-      },
-    ]);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fields.length]);
+
+  const addVehicle = () => {
+    append({
+      make: "",
+      model: "",
+      registrationNumber: "",
+      yearOfManufacturing: "",
+      vehicleType: "",
+      transmissionType: "",
+      countryOfOrigin: "",
+      fuelType: "",
+    });
   };
 
   return (
     <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
       <h1 className="text-tonedblack text-lg font-bold font-raleway">Vehicle Information</h1>
-      {vehicles.map((vehicle, idx) => (
-        <div key={idx} >
+      {fields.map((field, idx) => (
+        <div key={field.id} >
             {idx > 0 && <TextInTheMiddle text={`Vehicle ${idx+1}`}  />}
             <VehicleForm
-                key={idx}
-                vehicle={vehicle}
-                onChange={updated => handleVehicleChange(idx, updated)}
+                key={field.id}
+                index={idx}
                 countries={countries}
+                register={register}
+                setValue={setValue}
+                watch={watch}
             />
         </div>
       ))}

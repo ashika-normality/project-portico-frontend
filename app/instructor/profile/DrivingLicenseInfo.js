@@ -13,10 +13,6 @@ import { useFormContext } from "react-hook-form";
 
 function DrivingLicenseInfo() {
     const { states } = useAppContext();
-    const [licenseNumber, setLicenseNumber] = useState("");
-    const [expiry, setExpiry] = useState("");
-    const [cardStockNumber, setCardStockNumber] = useState("");
-    const [stateIssued, setStateIssued] = useState("");
     const [licensePhoto, setLicensePhoto] = useState(null);
 
     const { register, setValue, watch } = useFormContext();
@@ -33,16 +29,15 @@ function DrivingLicenseInfo() {
                     <LabeledInput
                         label="License Number"
                         name="licenseNumber"
-                        value={licenseNumber}
-                        onChange={e => setLicenseNumber(e.target.value)}
                         required={true}
+                        register={register}
                     />
                 </div>
                 <div className="w-1/2">
                 <LabeledDatePicker
                         label={"Expiry"}
                         name="expiry"
-                        register = {register}
+                        register={register}
                         showDay={true}
                         showMonth={true}
                         showYear={true}
@@ -56,21 +51,18 @@ function DrivingLicenseInfo() {
                     <LabeledInput
                         label="Card Stock Number"
                         name="cardStockNumber"
-                        value={cardStockNumber}
-                        onChange={e => setCardStockNumber(e.target.value)}
                         required={true}
+                        register={register}
                     />
                 </div>
                 <div className="w-1/2">
                     <LabeledSelect
                         label="State Issued"
                         name="stateIssued"
-                        value={stateIssued}
-                        onChange={e => setStateIssued(e.target.value)}
-                        options={states.map(s => ({ value: s.iso2, label: s.name }))}
                         required={true}
-                        setValue={() => {}}
+                        options={states.map(s => ({ value: s.iso2, label: s.name }))}
                         placeholder="Select State"
+                        register={register}
                     />
                 </div>
             </div>

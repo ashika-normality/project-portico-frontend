@@ -172,7 +172,7 @@ const LabeledDatePicker = ({
                   className="w-full border border-greyforoutline font-source-sans rounded-md p-2 text-center focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
-              <span className="text-gray-400">-</span>
+              
             </>
           )}
 
@@ -188,7 +188,7 @@ const LabeledDatePicker = ({
                   className="w-full border border-greyforoutline font-source-sans rounded-md p-2 text-center focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
-              {showYear && <span className="text-gray-400">-</span>}
+              
             </>
           )}
 

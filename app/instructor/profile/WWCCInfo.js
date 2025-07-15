@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import LabeledDatePicker from "@/app/components/LabeledDatePicker";
 import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
 import { useAppContext } from "@/app/components/AppContext";
+import { useFormContext } from "react-hook-form";
 
 function WWCCInfo() {
     const { states, fetchStates, selectedCountry } = useAppContext();
-    const [wwccNumber, setWwccNumber] = useState("");
-    const [wwccExpiry, setWwccExpiry] = useState("");
-    const [wwccStateIssued, setWwccStateIssued] = useState("");
-    const [wwccType, setWwccType] = useState("");
+    const { register, setValue, watch } = useFormContext();
 
     const typeOptions = [
         { value: "employee", label: "Employee" },
@@ -23,6 +21,9 @@ function WWCCInfo() {
         }
     }, [selectedCountry, fetchStates]);
 
+    const wwccStateIssuedValue = watch("wwccStateIssued");
+    const wwccTypeValue = watch("wwccType");
+
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
             <h1 className="text-tonedblack text-lg font-bold font-raleway">WWCC Information</h1>
@@ -31,21 +32,20 @@ function WWCCInfo() {
                     <LabeledInput
                         label="WWCC Number"
                         name="wwccNumber"
-                        value={wwccNumber}
-                        onChange={e => setWwccNumber(e.target.value)}
                         required={true}
+                        register={register}
                     />
                 </div>
                 <div className="w-1/2">
-                    <LabeledDatePicker
-                        label="Expiry"
-                        name="wwccExpiry"
-                        value={wwccExpiry}
-                        onChange={e => setWwccExpiry(e.target.value)}
+                <LabeledDatePicker
+                        label={"Expiry"}
+                        name="WWCCExpiry"
+                        register={register}
                         showDay={true}
                         showMonth={true}
                         showYear={true}
                         required={true}
+                        {...register("WWCCExpiry", { required: true })}
                     />
                 </div>
             </div>
@@ -54,11 +54,12 @@ function WWCCInfo() {
                     <LabeledSelect
                         label="State of Issue"
                         name="wwccStateIssued"
-                        value={wwccStateIssued}
-                        onChange={e => setWwccStateIssued(e.target.value)}
                         options={states.map(s => ({ value: s.iso2, label: s.name }))}
                         required={false}
-                        setValue={() => {}}
+                        register={register}
+                        value={wwccStateIssuedValue}
+                        setValue={setValue}
+                        onChange={e => setValue("wwccStateIssued", e.target.value)}
                         placeholder="Select State"
                     />
                 </div>
@@ -66,11 +67,12 @@ function WWCCInfo() {
                     <LabeledSelect
                         label="Type"
                         name="wwccType"
-                        value={wwccType}
-                        onChange={e => setWwccType(e.target.value)}
                         options={typeOptions}
                         required={false}
-                        setValue={() => {}}
+                        register={register}
+                        value={wwccTypeValue}
+                        setValue={setValue}
+                        onChange={e => setValue("wwccType", e.target.value)}
                     />
                 </div>
             </div>

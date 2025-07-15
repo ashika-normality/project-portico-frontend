@@ -9,10 +9,6 @@ import { useFormContext } from "react-hook-form";
 
 function InstructorLicenseInfo() {
     const { states, fetchStates, selectedCountry } = useAppContext();
-    const [instructorLicenseNumber, setInstructorLicenseNumber] = useState("");
-    const [instructorLicenseExpiry, setInstructorLicenseExpiry] = useState("");
-    const [instructorLicenseStateIssued, setInstructorLicenseStateIssued] = useState("");
-    const [instructorLicenseConditions, setInstructorLicenseConditions] = useState("");
     const { register, setValue, watch } = useFormContext();
 
     useEffect(() => {
@@ -20,6 +16,8 @@ function InstructorLicenseInfo() {
             fetchStates(selectedCountry);
         }
     }, [selectedCountry, fetchStates]);
+
+    const instructorLicenseStateIssuedValue = watch("instructorLicenseStateIssued");
 
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
@@ -29,8 +27,6 @@ function InstructorLicenseInfo() {
                     <LabeledInput
                         label="License Number"
                         name="instructorLicenseNumber"
-                        value={instructorLicenseNumber}
-                        onChange={e => setInstructorLicenseNumber(e.target.value)}
                         required={true}
                         register={register}
                         {...register("instructorLicenseNumber", { required: true })}
@@ -54,12 +50,12 @@ function InstructorLicenseInfo() {
                     <LabeledSelect
                         label="State Issued"
                         name="instructorLicenseStateIssued"
-                        value={instructorLicenseStateIssued}
-                        onChange={e => setInstructorLicenseStateIssued(e.target.value)}
                         options={states.map(s => ({ value: s.iso2, label: s.name }))}
                         required={false}
                         setValue={setValue}
                         register={register}
+                        value={instructorLicenseStateIssuedValue}
+                        onChange={e => setValue("instructorLicenseStateIssued", e.target.value)}
                         placeholder="Select State"
                         {...register("instructorLicenseStateIssued")}
                     />
@@ -68,8 +64,6 @@ function InstructorLicenseInfo() {
                     <LabeledInput
                         label="Conditions (If applicable)"
                         name="instructorLicenseConditions"
-                        value={instructorLicenseConditions}
-                        onChange={e => setInstructorLicenseConditions(e.target.value)}
                         required={false}
                         register={register}
                         {...register("instructorLicenseConditions")}
