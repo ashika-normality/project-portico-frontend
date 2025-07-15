@@ -10,16 +10,13 @@ const PersonalForm = () => {
     const { countries, states, cities, fetchStates, fetchCities, selectedCountry, setSelectedCountry, selectedState, setSelectedState, selectedCity, setSelectedCity } = useAppContext();
     const { register, setValue, watch } = useFormContext();
 
-    // Remove local gender state
-    // const [gender, setGender] = useState("");
-
     // Sync react-hook-form values with context state for selects
-    useEffect(() => {
-        fetchStates(selectedCountry || "AU");
-        setSelectedState("");
-        setSelectedCity("");
-        setValue("country", selectedCountry || "AU");
-    }, [selectedCountry]);
+    // useEffect(() => {
+    //     fetchStates(selectedCountry || "AU");
+    //     setSelectedState("");
+    //     setSelectedCity("");
+    //     setValue("country", selectedCountry || "AU");
+    // }, [selectedCountry]);
 
     useEffect(() => {
         fetchCities(selectedCountry || "AU", selectedState);
@@ -31,13 +28,29 @@ const PersonalForm = () => {
         setValue("city", selectedCity);
     }, [selectedCity]);
 
-    // Watch for form value changes (optional, for debugging)
-    // const formValues = watch();
+    // --- Country code logic for phone number ---
+    const mobile = watch("mobile") || "";
+    useEffect(() => {
+        fetchStates(selectedCountry || "AU");
+        setSelectedState("");
+        setSelectedCity("");
+        setValue("country", selectedCountry || "AU");
+        // Use AU as default for phone code if not selected
+        const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
+        if (country && country.phonecode) {
+            const code = `+${country.phonecode}`;
+            if (!mobile.startsWith(code)) {
+                setValue("mobile", code);
+            }
+        }
+    }, [selectedCountry, countries]);
+    // --- End country code logic ---
+
     const gender = watch("gender") || "";
 
     return(
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
-            <div className="flex space-x-3">
+            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
                 <LabeledInput
                     label="First Name"
                     name="firstName"
@@ -54,7 +67,7 @@ const PersonalForm = () => {
                     {...register("lastName", { required: true })}
                 />
             </div> 
-            <div className="flex space-x-3">  
+            <div className="flex flex-col md:flex-row space-y-2 space-x-3">  
                 <LabeledInput
                     label={"Email Address"}
                     name="email"
@@ -81,7 +94,7 @@ const PersonalForm = () => {
                     // {...register("gender")}
                 />
             </div>
-            <div className="flex space-x-3">
+            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
                 <div className="w-full md:w-1/2">
                     <LabeledInput
                         label={"Mobile"}
@@ -89,7 +102,13 @@ const PersonalForm = () => {
                         register = {register}
                         type="tel"
                         required={true}
-                        
+                        value={mobile}
+                        onChange={e => setValue("mobile", e.target.value)}
+                        // Optionally, you can add a prefix visually here
+                        placeholder={(() => {
+                            const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
+                            return country && country.phonecode ? `+${country.phonecode} Enter phone number` : "Enter phone number";
+                        })()}
                     />
                 </div>
                 <div className="w-full md:w-1/2">

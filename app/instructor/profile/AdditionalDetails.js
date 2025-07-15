@@ -42,7 +42,7 @@ function AdditionalDetails() {
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
             <h1 className="text-tonedblack text-lg font-bold font-raleway">Additional Details</h1>
-            <div className="w-full flex space-x-3">
+            <div className="w-full flex  space-x-3">
                 <div className="w-1/2">
                     <LabeledDatePicker
                         label="Instructor Since"
@@ -69,7 +69,7 @@ function AdditionalDetails() {
                     />
                 </div>
             </div>
-            <div className="w-full flex space-x-3">
+            <div className="w-full flex flex-col md:flex-row space-y-3 space-x-3">
                 <LabeledSelect
                     label="Business Type"
                     name="businessType"
@@ -91,7 +91,7 @@ function AdditionalDetails() {
                     {...register("businessName")}
                 />
             </div>
-            <div className="w-full flex space-x-3">
+            <div className="w-full flex flex-col md:flex-row space-y-3 space-x-3">
                 <LabeledInput
                     label="Australia Business Number(ABN)"
                     name="abn"

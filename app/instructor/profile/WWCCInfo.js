@@ -27,8 +27,8 @@ function WWCCInfo() {
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
             <h1 className="text-tonedblack text-lg font-bold font-raleway">WWCC Information</h1>
-            <div className="w-full flex space-x-3">
-                <div className="w-1/2">
+            <div className="w-full flex flex-col md:flex-row space-y-3 space-x-3">
+                <div className="w-full md:w-1/2">
                     <LabeledInput
                         label="WWCC Number"
                         name="wwccNumber"
@@ -36,7 +36,7 @@ function WWCCInfo() {
                         register={register}
                     />
                 </div>
-                <div className="w-1/2">
+                <div className="w-full md:w-1/2">
                 <LabeledDatePicker
                         label={"Expiry"}
                         name="WWCCExpiry"
