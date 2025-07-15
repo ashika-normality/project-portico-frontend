@@ -83,6 +83,7 @@ const PersonalForm = () => {
                     register = {register}
                     setValue={setValue}
                     value={gender}
+                    required={true}
                     onChange={e => {
                         setValue("gender", e.target.value); // keep form state in sync
                       }}
