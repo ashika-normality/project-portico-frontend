@@ -17,6 +17,7 @@ import DrivingLicenseInfo from "./DrivingLicenseInfo";
 import VehicleInformation from "./VehicleInformation";
 import InstructorLicenseInfo from "./InstructorLicenseInfo";
 import WWCCInfo from "./WWCCInfo";
+import { Toaster } from "react-hot-toast";
 
 
 const Profile = () => {
@@ -41,6 +42,7 @@ const Profile = () => {
 
   return (
     <FormProvider {...methods}>
+        <Toaster />
     <form onSubmit={methods.handleSubmit(onSubmit, onError)} className="w-full h-full flex flex-col justify-center items-center bg-gray-100">
     <div className="w-full justify-center items-center px-4 md:px-16 py-4">
         <div className="flex justify-around items-center w-full bg-white rounded-portico-main shadow-equal px-2 md:px-8">
@@ -141,9 +143,9 @@ const Profile = () => {
                 {activeTab === 'vehicleLicense' && (
                     <div className="w-full pb-24 md:pl-8 space-y-6">
                         <DrivingLicenseInfo />
-                        <VehicleInformation />
                         <InstructorLicenseInfo />
                         <WWCCInfo />
+                        <VehicleInformation />
                     </div>
                 )}
             <div>

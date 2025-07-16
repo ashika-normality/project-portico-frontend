@@ -76,8 +76,11 @@ const LabeledDatePicker = ({
   const handleMonthChange = (e) => {
     let val = e.target.value.replace(/\D/g, "");
     if (val.length > 2) val = val.slice(0, 2);
-    // Allow leading zero, but only up to 2 digits
-    if (val === "" || (val.length === 1 && parseInt(val) >= 0 && parseInt(val) <= 1) || (val.length === 2 && parseInt(val) >= 1 && parseInt(val) <= 12)) {
+    // Accept 1-9, 01-09, 10, 11, 12; disallow 00 and >12
+    if (
+      val === "" ||
+      (/^0?$|^0?[1-9]?$|^1[0-2]?$/.test(val))
+    ) {
       setMonth(val);
       // Auto-focus year if 2 digits entered and showYear is true
       if (val.length === 2 && showYear && yearRef.current) {
