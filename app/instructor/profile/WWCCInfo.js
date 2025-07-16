@@ -52,7 +52,7 @@ function WWCCInfo() {
             <div className="w-full flex space-x-3">
                 <div className="w-1/2">
                     <LabeledSelect
-                        label="State of Issue"
+                        label="State Issued"
                         name="wwccStateIssued"
                         options={states.map(s => ({ value: s.iso2, label: s.name }))}
                         required={false}

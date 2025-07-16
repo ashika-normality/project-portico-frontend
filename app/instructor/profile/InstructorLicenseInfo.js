@@ -57,7 +57,6 @@ function InstructorLicenseInfo() {
                         value={instructorLicenseStateIssuedValue}
                         onChange={e => setValue("instructorLicenseStateIssued", e.target.value)}
                         placeholder="Select State"
-                        {...register("instructorLicenseStateIssued")}
                     />
                 </div>
                 <div className="w-1/2">

@@ -22,6 +22,9 @@ const LabeledDatePicker = ({
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const datePickerRef = useRef(null);
   const hiddenDateInputRef = useRef(null);
+  const dayRef = useRef(null);
+  const monthRef = useRef(null);
+  const yearRef = useRef(null);
 
   // Parse initial value
   useEffect(() => {
@@ -59,23 +62,41 @@ const LabeledDatePicker = ({
 
   // Handlers
   const handleDayChange = (e) => {
-    const val = e.target.value.replace(/\D/g, "");
+    let val = e.target.value.replace(/\D/g, "");
+    if (val.length > 2) val = val.slice(0, 2);
     if (val === "" || (parseInt(val) >= 1 && parseInt(val) <= 31)) {
       setDay(val);
+      // Auto-focus month if 2 digits entered and showMonth is true
+      if (val.length === 2 && showMonth && monthRef.current) {
+        monthRef.current.focus();
+      }
     }
   };
 
   const handleMonthChange = (e) => {
-    const val = e.target.value.replace(/\D/g, "");
-    if (val === "" || (parseInt(val) >= 1 && parseInt(val) <= 12)) {
+    let val = e.target.value.replace(/\D/g, "");
+    if (val.length > 2) val = val.slice(0, 2);
+    // Allow leading zero, but only up to 2 digits
+    if (val === "" || (val.length === 1 && parseInt(val) >= 0 && parseInt(val) <= 1) || (val.length === 2 && parseInt(val) >= 1 && parseInt(val) <= 12)) {
       setMonth(val);
+      // Auto-focus year if 2 digits entered and showYear is true
+      if (val.length === 2 && showYear && yearRef.current) {
+        yearRef.current.focus();
+      }
     }
   };
 
   const handleYearChange = (e) => {
-    const val = e.target.value.replace(/\D/g, "");
-    if (val.length <= 4) {
-      setYear(val);
+    let val = e.target.value.replace(/\D/g, "");
+    if (val.length > 4) val = val.slice(0, 4);
+    setYear(val);
+  };
+
+  // Handle Enter key to jump to next input
+  const handleKeyDown = (e, nextRef) => {
+    if (e.key === "Enter" && nextRef && nextRef.current) {
+      nextRef.current.focus();
+      e.preventDefault();
     }
   };
 
@@ -164,12 +185,14 @@ const LabeledDatePicker = ({
             <>
               <div className="flex flex-col items-center w-full"> {/* Make input full width */}
                 <input
+                  ref={dayRef}
                   type="text"
                   placeholder="DD"
                   value={day}
                   onChange={handleDayChange}
                   maxLength={2}
                   className="w-full border border-greyforoutline font-source-sans rounded-md p-2 text-center focus:outline-none focus:ring-2 focus:ring-primary"
+                  onKeyDown={(e) => handleKeyDown(e, monthRef)}
                 />
               </div>
               
@@ -180,12 +203,14 @@ const LabeledDatePicker = ({
             <>
               <div className="flex flex-col items-center w-full"> {/* Make input full width */}
                 <input
+                  ref={monthRef}
                   type="text"
                   placeholder="MM"
                   value={month}
                   onChange={handleMonthChange}
                   maxLength={2}
                   className="w-full border border-greyforoutline font-source-sans rounded-md p-2 text-center focus:outline-none focus:ring-2 focus:ring-primary"
+                  onKeyDown={(e) => handleKeyDown(e, yearRef)}
                 />
               </div>
               
@@ -195,12 +220,14 @@ const LabeledDatePicker = ({
           {showYear && (
             <div className="flex flex-col items-center w-full"> {/* Make input full width */}
               <input
+                ref={yearRef}
                 type="text"
                 placeholder="YYYY"
                 value={year}
                 onChange={handleYearChange}
                 maxLength={4}
                 className="w-full border border-greyforoutline font-source-sans rounded-md p-2 text-center focus:outline-none focus:ring-2 focus:ring-primary"
+                onKeyDown={(e) => handleKeyDown(e, null)}
               />
             </div>
           )}
