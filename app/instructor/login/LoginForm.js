@@ -9,7 +9,12 @@ import toast, { Toaster } from "react-hot-toast";
 import googleIcon from "../../../public/Assets/google-icon.svg";
 import facebookIcon from "../../../public/Assets/fb-black.svg";
 
+import { useRouter } from "next/navigation";
+
 function EmailPhoneForm({ value, onChange, onSubmit, loading, error }) {
+
+  
+
   return (
     <>
     <div className="py-3 text-primary w-2/3 text-2xl md:text-3xl font-raleway font-bold">
@@ -20,18 +25,21 @@ function EmailPhoneForm({ value, onChange, onSubmit, loading, error }) {
         label="Email"
         name="email_phone"
         type="text"
-        placeholder="Enter your Email"
+        placeholder="Enter your Email or Phone"
         value={value}
         onChange={onChange}
         required
       />
+      {error && (
+        <p className="text-red-500 text-sm mt-1">{error}</p>
+      )}
       <PrimaryButton text={loading ? "Sending..." : "Continue"} type="submit" disabled={loading} />
       <div className="pt-4">
         <TextInTheMiddle text="or continue with" color="greyforline"/>
       </div>
         <div className="flex gap-6 mt-2">
-            <MildOrangeButton icon={googleIcon} altIcon="Google Icon" text="Google" bgColor={'mildorange'} alignment={'center'}/>
-            <MildOrangeButton icon={facebookIcon} altIcon="Facebook Icon" text="Facebook" bgColor={'mildorange'} alignment={'center'}/>
+            <MildOrangeButton icon={googleIcon} altIcon="Google Icon" text="Google" bgColor='mildorange' alignment={'center'}/>
+            <MildOrangeButton icon={facebookIcon} altIcon="Facebook Icon" text="Facebook" bgColor='mildorange' alignment={'center'}/>
         </div>
         <div>
           <p className="text-sm font-raleway mt-6 text-center">
@@ -102,6 +110,8 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const router = useRouter();
+
   // Handle email/phone input change
   const handleEmailPhoneChange = (e) => {
     setEmailPhone(e.target.value);
@@ -119,6 +129,14 @@ const LoginForm = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    if (!validateEmail(emailPhone) && !validatePhone(emailPhone)) {
+      toast.error("Please enter a valid email address or mobile number.");
+      setError("Please enter a valid email address or mobile number.");
+      setLoading(false);
+      return;
+    }
+
     try {
       await axiosInstance.post("/otp/send-otp", { identifier: emailPhone });
       setStep(2);
@@ -142,11 +160,16 @@ const LoginForm = () => {
         identifier: emailPhone,
         otp,
       });
-      // Save token, redirect, etc.
-      localStorage.setItem("accessToken", res.data.token);
+      // Save tokens, redirect, etc.
+      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.refreshToken);
       // You can redirect or show success here
       setError("");
       toast.success("Login successful! Redirecting...");
+      setTimeout(() => {
+        // Redirect to instructor dashboard or home page
+        router.push("/instructor/profile");
+      }, 2000);
     } catch (err) {
       setError(
         err?.response?.data?.message || "Failed to verify OTP. Please try again."
@@ -190,4 +213,7 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm; 
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const validatePhone = (phone) => /^(\+61|0)[4-5]\d{8}$/.test(phone.replace(/\s+/g, ''));
+
+export default LoginForm;

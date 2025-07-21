@@ -38,7 +38,28 @@ axiosInstance.interceptors.response.use(
     console.log('Response:', response);
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+    // If 401 and not already retried, try refresh
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (!refreshToken) throw new Error('No refresh token');
+        const res = await axiosInstance.post('/auth/refresh-token', { refreshToken });
+        const newAccessToken = res.data.accessToken;
+        localStorage.setItem('accessToken', newAccessToken);
+        // Update header and retry original request
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        // Optionally clear tokens and redirect to login
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        // window.location.href = '/instructor/login'; // Uncomment if you want to force logout
+        return Promise.reject(refreshError);
+      }
+    }
     // You can handle global errors here
     console.error('API Error:', error);
     return Promise.reject(error);
