@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LabeledInput from "../../components/LabeledInput";
 import PrimaryButton from "../../components/PrimaryButton";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInterceptor";
 
 function OtpForm({ identifier, value, onChange, onSubmit, onBack, loading, error }) {
@@ -22,6 +22,7 @@ function OtpForm({ identifier, value, onChange, onSubmit, onBack, loading, error
 
   return (
     <>
+    <Toaster />
     <div className="py-3 text-primary w-2/3 text-xl md:text-3xl font-raleway font-bold">
       <p>One Time Password</p>
     </div>

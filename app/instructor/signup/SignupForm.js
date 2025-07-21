@@ -215,8 +215,9 @@ const SignupForm = () => {
       );
       setFormStatus({ loading: false, error: '', success: response.data.message });
       setPendingEmail(formData.email);
-      setStep(2); // Move to OTP step
       toast.success("OTP sent. Please verify to complete registration.");
+      setTimeout(() => setStep(2), 3000); // Move to OTP step
+      
     } catch (error) {
       setFormStatus({ loading: false, error: error.response?.data?.message || 'Signup failed', success: '' });
       toast.error(error.response?.data?.message || 'Signup failed. Please try again later.');
@@ -236,7 +237,7 @@ const SignupForm = () => {
       );
       setFormStatus({ loading: false, error: '', success: response.data.message });
       toast.success("Signup complete! Redirecting to login...");
-      setTimeout(() => router.push('/instructor/login'), 2000);
+      setTimeout(() => router.push('/instructor/login'), 3000);
     } catch (error) {
       setFormStatus({ loading: false, error: error.response?.data?.message || 'OTP verification failed', success: '' });
       toast.error(error.response?.data?.message || 'OTP verification failed. Please try again.');
