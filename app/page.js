@@ -11,6 +11,7 @@ export default function Home() {
         <h1 className="text-primary font-bold text-2xl">Finished Pages</h1>
         <a href="/instructor/login" className="hover:text-primary">Login</a>
         <a href="/instructor/signup " className="hover:text-primary">Signup</a>
+        <a href="/instructor/profile " className="hover:text-primary">Profile</a>
       </div>
       <Footer />
     </div>
