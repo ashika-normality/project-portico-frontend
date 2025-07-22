@@ -10,6 +10,7 @@ import googleIcon from "../../../public/Assets/google-icon.svg";
 import facebookIcon from "../../../public/Assets/fb-black.svg";
 
 import { useRouter } from "next/navigation";
+import SpinnerComponent from "@/app/components/SpinnerComponent";
 
 function EmailPhoneForm({ value, onChange, onSubmit, loading, error }) {
 
@@ -25,7 +26,7 @@ function EmailPhoneForm({ value, onChange, onSubmit, loading, error }) {
         label="Email"
         name="email_phone"
         type="text"
-        placeholder="Enter your Email or Phone"
+        placeholder="jondoe@example.com"
         value={value}
         onChange={onChange}
         required
@@ -165,11 +166,13 @@ const LoginForm = () => {
       localStorage.setItem("refreshToken", res.data.refreshToken);
       // You can redirect or show success here
       setError("");
+      setLoading(false);
       toast.success("Login successful! Redirecting...");
       setTimeout(() => {
         // Redirect to instructor dashboard or home page
+        
         router.push("/instructor/profile");
-      }, 2000);
+      }, 1000);
     } catch (err) {
       setError(
         err?.response?.data?.message || "Failed to verify OTP. Please try again."
@@ -189,6 +192,7 @@ const LoginForm = () => {
 
   return (
     <div>
+      {loading && <SpinnerComponent text={step===1?`Sending OTP...`:`Verifying OTP...`} />}
       <Toaster />
       {step === 1 ? (
         <EmailPhoneForm
@@ -201,7 +205,7 @@ const LoginForm = () => {
       ) : (
         <OtpForm
           identifier={emailPhone}
-          value={otp}
+          value={otp} 
           onChange={handleOtpChange}
           onSubmit={handleLogin}
           onBack={handleBack}

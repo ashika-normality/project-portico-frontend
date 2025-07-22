@@ -12,6 +12,8 @@ import { useAppContext } from "@/app/components/AppContext";
 import { useRouter } from "next/navigation";
 import OtpForm from "../login/OtpForm";
 
+import SpinnerComponent from "@/app/components/SpinnerComponent";
+
 const SignupForm = () => {
   const router = useRouter();
   const API_KEY = process.env.NEXT_PUBLIC_COUNTRY_API_KEY;
@@ -31,12 +33,13 @@ const SignupForm = () => {
     setSelectedCity("");
   }, [selectedCountry, selectedState]);
 
+  // FIXED: Initial loading should be false, not true
   const [formStatus, setFormStatus] = useState({ loading: false, error: '', success: '' });
   const [validationErrors, setValidationErrors] = useState({});
 
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState(null); // For displaying uploaded image after signup
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [step, setStep] = useState(1); // 1: form, 2: otp
   const [otp, setOtp] = useState("");
   const [pendingEmail, setPendingEmail] = useState("");
@@ -48,33 +51,26 @@ const SignupForm = () => {
   };
 
   const validateMobile = (mobile) => {
-    // Australian mobile number format validation
-    //const mobileRegex = /^(\+61|0)[4-5]\d{8}$/;
-    //return mobileRegex.test(mobile.replace(/\s+/g, ''));
     return true
   };
 
   const validatePostcode = (postcode, country) => {
     if (country === 'AU') {
-      // Australian postcode: 4 digits
       return /^\d{4}$/.test(postcode);
     }
-    // Add other country postcode validations as needed
     return postcode.length >= 3 && postcode.length <= 10;
   };
 
   const validateLicenseNumber = (licenseNumber) => {
-    // Basic validation for license numbers (alphanumeric, minimum 3 characters)
     return /^[A-Z0-9]{3,}$/.test(licenseNumber);
   };
 
   const validateWWCC = (wwccNumber) => {
-    // WWCC number validation (varies by state, basic check here)
     return /^[A-Z0-9]{6,}$/.test(wwccNumber);
   };
 
   const validateWebsite = (website) => {
-    if (!website) return true; // Optional field
+    if (!website) return true;
     const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
     return urlRegex.test(website);
   };
@@ -203,7 +199,7 @@ const SignupForm = () => {
       if (photoFile) {
         submitData.append('photograph', photoFile);
       }
-      // Step 1: Initiate registration
+      
       const response = await axiosInstance.post(
         'http://localhost:7002/api/auth/register-instructor-initiate',
         submitData,
@@ -213,14 +209,14 @@ const SignupForm = () => {
           },
         }
       );
-      setFormStatus({ loading: false, error: '', success: response.data.message });
       setPendingEmail(formData.email);
-      toast.success("OTP sent. Please verify to complete registration.");
-      setTimeout(() => setStep(2), 3000); // Move to OTP step
-      
+      //toast.success("Redirecting to OTP verification...");
+      setTimeout(() => setStep(2), 1500);
     } catch (error) {
       setFormStatus({ loading: false, error: error.response?.data?.message || 'Signup failed', success: '' });
       toast.error(error.response?.data?.message || 'Signup failed. Please try again later.');
+    } finally {
+      setFormStatus({ loading: false, error: '', success: '' });
     }
   };
 
@@ -236,8 +232,10 @@ const SignupForm = () => {
         { email: pendingEmail, otp }
       );
       setFormStatus({ loading: false, error: '', success: response.data.message });
-      toast.success("Signup complete! Redirecting to login...");
-      setTimeout(() => router.push('/instructor/login'), 3000);
+      toast.success(formStatus.success || "OTP verified successfully! Redirecting to login...");
+      setTimeout(() => {
+        router.push('/instructor/login');
+      }, 1500);
     } catch (error) {
       setFormStatus({ loading: false, error: error.response?.data?.message || 'OTP verification failed', success: '' });
       toast.error(error.response?.data?.message || 'OTP verification failed. Please try again.');
@@ -285,10 +283,17 @@ const SignupForm = () => {
   };
 
   return (
-    <>
+    <div>
+      <Toaster />
+      
+      {/* IMPROVED SPINNER OVERLAY - Only shows during loading with background blur */}
+      {formStatus.loading && (
+        <SpinnerComponent text={step===1?"Sending OTP":"Verifying OTP..."}/>
+      )}
+
       {step === 1 ? (
         <form className="flex flex-col space-y-4 w-full py-3 px-6" onSubmit={handleSubmit}>
-          <Toaster />
+          
           <div className="full flex justify-between items-center space-x-4">
             <div className="w-1/2">
               <LabeledInput 
@@ -553,7 +558,6 @@ const SignupForm = () => {
               <img src={photoPreview} alt="Photograph Preview" className="max-h-40 rounded shadow" />
             </div>
           )}
-          {/* Show uploaded image after signup if available */}
           {uploadedImageUrl && (
             <div className="mt-4 flex justify-center">
               <img src={uploadedImageUrl} alt="Uploaded Profile" className="max-h-40 rounded shadow border" />
@@ -584,7 +588,7 @@ const SignupForm = () => {
           error={formStatus.error}
         />
       )}
-    </>
+    </div>
   );
 };
 
