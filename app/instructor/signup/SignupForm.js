@@ -283,7 +283,7 @@ const SignupForm = () => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <Toaster />
       
       {/* IMPROVED SPINNER OVERLAY - Only shows during loading with background blur */}
@@ -294,8 +294,8 @@ const SignupForm = () => {
       {step === 1 ? (
         <form className="flex flex-col space-y-4 w-full py-3 px-6" onSubmit={handleSubmit}>
           
-          <div className="full flex justify-between items-center space-x-4">
-            <div className="w-1/2">
+          <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-x-4">
+            <div className="w-full md:w-1/2">
               <LabeledInput 
                 label={"First Name"}
                 name="first_name"
@@ -307,7 +307,7 @@ const SignupForm = () => {
                 <p className="text-red-500 text-sm mt-1">{validationErrors.firstName}</p>
               )}
             </div>
-            <div className="w-1/2">
+            <div className="w-full md:w-1/2">
               <LabeledInput 
                 label={"Last Name"}
                 name="last_name"
