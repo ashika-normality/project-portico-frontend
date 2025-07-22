@@ -166,13 +166,13 @@ const LoginForm = () => {
       localStorage.setItem("refreshToken", res.data.refreshToken);
       // You can redirect or show success here
       setError("");
-      setLoading(false);
       toast.success("Login successful! Redirecting...");
       setTimeout(() => {
         // Redirect to instructor dashboard or home page
         
         router.push("/instructor/profile");
-      }, 1000);
+      }, 100);
+      setLoading(false);
     } catch (err) {
       setError(
         err?.response?.data?.message || "Failed to verify OTP. Please try again."

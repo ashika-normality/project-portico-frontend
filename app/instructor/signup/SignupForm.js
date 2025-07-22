@@ -211,10 +211,10 @@ const SignupForm = () => {
       );
       setPendingEmail(formData.email);
       //toast.success("Redirecting to OTP verification...");
-      setTimeout(() => setStep(2), 1500);
+      setTimeout(() => setStep(2), 100);
     } catch (error) {
-      setFormStatus({ loading: false, error: error.response?.data?.message || 'Signup failed', success: '' });
       toast.error(error.response?.data?.message || 'Signup failed. Please try again later.');
+      setFormStatus({ loading: false, error: error.response?.data?.message || 'Signup failed', success: '' });
     } finally {
       setFormStatus({ loading: false, error: '', success: '' });
     }
@@ -235,7 +235,7 @@ const SignupForm = () => {
       toast.success(formStatus.success || "OTP verified successfully! Redirecting to login...");
       setTimeout(() => {
         router.push('/instructor/login');
-      }, 1500);
+      }, 100);
     } catch (error) {
       setFormStatus({ loading: false, error: error.response?.data?.message || 'OTP verification failed', success: '' });
       toast.error(error.response?.data?.message || 'OTP verification failed. Please try again.');
@@ -294,7 +294,7 @@ const SignupForm = () => {
       {step === 1 ? (
         <form className="flex flex-col space-y-4 w-full py-3 px-6" onSubmit={handleSubmit}>
           
-          <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-x-4">
+          <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 md:space-x-4">
             <div className="w-full md:w-1/2">
               <LabeledInput 
                 label={"First Name"}
@@ -578,15 +578,17 @@ const SignupForm = () => {
           />
         </form>
       ) : (
-        <OtpForm
-          identifier={pendingEmail}
-          value={otp}
-          onChange={handleOtpChange}
-          onSubmit={handleOtpSubmit}
-          onBack={handleOtpBack}
-          loading={formStatus.loading}
-          error={formStatus.error}
+        <div className="p-2">
+          <OtpForm
+            identifier={pendingEmail}
+            value={otp}
+            onChange={handleOtpChange}
+            onSubmit={handleOtpSubmit}
+            onBack={handleOtpBack}
+            loading={formStatus.loading}
+            error={formStatus.error}
         />
+        </div>
       )}
     </div>
   );

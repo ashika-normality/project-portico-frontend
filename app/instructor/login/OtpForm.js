@@ -22,7 +22,7 @@ function OtpForm({ identifier, value, onChange, onSubmit, onBack, loading, error
   };
 
   return (
-    <>
+    <div className="w-full">
     {resendLoading && <SpinnerComponent text={"Resending OTP..."} />}
     <Toaster />
     <div className="py-3 text-primary w-2/3 text-xl md:text-3xl font-raleway font-bold">
@@ -58,7 +58,7 @@ function OtpForm({ identifier, value, onChange, onSubmit, onBack, loading, error
         <p className="text-red-500 text-sm mt-1">{error}</p>
       )}
     </form>
-    </>
+    </div>
   );
 }
 
