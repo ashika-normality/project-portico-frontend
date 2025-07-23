@@ -13,6 +13,20 @@ import { useRouter } from "next/navigation";
 import OtpForm from "../login/OtpForm";
 
 import SpinnerComponent from "@/app/components/SpinnerComponent";
+import ImageUploadButton from "@/app/components/ImageUploadButton";
+
+const ListTooltip = ({ items, renderItem }) => {
+  return (
+    <ul className="list-disc pl-5 space-y-1">
+      {items.map((item, index) => (
+        <li key={index} className="text-sm font-source-sans">
+          {(item)}
+        </li>
+      ))}
+    </ul>
+  ); 
+}
+
 
 const SignupForm = () => {
   const router = useRouter();
@@ -156,7 +170,6 @@ const SignupForm = () => {
     const formData = {
       firstName: e.target.first_name.value,
       lastName: e.target.last_name.value,
-      givenName: e.target.givenName.value,
       nickName: e.target.nickName.value,
       email: e.target.email_address.value,
       mobile: e.target.mobile.value,
@@ -295,7 +308,7 @@ const SignupForm = () => {
         <form className="flex flex-col space-y-4 w-full py-3 px-6" onSubmit={handleSubmit}>
           
           <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 md:space-x-4">
-            <div className="w-full md:w-1/2">
+            <div className="w-full">
               <LabeledInput 
                 label={"First Name"}
                 name="first_name"
@@ -307,6 +320,10 @@ const SignupForm = () => {
                 <p className="text-red-500 text-sm mt-1">{validationErrors.firstName}</p>
               )}
             </div>
+            
+          </div>
+          
+          <div className="full flex justify-between items-center space-x-4">
             <div className="w-full md:w-1/2">
               <LabeledInput 
                 label={"Last Name"}
@@ -319,24 +336,9 @@ const SignupForm = () => {
                 <p className="text-red-500 text-sm mt-1">{validationErrors.lastName}</p>
               )}
             </div>
-          </div>
-          
-          <div className="full flex justify-between items-center space-x-4">
-            <div className="w-1/2">
+            <div className="w-full md:w-1/2">
               <LabeledInput
-                label="Given Name"
-                name="givenName"
-                type="text"
-                required={true}
-                onChange={() => handleInputChange('givenName')}
-              />
-              {validationErrors.givenName && (
-                <p className="text-red-500 text-sm mt-1">{validationErrors.givenName}</p>
-              )}
-            </div>
-            <div className="w-1/2">
-              <LabeledInput
-                label={"Nick Name"}
+                label={"Nickname"}
                 name="nickName"
                 type="text"
                 required={false}
@@ -464,36 +466,60 @@ const SignupForm = () => {
             </div>
           </div>
           
-          <div className="full flex justify-between items-center space-x-4">
-            <div className="w-4/10">
-              <LabeledInput
-                label={"Driving License Number"}
-                name="driving_license_number"
-                type="text"
-                required={true}
-                style={{ textTransform: 'uppercase' }}
-                onChange={() => handleInputChange('drivingLicenseNumber')}
-              />
-              {validationErrors.drivingLicenseNumber && (
-                <p className="text-red-500 text-sm mt-1">{validationErrors.drivingLicenseNumber}</p>
-              )}
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
+            <div className="w-full flex flex-col space-y-2 rounded-lg">
+              <div className="w-full">
+                <LabeledInput
+                  label={"Driving License Number"}
+                  name="driving_license_number"
+                  type="text"
+                  required={true}
+                  style={{ textTransform: 'uppercase' }}
+                  onChange={() => handleInputChange('drivingLicenseNumber')}
+                />
+                {validationErrors.drivingLicenseNumber && (
+                  <p className="text-red-500 text-sm mt-1">{validationErrors.drivingLicenseNumber}</p>
+                )}
+              </div>
+              <div className="w-full">
+                <ImageUploadButton 
+                  required={true}
+                  title={"Upload Driving License"}
+                  name={"driverLicenseImage"} 
+                  label={"Driving License"}
+                  icon={<MdCloudUpload size={40} />}
+                  description={""}
+                />
+              </div>
             </div>
-            <div className="w-6/10">
-              <LabeledInput
-                label={"Instructor License Number"}
-                name="instructor_license_number"
-                type="text"
-                required={true}
-                style={{ textTransform: 'uppercase' }}
-                onChange={() => handleInputChange('instructorLicenseNumber')}
-              />
-              {validationErrors.instructorLicenseNumber && (
-                <p className="text-red-500 text-sm mt-1">{validationErrors.instructorLicenseNumber}</p>
-              )}
+            <div className="w-full flex flex-col space-y-2 rounded-lg">
+              <div className="w-full">
+                <LabeledInput
+                  label={"Instructor License Number"}
+                  name="instructor_license_number"
+                  type="text"
+                  required={true}
+                  style={{ textTransform: 'uppercase' }}
+                  onChange={() => handleInputChange('instructorLicenseNumber')}
+                />
+                {validationErrors.instructorLicenseNumber && (
+                  <p className="text-red-500 text-sm mt-1">{validationErrors.instructorLicenseNumber}</p>
+                )}
+              </div>
+              <div className="w-full">
+                <ImageUploadButton 
+                  required={true}
+                  title={"Upload Instructor License"}
+                  name={"instructorLicenseImage"} 
+                  label={"Instructor License"}
+                  icon={<MdCloudUpload size={40} />}
+                  description={""}
+                />
+              </div>
             </div>
           </div>
           
-          <div className="full flex justify-between items-center space-x-4">
+          <div className="w-full flex justify-between items-center space-x-4">
             <div className="w-4/10">
               <LabeledInput
                 label={"WWCC Number"}
@@ -538,31 +564,25 @@ const SignupForm = () => {
             rows={3}
           />
           
-          <div>
-            <LabeledFileUpload
-              label={photoPreview ? "Change Image" : "Upload Image"}
-              icon={<MdCloudUpload size={40} />}
-              name="photograph"
-              required
-              tooltip="Accepted formats: PDF, JPG, PNG. Max size: 5MB."
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={handlePhotoChange}
-              decription="Click to Upload or Drag and Drop Files here"
-            />
-            {validationErrors.photograph && (
-              <p className="text-red-500 text-sm mt-1">{validationErrors.photograph}</p>
-            )}
+          <div className="w-full flex justify-between items-center space-x-4">
+            <div className="w-full">
+              <ImageUploadButton 
+                required={true}
+                tooltip={<ListTooltip items={["Dimensions: 300x300 pixels (Minimum) – Square format preferred",
+                  "Aspect Ratio: 1:1 (Square)",
+                  "File Format: JPEG (.jpg) or PNG (.png)",
+                  "File Size: Max 2MB",
+                  "Background: Plain white or light-colored background (Recommended)",
+                  "Clarity: High resolution, well-lit, and front-facing",
+                  "No Filters: Avoid heavy edits or filters"
+                 ]} />}
+                name={"uploadPhotograph"} label={"Profile Picture"}
+                title={"Upload Photograph"}
+                icon={<MdCloudUpload size={40} />}
+                description={""}
+              />
+            </div>
           </div>
-          {photoPreview && (
-            <div className="mt-2 flex justify-center">
-              <img src={photoPreview} alt="Photograph Preview" className="max-h-40 rounded shadow" />
-            </div>
-          )}
-          {uploadedImageUrl && (
-            <div className="mt-4 flex justify-center">
-              <img src={uploadedImageUrl} alt="Uploaded Profile" className="max-h-40 rounded shadow border" />
-            </div>
-          )}
           
           <div className="flex items-center space-x-2 pt-2 pb-4">
             <input type="checkbox" id="terms" name="terms" className="mr-2" required />
