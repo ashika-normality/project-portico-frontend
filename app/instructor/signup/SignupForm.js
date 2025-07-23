@@ -5,7 +5,13 @@ import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
 import LabeledTextbox from "@/app/components/LabeledTextbox";
 import PrimaryButton from "@/app/components/PrimaryButton";
+
 import { MdCloudUpload } from "react-icons/md";
+import { BsPersonVcardFill } from "react-icons/bs";
+import { RiInfoCardFill } from "react-icons/ri";
+
+
+
 import axiosInstance from '@/app/utils/axiosInterceptor';
 import { Toaster, toast } from "react-hot-toast";
 import { useAppContext } from "@/app/components/AppContext";
@@ -14,6 +20,9 @@ import OtpForm from "../login/OtpForm";
 
 import SpinnerComponent from "@/app/components/SpinnerComponent";
 import ImageUploadButton from "@/app/components/ImageUploadButton";
+import PopUpImageUpload from "@/app/components/PopUpImageUpload";
+
+
 
 const ListTooltip = ({ items, renderItem }) => {
   return (
@@ -57,6 +66,14 @@ const SignupForm = () => {
   const [step, setStep] = useState(1); // 1: form, 2: otp
   const [otp, setOtp] = useState("");
   const [pendingEmail, setPendingEmail] = useState("");
+
+  const [showDrivingLicenseUpload, setShowDrivingLicenseUpload] = useState(false);
+  const [drivingLicense, setDrivingLicense] = useState({
+    front: null,
+    back: null,
+    frontPreview: null,
+    backPreview: null,
+  });
 
   // Validation functions
   const validateEmail = (email) => {
@@ -159,6 +176,14 @@ const SignupForm = () => {
     }
 
     return errors;
+  };
+
+  const handleLicenseUploadComplete = (images) => {
+    setDrivingLicense({
+      front: images.licenseFront,
+      back: images.licenseBack
+    });
+
   };
 
   const handleSubmit = async (e) => {
@@ -306,7 +331,6 @@ const SignupForm = () => {
 
       {step === 1 ? (
         <form className="flex flex-col space-y-4 w-full py-3 px-6" onSubmit={handleSubmit}>
-          
           <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 md:space-x-4">
             <div className="w-full">
               <LabeledInput 
@@ -484,11 +508,12 @@ const SignupForm = () => {
               <div className="w-full">
                 <ImageUploadButton 
                   required={true}
-                  title={"Upload Driving License"}
+                  title={(drivingLicense.front && drivingLicense.back)?`Edit Driving License`:"Upload Driving License"}
                   name={"driverLicenseImage"} 
                   label={"Driving License"}
-                  icon={<MdCloudUpload size={40} />}
-                  description={""}
+                  icon={<BsPersonVcardFill size={30} />}
+                  description={(drivingLicense.front && drivingLicense.back)?`Added ${drivingLicense.front.name}, ${drivingLicense.back.name}`:""}
+                  onClick={() => setShowDrivingLicenseUpload(true)}
                 />
               </div>
             </div>
@@ -512,7 +537,7 @@ const SignupForm = () => {
                   title={"Upload Instructor License"}
                   name={"instructorLicenseImage"} 
                   label={"Instructor License"}
-                  icon={<MdCloudUpload size={40} />}
+                  icon={<RiInfoCardFill size={30} />}
                   description={""}
                 />
               </div>
@@ -609,6 +634,18 @@ const SignupForm = () => {
             error={formStatus.error}
         />
         </div>
+      )}
+
+      {showDrivingLicenseUpload && (
+        <PopUpImageUpload 
+          onClose={() => {setShowDrivingLicenseUpload(false)}}
+          title={"Upload Driving License"}
+          onUploadComplete={handleLicenseUploadComplete}
+          imageRequirements={{
+            format: "JPEG, PNG, PDF",
+            maxSize: "5MB",
+          }}  
+        />
       )}
     </div>
   );
