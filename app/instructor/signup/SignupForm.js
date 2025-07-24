@@ -26,9 +26,9 @@ import PopUpImageUpload from "@/app/components/PopUpImageUpload";
 
 const ListTooltip = ({ items, renderItem }) => {
   return (
-    <ul className="list-disc pl-5 space-y-1">
+    <ul className="list-disc font-light text-[12px] pl-3 py-1">
       {items.map((item, index) => (
-        <li key={index} className="text-sm font-source-sans">
+        <li key={index} className="font-source-sans">
           {(item)}
         </li>
       ))}
@@ -214,30 +214,30 @@ const SignupForm = () => {
       bio: e.target.bio.value,
     };
 
-    // Validate form
-    const errors = validateForm(formData);
-    
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      setFormStatus({ loading: false, error: 'Please fix the validation errors', success: '' });
-      toast.error('Please fix the validation errors');
-      return;
+    // Create FormData and append all fields
+    const submitData = new FormData();
+    Object.keys(formData).forEach(key => {
+      if (key === 'address') {
+        submitData.append('address', JSON.stringify(formData.address));
+      } else {
+        submitData.append(key, formData[key]);
+      }
+    });
+
+    // Add photograph
+    if (photoFile) {
+      submitData.append('profileImage', photoFile);
+    }
+
+    // Add driving license front and back images
+    if (drivingLicense.front) {
+      submitData.append('drivingLicenseFront', drivingLicense.front);
+    }
+    if (drivingLicense.back) {
+      submitData.append('drivingLicenseBack', drivingLicense.back);
     }
 
     try {
-      // Create FormData and append all fields
-      const submitData = new FormData();
-      Object.keys(formData).forEach(key => {
-        if (key === 'address') {
-          submitData.append('address', JSON.stringify(formData.address));
-        } else {
-          submitData.append(key, formData[key]);
-        }
-      });
-      if (photoFile) {
-        submitData.append('photograph', photoFile);
-      }
-      
       const response = await axiosInstance.post(
         'http://localhost:7002/api/auth/register-instructor-initiate',
         submitData,
@@ -248,7 +248,6 @@ const SignupForm = () => {
         }
       );
       setPendingEmail(formData.email);
-      //toast.success("Redirecting to OTP verification...");
       setTimeout(() => setStep(2), 100);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Signup failed. Please try again later.');
@@ -347,7 +346,7 @@ const SignupForm = () => {
             
           </div>
           
-          <div className="full flex justify-between items-center space-x-4">
+          <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 md:space-x-4">
             <div className="w-full md:w-1/2">
               <LabeledInput 
                 label={"Last Name"}
@@ -601,8 +600,8 @@ const SignupForm = () => {
                   "Clarity: High resolution, well-lit, and front-facing",
                   "No Filters: Avoid heavy edits or filters"
                  ]} />}
-                name={"uploadPhotograph"} label={"Profile Picture"}
-                title={"Upload Photograph"}
+                name={"profileImage"} label={"Profile Image"}
+                title={"Upload Image"}
                 icon={<MdCloudUpload size={40} />}
                 description={""}
               />

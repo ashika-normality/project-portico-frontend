@@ -58,6 +58,9 @@ const PersonalForm = () => {
                     required={true}
                     register = {register}
                 />
+
+            </div> 
+            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
                 <LabeledInput
                     label={"Last Name"}
                     name="lastName"
@@ -65,15 +68,6 @@ const PersonalForm = () => {
                     required={true}
                     register = {register}
                     
-                />
-            </div> 
-            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
-                <LabeledInput
-                    label="Given Name"
-                    name="givenName"
-                    type="text"
-                    required={true}
-                    register = {register}
                 />
                 <LabeledInput
                     label={"Nick Name"}

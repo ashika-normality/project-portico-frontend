@@ -43,11 +43,11 @@ const LabeledFileUpload = ({
   return (
     <div className="flex flex-col space-y-1.5 w-full">
       <label className="text-sm font-source-sans font-semibold flex items-center space-x-1" htmlFor={name}>
-        <span>{label}{required && label!="" ? <span className="text-red-700">*</span> : ""}</span>
+        <span>{label}{required && label!="" ? <span className="text-redimportant">*</span> : ""}</span>
         {tooltip && (
           <span className="relative group cursor-pointer">
-            <span className="ml-1 w-4 h-4 inline-flex items-center justify-center rounded-full bg-gray-200 text-gray-700 text-xs font-bold">i</span>
-            <span className="absolute left-1/2 z-10 hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap -translate-x-1/2 mt-2">
+            <span className="ml-1 w-4 h-4 inline-flex items-center justify-center rounded-full bg-mildorange text-primary text-xs font-bold">i</span>
+            <span className="absolute left-1/2 z-10 hidden group-hover:block bg-mildorange text-black text-xs rounded px-2 py-1 whitespace-nowrap -translate-x-1/2 mt-2">
               {tooltip}
             </span>
           </span>

@@ -19,6 +19,9 @@ export function AppProvider({ children }) {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
+  const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+
   // Fetch countries on mount
   useEffect(() => {
     const fetchCountries = async () => {
@@ -83,7 +86,9 @@ export function AppProvider({ children }) {
       fetchStates, fetchCities,
       selectedCountry, setSelectedCountry,
       selectedState, setSelectedState,
-      selectedCity, setSelectedCity
+      selectedCity, setSelectedCity,
+      profile, setProfile,
+      profileLoading, setProfileLoading
     }}>
       {children}
     </AppContext.Provider>

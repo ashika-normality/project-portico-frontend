@@ -11,7 +11,7 @@ const LabeledSelect = ({
 }) => (
   <div className="flex flex-col space-y-1.5 w-full">
     <label htmlFor={name} className="text-sm font-source-sans font-semibold">
-      {label}{required ? <span className="text-red-700">*</span> : ""}
+      {label}{required ? <span className="text-redimportant">*</span> : ""}
     </label>
     <select
       name={name}

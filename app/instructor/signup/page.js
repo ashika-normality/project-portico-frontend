@@ -6,7 +6,7 @@ const page = () => (
             <h1 className="font-raleway text-xl font-bold text-primary">Instructor Sign Up</h1>
             <p className="font-source-sans text-greydarker">Sign up to get verified and start your journey with us!</p>
             <SignupForm />
-            <span className="text-sm font-raleway text-center">Already have an Account? <a href="login" className="text-primary hover:underline font-semibold">Login</a></span>
+            <span className="text-sm font-medium font-raleway text-center">Already have an Account? <a href="login" className="text-primary hover:underline font-semibold">Login</a></span>
         </div>
     </div> 
 );

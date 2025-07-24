@@ -207,7 +207,7 @@ const PopUpImageUpload = ({
               type="file"
               accept="image/*,application/pdf"
               onChange={(e) => handleImageChange(e, 'front')}
-              className={`block w-full text-sm text-greyfortext file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-mildorange file:text-primary hover:file:bg-footerorange ${
+              className={`block w-full text-sm text-greyfortext file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-mildorange file:text-primary hover:file:bg-footerorange  hover:file:text-white cursor-pointer ${
                 errors.front?.length > 0 ? 'border-2 border-red-500' : ''
               }`}
             />
@@ -257,7 +257,7 @@ const PopUpImageUpload = ({
               type="file"
               accept="image/*,application/pdf"
               onChange={(e) => handleImageChange(e, 'back')}
-              className={`block w-full text-sm text-greyfortext file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-mildorange file:text-primary hover:file:bg-footerorange ${
+              className={`block w-full text-sm text-greyfortext cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-mildorange file:text-primary hover:file:bg-footerorange hover:file:text-white ${
                 errors.back?.length > 0 ? 'border-2 border-red-500' : ''
               }`}
             />
@@ -304,7 +304,7 @@ const PopUpImageUpload = ({
         <div className="flex justify-end space-x-3 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-red-500 bg-red-200 rounded hover:bg-red-300"
+            className="px-4 py-2 text-sm font-medium text-red-500 bg-red-200 rounded hover:bg-red-300 cursor-pointer"
           >
             Cancel
           </button>
@@ -314,7 +314,7 @@ const PopUpImageUpload = ({
             className={`px-4 py-2 text-sm font-medium text-white rounded ${
               isSubmitDisabled
                 ? 'bg-mildorange cursor-not-allowed'
-                : 'bg-primary hover:bg-footerorange'
+                : 'bg-primary hover:bg-footerorange cursor-pointer'
             }`}
             title={hasValidationErrors ? 'Please fix validation errors before uploading' : ''}
           >
