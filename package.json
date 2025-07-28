@@ -17,6 +17,7 @@
     "@heroui/react": "^2.8.1",
     "@heroui/spinner": "^2.2.20",
     "axios": "^1.10.0",
+    "hamburger-react": "^2.5.2",
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
