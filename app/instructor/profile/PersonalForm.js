@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import LabeledTextbox from "@/app/components/LabeledTextbox";
 import { useFormContext } from "react-hook-form";
 
-const PersonalForm = () => {
+const PersonalForm = ({profile}) => {
     const { countries, states, cities, fetchStates, fetchCities, selectedCountry, setSelectedCountry, selectedState, setSelectedState, selectedCity, setSelectedCity } = useAppContext();
     const { register, setValue, watch } = useFormContext();
 
@@ -18,32 +18,42 @@ const PersonalForm = () => {
     //     setValue("country", selectedCountry || "AU");
     // }, [selectedCountry]);
 
-    useEffect(() => {
-        fetchCities(selectedCountry || "AU", selectedState);
-        setSelectedCity("");
-        setValue("state", selectedState);
-    }, [selectedCountry, selectedState]);
+    
 
     useEffect(() => {
-        setValue("city", selectedCity);
-    }, [selectedCity]);
+        if (!profile?.user) return; // Guard clause if profile is not yet loaded
 
-    // --- Country code logic for phone number ---
-    const mobile = watch("mobile") || "";
-    useEffect(() => {
-        fetchStates(selectedCountry || "AU");
-        setSelectedState("");
-        setSelectedCity("");
-        setValue("country", selectedCountry || "AU");
-        // Use AU as default for phone code if not selected
-        const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
-        if (country && country.phonecode) {
-            const code = `+${country.phonecode}`;
-            if (!mobile.startsWith(code)) {
-                setValue("mobile", code);
+        const profileCountry = profile.user.address?.country || "AU";
+        const profileState = profile.user.address?.state || "";
+        const profileCity = profile.user.address?.city || "";
+
+        // 1. Set the context state for all location fields
+        setSelectedCountry(profileCountry);
+        setSelectedState(profileState);
+        setSelectedCity(profileCity);
+
+        // 2. Set the react-hook-form values for all location fields
+        setValue("country", profileCountry);
+        setValue("state", profileState);
+        setValue("city", profileCity);
+        
+        // 3. Fetch the dropdown options based on the profile data
+        fetchStates(profileCountry);
+        if (profileState) {
+            fetchCities(profileCountry, profileState);
+        }
+
+        // 4. Handle mobile country code
+        const countryData = countries.find(c => c.iso2 === profileCountry);
+        if (countryData?.phonecode) {
+            const code = `+${countryData.phonecode}`;
+            const currentMobile = watch("mobile") || profile.user.mobile || "";
+            if (!currentMobile.match(/^\+\d+/)) {
+                setValue("mobile", code + currentMobile);
             }
         }
-    }, [selectedCountry, countries]);
+
+    }, [profile, countries]);
     // --- End country code logic ---
 
     const gender = watch("gender") || "";
@@ -56,7 +66,9 @@ const PersonalForm = () => {
                     name="firstName"
                     type="text"
                     required={true}
-                    register = {register}
+                    register={register}
+                    setValue={setValue}
+                    defaultValue={profile.user.firstName}
                 />
 
             </div> 
@@ -67,6 +79,8 @@ const PersonalForm = () => {
                     type="text"
                     required={true}
                     register = {register}
+                    setValue={setValue}
+                    defaultValue={profile.user.lastName}
                     
                 />
                 <LabeledInput
@@ -75,6 +89,8 @@ const PersonalForm = () => {
                     type="text"
                     required={false}
                     register = {register}
+                    setValue={setValue}
+                    defaultValue={profile.user.nickName}
                     
                 />
             </div> 
@@ -85,41 +101,67 @@ const PersonalForm = () => {
                     type="email"
                     required={true}
                     register = {register}
-                    {...register("email", { required: true })}
+                    setValue={setValue}
+                    defaultValue={profile.user.email}
                 />
                 
                 <LabeledSelect
                     label={"Gender"}
                     name={"gender"}
-                    register = {register}
-                    setValue={setValue}
-                    value={gender}
+                    value={watch("gender") || profile?.user?.gender || ""}
+                    onChange={(e) => setValue("gender", e.target.value, { shouldValidate: true })}
                     required={true}
-                    onChange={e => {
-                        setValue("gender", e.target.value); // keep form state in sync
-                      }}
                     options={[
                         {value: "male", label:"Male"},
                         {value: "female", label:"Female"},
                         {value: "not_to_say", label:"Prefer not to say"}
                     ]}
-                    // {...register("gender")}
                 />
+                {console.log(profile?.user?.gender)}
             </div>
             <div className="flex flex-col md:flex-row space-y-2 space-x-3">
                 <div className="w-full md:w-1/2">
                     <LabeledInput
                         label={"Mobile"}
                         name="mobile"
-                        register = {register}
                         type="tel"
                         required={true}
-                        value={mobile}
-                        onChange={e => setValue("mobile", e.target.value)}
-                        // Optionally, you can add a prefix visually here
+                        register={register}
+                        setValue={setValue}
+                        defaultValue={(() => {
+                        // Get profile mobile (might not have country code)
+                        const profileMobile = profile?.user?.mobile || "";
+                        
+                        // Get current country code
+                        const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
+                        const countryCode = country?.phonecode ? `+${country.phonecode}` : '';
+                        
+                        // If profile mobile already has a country code, use as-is
+                        if (profileMobile && profileMobile.match(/^\+\d+/)) {
+                            return profileMobile;
+                        }
+                        
+                        // Otherwise prepend current country code
+                        return countryCode + profileMobile.replace(/^\+\d+/, '');
+                        })()}
+                        onChange={(e) => {
+                        const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
+                        const countryCode = country?.phonecode ? `+${country.phonecode}` : '';
+                        
+                        // Prevent deleting country code if it exists
+                        if (countryCode && !e.target.value.startsWith(countryCode)) {
+                            // But allow if they're typing a different valid country code
+                            if (!e.target.value.match(/^\+\d+/)) {
+                            setValue("mobile", countryCode + e.target.value.replace(/^\+\d+/, ''));
+                            return;
+                            }
+                        }
+                        
+                        setValue("mobile", e.target.value);
+                        }}
                         placeholder={(() => {
-                            const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
-                            return country && country.phonecode ? `+${country.phonecode} Enter phone number` : "Enter phone number";
+                        const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
+                        return country?.phonecode ? `+${country.phonecode} Enter phone number` : "Enter phone number";
                         })()}
                     />
                 </div>
@@ -143,7 +185,9 @@ const PersonalForm = () => {
                 type="text"
                 required={true}
                 placeholder={"Street Address"}
-                {...register("address1", { required: true })}
+                setValue={setValue}
+                defaultValue={profile.user.address.line1}
+                //{...register("address1", { required: true })}
             />
             <LabeledInput 
                 label={"Address Line 2"}
@@ -152,7 +196,9 @@ const PersonalForm = () => {
                 register = {register}
                 required={false}
                 placeholder={"Apartment, Suite, Unit, Building, Floor"}
-                {...register("address2")}
+                //{...register("address2")}
+                setValue={setValue}
+                defaultValue={profile.user.address.line2}
             />
             <div className="full flex justify-between items-center space-x-4">
                 <div className="w-1/2">
@@ -162,7 +208,9 @@ const PersonalForm = () => {
                     register = {register}
                     type="text"
                     required={true}
-                    {...register("postcode", { required: true })}
+                    setValue={setValue}
+                    defaultValue={profile.user.address.line1}
+                    //{...register("postcode", { required: true })}
                 />
                 </div>
                 <div className="w-1/2">
@@ -222,7 +270,9 @@ const PersonalForm = () => {
                 register = {register}
                 required={false}
                 rows={3}
-                {...register("aboutMe")}
+                setValue={setValue}
+                defaultValue={profile.bio}
+                //{...register("aboutMe")}
             />
         </div>
         

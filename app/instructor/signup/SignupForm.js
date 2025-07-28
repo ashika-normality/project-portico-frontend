@@ -218,7 +218,12 @@ const SignupForm = () => {
     const submitData = new FormData();
     Object.keys(formData).forEach(key => {
       if (key === 'address') {
-        submitData.append('address', JSON.stringify(formData.address));
+       submitData.append("addressLine1", formData.address.line1);
+        submitData.append("addressLine2", formData.address.line2);
+        submitData.append("city", formData.address.city);
+        submitData.append("state", formData.address.state);
+        submitData.append("country", formData.address.country);
+        submitData.append("postcode", formData.address.postcode);
       } else {
         submitData.append(key, formData[key]);
       }
@@ -417,6 +422,7 @@ const SignupForm = () => {
             type="text"
             placeholder={"Apartment, Suite, Unit, Building, Floor, etc."}
             required={false}
+            onChange={() => handleInputChange('addressLine2')}
           />
           
           <div className="full flex justify-between items-center space-x-4">

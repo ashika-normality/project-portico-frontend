@@ -31,7 +31,7 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState('personalDetails');  
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const { setProfile, setProfileLoading } = useAppContext();
+    const { setProfile, setProfileLoading, profile } = useAppContext();
 
     useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -200,7 +200,7 @@ const Profile = () => {
                         
                         {activeTab === 'personalDetails' && (
                             <div className="w-full pb-24 md:pl-8 space-y-6">
-                                <PersonalForm />
+                                <PersonalForm profile={profile?profile:undefined}/>
                                 <AdditionalDetails />
                             </div>
                         )}
