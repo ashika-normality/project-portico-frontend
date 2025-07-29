@@ -11,7 +11,7 @@ import { useAppContext } from "@/app/components/AppContext";
 
 import { useFormContext } from "react-hook-form";
 
-function DrivingLicenseInfo() {
+function DrivingLicenseInfo({profile}) {
     const { states } = useAppContext();
     const [licensePhoto, setLicensePhoto] = useState(null);
 
@@ -31,6 +31,8 @@ function DrivingLicenseInfo() {
                         name="licenseNumber"
                         required={true}
                         register={register}
+                        setValue={setValue}
+                        defaultValue={profile.drivingLicenseNumber}
                     />
                 </div>
                 <div className="w-full md:w-1/2">

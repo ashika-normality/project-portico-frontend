@@ -117,7 +117,6 @@ const PersonalForm = ({profile}) => {
                         {value: "not_to_say", label:"Prefer not to say"}
                     ]}
                 />
-                {console.log(profile?.user?.gender)}
             </div>
             <div className="flex flex-col md:flex-row space-y-2 space-x-3">
                 <div className="w-full md:w-1/2">

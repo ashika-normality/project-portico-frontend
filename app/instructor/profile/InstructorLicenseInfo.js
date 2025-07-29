@@ -7,7 +7,7 @@ import LabeledFileUpload from "@/app/components/LabeledFileUpload";
 import { useAppContext } from "@/app/components/AppContext";
 import { useFormContext } from "react-hook-form";
 
-function InstructorLicenseInfo() {
+function InstructorLicenseInfo({profile}) {
     const { states, fetchStates, selectedCountry } = useAppContext();
     const { register, setValue, watch } = useFormContext();
 
@@ -29,7 +29,9 @@ function InstructorLicenseInfo() {
                         name="instructorLicenseNumber"
                         required={true}
                         register={register}
-                        {...register("instructorLicenseNumber", { required: true })}
+                        setValue={setValue}
+                        defaultValue={profile.instructorLicenseNumber}
+                        //{...register("instructorLicenseNumber", { required: true })}
                     />
                 </div>
                 <div className="w-full md:w-1/2">

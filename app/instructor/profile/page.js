@@ -11,6 +11,8 @@ import instructorPerson from "../../../public/Assets/person-instructor.svg";
 import personButton from "../../../public/Assets/person-button.svg";
 import licenseVector from "../../../public/Assets/license-vector.svg";
 import calenderVector from "../../../public/Assets/calender-vector.svg";
+import dollarVector from "../../../public/Assets/dollar-sign.svg";
+import mapPinVector from "../../../public/Assets/map-pin.svg";
 
 import PrimaryButton from "@/app/components/PrimaryButton";
 import MildOrangeButton from "@/app/components/MildOrangeButton";
@@ -22,6 +24,7 @@ import WWCCInfo from "./WWCCInfo";
 import { Toaster } from "react-hot-toast";
 import SpinnerComponent from "@/app/components/SpinnerComponent";
 import axiosInstance from "@/app/utils/axiosInterceptor";
+import PricingDetails from "./pricingDetails";
 
 const Profile = () => {
     const methods = useForm();
@@ -29,6 +32,7 @@ const Profile = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('personalDetails');  
+    const [activeSubTab, setActiveSubTab] = useState('');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const { setProfile, setProfileLoading, profile } = useAppContext();
@@ -76,7 +80,15 @@ const Profile = () => {
 }, []);
 
     const handleTabChange = (tab) => {
+        if(tab === 'pricingAvailability' && activeSubTab === ''){
+            setActiveSubTab('pricing');
+        }
         setActiveTab(tab);
+        tab ==='pricingAvailability' && activeSubTab === '' ? setDropdownOpen(true) : setDropdownOpen(false);
+    };
+
+    const handleSubTabChange = (subTab) => {
+        setActiveSubTab(subTab);
         setDropdownOpen(false);
     };
 
@@ -144,33 +156,75 @@ const Profile = () => {
                                     {activeTab === 'vehicleLicense' && (
                                         <span className="flex items-center"><img src={licenseVector.src} alt="License Icon" className="w-5 h-5 mr-2" />Vehicle & License</span>
                                     )}
-                                    {activeTab === 'pricingAvailability' && (
-                                        <span className="flex items-center"><img src={calenderVector.src} alt="Calender Icon" className="w-5 h-5 mr-2" />Pricing & Availability</span>
+                                    {activeTab === 'pricingAvailability' && activeSubTab === ('pricing' || '')  && (
+                                        <span className="flex items-center"><img src={dollarVector.src} alt="Calender Icon" className="w-5 h-5 mr-2" />Pricing</span>
+                                    )}
+                                    {activeTab === 'pricingAvailability' && activeSubTab === 'availability'  && (
+                                        <span className="flex items-center"><img src={calenderVector.src} alt="Calender Icon" className="w-5 h-5 mr-2" />Availability</span>
+                                    )}
+                                    {activeTab === 'pricingAvailability' && activeSubTab === 'offDaySettings'  && (
+                                        <span className="flex items-center"><img src={personButton.src} alt="Calender Icon" className="w-5 h-5 mr-2" />Off-Day Settings</span>
                                     )}
                                     <svg className={`w-4 h-4 ml-2 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                                 </button>
                                 {dropdownOpen && (
                                     <div className="absolute z-20 w-full box-border p-4 bg-white rounded-xl shadow-small mt-1 border border-gray-200">
                                         <MildOrangeButton
-                                            text="Personal Details"
-                                            onClick={() => {handleTabChange('personalDetails')}}
+                                        text="Personal Details"
+                                        onClick={() => { handleTabChange('personalDetails') }}
+                                        icon={personButton}
+                                        altIcon="Person Icon"
+                                        bgColor={activeTab === 'personalDetails' ? 'footerorange' : ''}
+                                        />
+                                        <MildOrangeButton
+                                        text="Vehicle & License"
+                                        onClick={() => { handleTabChange('vehicleLicense') }}
+                                        icon={licenseVector}
+                                        altIcon="License Icon"
+                                        bgColor={activeTab === 'vehicleLicense' ? 'footerorange' : ''}
+                                        />
+                                        <MildOrangeButton
+                                        text="Pricing & Availability"
+                                        onClick={() => { handleTabChange('pricingAvailability') }}
+                                        icon={calenderVector}
+                                        altIcon="Calender Icon"
+                                        bgColor={activeTab === 'pricingAvailability' ? 'footerorange' : ''}
+                                        />
+                                        
+                                        {activeTab === 'pricingAvailability' && (
+                                        <div className="mt-2 pl-4 flex flex-col space-y-2">
+                                            <MildOrangeButton
+                                            text="Pricing"
+                                            onClick={() => { handleSubTabChange('pricing'); handleTabChange('pricingAvailability'); }}
+                                            icon={dollarVector}
+                                            altIcon="Dollar Icon"
+                                            scale={90}
+                                            bgColor={activeSubTab === 'pricing' ? 'footerorange' : ''}
+                                            alignment={'left'}
+                                            />
+                                            <MildOrangeButton
+                                            text="Availability"
+                                            onClick={() => { handleSubTabChange('availability'); handleTabChange('pricingAvailability'); }}
+                                            icon={calenderVector}
+                                            altIcon="Calendar Icon"
+                                            scale={90}
+                                            bgColor={activeSubTab === 'availability' ? 'footerorange' : ''}
+                                            alignment={'left'}
+                                            />
+                                            <MildOrangeButton
+                                            text="Off-Day Settings"
+                                            onClick={() => { handleSubTabChange('offDaySettings'); handleTabChange('pricingAvailability'); }}
                                             icon={personButton}
                                             altIcon="Person Icon"
-                                        />
-                                        <MildOrangeButton
-                                            text="Vehicle & License"
-                                            onClick={() => {handleTabChange('vehicleLicense')}}
-                                            icon={licenseVector}
-                                            altIcon="License Icon"
-                                        />
-                                        <MildOrangeButton
-                                            text="Pricing & Availability"
-                                            onClick={() => {handleTabChange('pricingAvailability')}}
-                                            icon={calenderVector}
-                                            altIcon="Calender Icon"
-                                        />
+                                            scale={90}
+                                            bgColor={activeSubTab === 'offDaySettings' ? 'footerorange' : ''}
+                                            alignment={'left'}
+                                            />
+                                        </div>
+                                    )}
                                     </div>
-                                )}
+                                    )}
+
                             </div>
                             {/* Desktop Sidebar Menu */}
                             <div className="hidden md:flex flex-col bg-white justify-start rounded-xl shadow-equal items-start p-4 w-full space-y-2">
@@ -180,6 +234,7 @@ const Profile = () => {
                                     bgColor={activeTab === 'personalDetails' ? 'footerorange' : ''}
                                     icon={personButton}
                                     altIcon="Person Icon"
+                                    hoverColor={'footerorange'}
                                 />
                                 <MildOrangeButton
                                     text="Vehicle & License"
@@ -187,6 +242,7 @@ const Profile = () => {
                                     bgColor={activeTab === 'vehicleLicense' ? 'footerorange' : ''}
                                     icon={licenseVector}
                                     altIcon="License Icon"
+                                    hoverColor={'footerorange'}
                                 />
                                 <MildOrangeButton
                                     text="Pricing & Availability"
@@ -194,22 +250,69 @@ const Profile = () => {
                                     bgColor={activeTab === 'pricingAvailability' ? 'footerorange' : ''}
                                     icon={calenderVector}
                                     altIcon="Calender Icon"
+                                    hoverColor={'footerorange'}
                                 />
+                                {activeTab === 'pricingAvailability' && (
+                                    <div className="w-full flex flex-col items-end justify-end">
+                                        <MildOrangeButton
+                                            text="Pricing"
+                                            onClick={() => {
+                                                handleSubTabChange('pricing') 
+                                                handleTabChange('pricingAvailability')
+                                            }}
+                                            bgColor={activeSubTab === 'pricing' ? 'footerorange' : ''}
+                                            icon={dollarVector}
+                                            altIcon="Dollar Icon"
+                                            scale={90}
+                                            alignment={'right'}
+                                            hoverColor={'footerorange'}
+                                         />
+                                         <MildOrangeButton
+                                            text="Availability"
+                                            onClick={() => {
+                                                handleSubTabChange('availability') 
+                                                handleTabChange('pricingAvailability')
+                                            }}
+                                            bgColor={activeSubTab === 'availability' ? 'footerorange' : ''}
+                                            icon={calenderVector}
+                                            altIcon="Calender Icon"
+                                            scale={90}
+                                            hoverColor={'footerorange'}
+                                         />
+                                         <MildOrangeButton
+                                            text="Off-Day Settings"
+                                            onClick={() => {
+                                                handleSubTabChange('offDaySettings') 
+                                                handleTabChange('pricingAvailability')
+                                            }}
+                                            bgColor={activeSubTab === 'offDaySettings' ? 'footerorange' : ''}
+                                            icon={personButton}
+                                            altIcon="person Icon"
+                                            scale={90}
+                                            hoverColor={'footerorange'}
+                                         />
+                                    </div>
+                                )}
                             </div>
                         </div>
                         
                         {activeTab === 'personalDetails' && (
                             <div className="w-full pb-24 md:pl-8 space-y-6">
                                 <PersonalForm profile={profile?profile:undefined}/>
-                                <AdditionalDetails />
+                                <AdditionalDetails profile={profile?profile:undefined}/>
                             </div>
                         )}
                         {activeTab === 'vehicleLicense' && (
                             <div className="w-full pb-24 md:pl-8 space-y-6">
-                                <DrivingLicenseInfo />
-                                <InstructorLicenseInfo />
-                                <WWCCInfo />
-                                <VehicleInformation />
+                                <DrivingLicenseInfo profile={profile?profile:undefined}/>
+                                <InstructorLicenseInfo profile={profile?profile:undefined}/>
+                                <WWCCInfo profile={profile?profile:undefined}/>
+                                <VehicleInformation profile={profile?profile:undefined}/>
+                            </div>
+                        )}
+                        {(activeTab === 'pricingAvailability' && activeSubTab === 'pricing') && (
+                            <div className="w-full pb-24 md:pl-8 space-y-6">
+                                <PricingDetails profile={profile?profile:undefined}/>
                             </div>
                         )}
                     </div>

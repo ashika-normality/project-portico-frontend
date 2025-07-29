@@ -4,7 +4,7 @@ import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
 import { useFormContext } from "react-hook-form";
 
-function AdditionalDetails() {
+function AdditionalDetails({profile}) {
     const { register, setValue, watch } = useFormContext();
     const [experienceDate, setExperienceDate] = useState("");
     // Remove local totalExperience state
@@ -88,7 +88,9 @@ function AdditionalDetails() {
                     type="text"
                     required={false}
                     register={register}
-                    {...register("businessName")}
+                    setValue={setValue}
+                    defaultValue={profile.drivingSchoolName}
+                    //{...register("businessName")}
                 />
             </div>
             <div className="w-full flex flex-col md:flex-row space-y-3 space-x-3">

@@ -26,6 +26,19 @@ import Image from "next/image";
   greydarker: "text-greydarker",
 };
 
+const hoverColorMap = {
+  tonedblack: "hover:bg-tonedblack",
+  primary: "hover:bg-primary",
+  primaryOverlay: "hover:bg-primary-overlay",
+  placeholder: "hover:bg-placeholder",
+  footerorange: "hover:bg-footerorange",
+  mildorange: "hover:bg-mildorange",
+  greyforoutline: "hover:bg-greyforoutline",
+  greyforline: "hover:bg-greyforline",
+  greyfortext: "hover:bg-greyfortext",
+  greydarker: "hover:bg-greydarker",
+}
+
 const MildOrangeButton = ({
     icon,
     altIcon,
@@ -34,10 +47,12 @@ const MildOrangeButton = ({
     textColor,
     bgColor,
     onClick,
-    alignment
+    alignment,
+    scale,
+    hoverColor
 }) => (
     <button
-        className={`w-full flex items-center justify-${alignment ? alignment : 'start'} ${bgColorMap[bgColor] || ''} gap-2 p-2 ${border ? `border-1 border-${border}` : ``} rounded-md mt-1 hover:scale-95 hover:cursor-pointer transition-all duration-300 ease-in-out`}
+        className={`w-full scale-${scale} flex items-center justify-${alignment ? alignment : 'start'} ${bgColorMap[bgColor] || ''} gap-2 p-2 ${border ? `border-1 border-${border}` : ``} ${hoverColorMap[hoverColor] || ''} rounded-md mt-1 hover:bg- hover:cursor-pointer transition-all duration-300 ease-in-out`}
         onClick={onClick}
         type="button"
     >

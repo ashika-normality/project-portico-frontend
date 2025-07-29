@@ -5,7 +5,7 @@ import LabeledSelect from "@/app/components/LabeledSelect";
 import { useAppContext } from "@/app/components/AppContext";
 import { useFormContext } from "react-hook-form";
 
-function WWCCInfo() {
+function WWCCInfo({profile}) {
     const { states, fetchStates, selectedCountry } = useAppContext();
     const { register, setValue, watch } = useFormContext();
 
@@ -34,6 +34,8 @@ function WWCCInfo() {
                         name="wwccNumber"
                         required={true}
                         register={register}
+                        setValue={setValue}
+                        defaultValue={profile.wwccNumber}
                     />
                 </div>
                 <div className="w-full md:w-1/2">

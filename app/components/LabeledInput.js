@@ -14,6 +14,8 @@ const LabeledInput = ({
   disabled,
   onChange,
   required = false,
+  preText,
+  postText
 }) => {
   useEffect(() => {
     if (setValue && defaultValue !== undefined) {
@@ -26,7 +28,9 @@ const LabeledInput = ({
       <label htmlFor={name} className="text-sm font-source-sans font-semibold">
         {label}{required ? <span className="text-redimportant">*</span> : ""}
       </label>
-      <input
+      <div className="w-full flex items-center space-x-2">
+        {preText && <span className="text-greyfortext">{preText}</span>}
+        <input
         required={required}
         type={type}
         name={name}
@@ -37,8 +41,10 @@ const LabeledInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="border border-greyforoutline font-source-sans rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        className="w-full border border-greyforoutline font-source-sans rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary"
       />
+      {postText && <span className="text-greyfortext">{postText}</span>}
+      </div>
     </div>
   );
 };
