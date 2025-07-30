@@ -18,6 +18,7 @@ function DrivingLicenseInfo({profile}) {
     const { register, setValue, watch } = useFormContext();
 
     const expiry = watch('drivingLicenseExpiry')
+    const stateIssued = watch('stateIssued')
 
     function handlePhotoChange(e) {
         setLicensePhoto(e.target.files[0]);
@@ -70,6 +71,8 @@ function DrivingLicenseInfo({profile}) {
                         options={states.map(s => ({ value: s.iso2, label: s.name }))}
                         placeholder="Select State"
                         register={register}
+                        setValue={setValue}
+                        value={stateIssued || profile?.user?.stateIssued || ""}
                     />
                 </div>
             </div>
