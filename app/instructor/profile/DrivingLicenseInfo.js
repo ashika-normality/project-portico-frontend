@@ -17,6 +17,8 @@ function DrivingLicenseInfo({profile}) {
 
     const { register, setValue, watch } = useFormContext();
 
+    const expiry = watch('drivingLicenseExpiry')
+
     function handlePhotoChange(e) {
         setLicensePhoto(e.target.files[0]);
     }
@@ -38,13 +40,16 @@ function DrivingLicenseInfo({profile}) {
                 <div className="w-full md:w-1/2">
                 <LabeledDatePicker
                         label={"Expiry"}
-                        name="expiry"
+                        name="drivingLicenseExpiry"
                         register={register}
+                        setValue={setValue}
+                        // ✅ Critical: Pass value from watch() OR profile
+                        value={expiry || profile?.user?.drivingLicenseExpiry || ""}
                         showDay={true}
                         showMonth={true}
                         showYear={true}
                         required={true}
-                        {...register("expiry", { required: true })}
+                        //{...register("expiry", { required: true })}
                     />
                 </div>
             </div>

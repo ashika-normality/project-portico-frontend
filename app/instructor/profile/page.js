@@ -101,7 +101,7 @@ const Profile = () => {
         console.log('Form Errors:', errors);
     };
 
-    if (loading) {
+    if (loading || !profile) {
         return (
             <SpinnerComponent text={"Loading..."} />
         );

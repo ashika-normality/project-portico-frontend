@@ -18,6 +18,7 @@ function InstructorLicenseInfo({profile}) {
     }, [selectedCountry, fetchStates]);
 
     const instructorLicenseStateIssuedValue = watch("instructorLicenseStateIssued");
+    const instructorLicenseExpiry = watch("instructorLicenseExpiry");
 
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
@@ -39,6 +40,8 @@ function InstructorLicenseInfo({profile}) {
                         label={"Expiry"}
                         name="instructorLicenseExpiry"
                         register = {register}
+                        setValue={setValue}
+                        value={instructorLicenseExpiry || profile.instructorLicenseExpiry || ""}
                         showDay={true}
                         showMonth={true}
                         showYear={true}

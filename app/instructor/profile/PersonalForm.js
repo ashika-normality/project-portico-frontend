@@ -53,6 +53,14 @@ const PersonalForm = ({profile}) => {
             }
         }
 
+        if (profile.user.dob) {
+            const dobDate = new Date(profile.user.dob);
+            if (!isNaN(dobDate.getTime())) {
+            const dobStr = dobDate.toISOString().split('T')[0]; // "YYYY-MM-DD"
+            // Don't call setValue here — let `value={watch("dob") || dobStr}` handle it
+        }
+  }
+
     }, [profile, countries]);
     // --- End country code logic ---
 
@@ -169,11 +177,13 @@ const PersonalForm = ({profile}) => {
                         label={"Date of Birth"}
                         name="dob"
                         register = {register}
+                        value={watch('dob') || profile?.user?.dob || ""}
+                        setValue={setValue}
                         showDay={true}
                         showMonth={true}
                         showYear={true}
                         required={true}
-                        {...register("dob", { required: true })}
+                        //{...register("dob", { required: true })}
                     />
                 </div>
             </div>

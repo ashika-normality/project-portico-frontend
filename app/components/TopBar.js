@@ -46,10 +46,11 @@ const TopBar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
-    setProfile(null); // Clear the profile from context
     setIsProfileDropdownOpen(false);
     closeDrawer();
+    setProfile(null); // Clear the profile from context
     router.push('/instructor/login');
+    
   };
 
   // Close dropdown when clicking outside

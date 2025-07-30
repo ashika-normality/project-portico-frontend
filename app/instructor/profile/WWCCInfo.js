@@ -23,6 +23,7 @@ function WWCCInfo({profile}) {
 
     const wwccStateIssuedValue = watch("wwccStateIssued");
     const wwccTypeValue = watch("wwccType");
+    const WWCCExpiry = watch("WWCCExpiry");
 
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
@@ -43,6 +44,8 @@ function WWCCInfo({profile}) {
                         label={"Expiry"}
                         name="WWCCExpiry"
                         register={register}
+                        setValue={setValue}
+                        value={WWCCExpiry || profile.WWCCExpiry || ""}
                         showDay={true}
                         showMonth={true}
                         showYear={true}
