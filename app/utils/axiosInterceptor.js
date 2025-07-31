@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
   // You can set a baseURL here if desired
-  baseURL: 'http://localhost:7002/api',
+  baseURL: 'https://project-portico-backend.vercel.app/api',
   withCredentials: true,
 });
 

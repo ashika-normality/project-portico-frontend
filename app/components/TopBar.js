@@ -46,6 +46,7 @@ const TopBar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     setIsProfileDropdownOpen(false);
     closeDrawer();
     setProfile(null); // Clear the profile from context

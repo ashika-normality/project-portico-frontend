@@ -139,8 +139,11 @@ const LoginForm = () => {
     }
 
     try {
-      await axiosInstance.post("/otp/send-otp", { identifier: emailPhone });
-      setStep(2);
+      const response = await axiosInstance.post("/otp/send-otp", { identifier: emailPhone });
+      toast.success(response.data.message + " CODE: " + response.data.data.otp);
+      setTimeout(() => {
+        setStep(2);
+      }, 1000)
     } catch (err) {
       setError(
         err?.response?.data?.message || "Failed to send OTP. Please try again."
@@ -193,7 +196,7 @@ const LoginForm = () => {
   return (
     <div>
       {loading && <SpinnerComponent text={step===1?`Sending OTP...`:`Verifying OTP...`} />}
-      <Toaster />
+      <Toaster toastOptions={{ duration: 7000 }}/>
       {step === 1 ? (
         <EmailPhoneForm
           value={emailPhone}

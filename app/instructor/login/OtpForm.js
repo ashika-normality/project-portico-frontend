@@ -12,8 +12,8 @@ function OtpForm({ identifier, value, onChange, onSubmit, onBack, loading, error
     e.preventDefault();
     setResendLoading(true);
     try {
-      await axiosInstance.post("/otp/resend-otp", { identifier });
-      toast.success("OTP resent successfully! Please check your email or phone.");
+      const response = await axiosInstance.post("/otp/resend-otp", { identifier: emailPhone });
+      toast.success(response.data.message + " CODE: " + response.data.data.otp);
     } catch (err) {
       toast.error(err?.response?.data?.message || "Failed to resend OTP.");
     } finally {

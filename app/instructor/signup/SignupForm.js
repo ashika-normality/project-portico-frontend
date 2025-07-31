@@ -244,7 +244,7 @@ const SignupForm = () => {
 
     try {
       const response = await axiosInstance.post(
-        'http://localhost:7002/api/auth/register-instructor-initiate',
+        '/auth/register-instructor-initiate',
         submitData,
         {
           headers: {
@@ -253,6 +253,7 @@ const SignupForm = () => {
         }
       );
       setPendingEmail(formData.email);
+      toast.success(response.data.message + " CODE: " + response.data.data.otp);
       setTimeout(() => setStep(2), 100);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Signup failed. Please try again later.');
@@ -270,7 +271,7 @@ const SignupForm = () => {
     setFormStatus({ loading: true, error: '', success: '' });
     try {
       const response = await axiosInstance.post(
-        'http://localhost:7002/api/auth/register-instructor-verify',
+        '/auth/register-instructor-verify',
         { email: pendingEmail, otp }
       );
       setFormStatus({ loading: false, error: '', success: response.data.message });
@@ -326,7 +327,7 @@ const SignupForm = () => {
 
   return (
     <div className="w-full">
-      <Toaster />
+      <Toaster toastOptions={{ duration: 7000 }}/>
       
       {/* IMPROVED SPINNER OVERLAY - Only shows during loading with background blur */}
       {formStatus.loading && (
