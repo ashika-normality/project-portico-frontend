@@ -327,7 +327,7 @@ const SignupForm = () => {
 
   return (
     <div className="w-full">
-      <Toaster toastOptions={{ duration: 7000 }}/>
+      <Toaster toastOptions={{ duration: 12000 }}/>
       
       {/* IMPROVED SPINNER OVERLAY - Only shows during loading with background blur */}
       {formStatus.loading && (

@@ -196,7 +196,7 @@ const LoginForm = () => {
   return (
     <div>
       {loading && <SpinnerComponent text={step===1?`Sending OTP...`:`Verifying OTP...`} />}
-      <Toaster toastOptions={{ duration: 7000 }}/>
+      <Toaster toastOptions={{ duration: 12000 }}/>
       {step === 1 ? (
         <EmailPhoneForm
           value={emailPhone}
