@@ -337,7 +337,7 @@ const SignupForm = () => {
       {step === 1 ? (
         <form className="flex flex-col space-y-4 w-full py-3 px-6" onSubmit={handleSubmit}>
           <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 md:space-x-4">
-            <div className="w-full">
+            <div className="w-full md:w-1/2">
               <LabeledInput 
                 label={"First Name"}
                 name="first_name"
@@ -349,10 +349,6 @@ const SignupForm = () => {
                 <p className="text-red-500 text-sm mt-1">{validationErrors.firstName}</p>
               )}
             </div>
-            
-          </div>
-          
-          <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 md:space-x-4">
             <div className="w-full md:w-1/2">
               <LabeledInput 
                 label={"Last Name"}
@@ -365,7 +361,12 @@ const SignupForm = () => {
                 <p className="text-red-500 text-sm mt-1">{validationErrors.lastName}</p>
               )}
             </div>
-            <div className="w-full md:w-1/2">
+            
+          </div>
+          
+          <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 md:space-x-4">
+            
+            <div className="w-full">
               <LabeledInput
                 label={"Nickname"}
                 name="nickName"
@@ -574,7 +575,7 @@ const SignupForm = () => {
             </div>
           </div>
           
-          <div>
+          {/* <div>
             <LabeledInput 
               label={"Website"}
               name="website"
@@ -586,7 +587,7 @@ const SignupForm = () => {
             {validationErrors.website && (
               <p className="text-red-500 text-sm mt-1">{validationErrors.website}</p>
             )}
-          </div>
+          </div> */}
           
           <LabeledTextbox
             label={"Bio"}
@@ -629,7 +630,7 @@ const SignupForm = () => {
           />
         </form>
       ) : (
-        <div className="p-2">
+        <div className="px-8 py-2">
           <OtpForm
             identifier={pendingEmail}
             value={otp}

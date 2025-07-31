@@ -78,9 +78,6 @@ const PersonalForm = ({profile}) => {
                     setValue={setValue}
                     defaultValue={profile.user.firstName}
                 />
-
-            </div> 
-            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
                 <LabeledInput
                     label={"Last Name"}
                     name="lastName"
@@ -91,6 +88,10 @@ const PersonalForm = ({profile}) => {
                     defaultValue={profile.user.lastName}
                     
                 />
+
+            </div> 
+            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
+                
                 <LabeledInput
                     label={"Nick Name"}
                     name="nickName"

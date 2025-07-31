@@ -25,6 +25,7 @@ import { Toaster } from "react-hot-toast";
 import SpinnerComponent from "@/app/components/SpinnerComponent";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 import PricingDetails from "./pricingDetails";
+import AvailabilitySettings from "./AvailabilitySettings";
 
 const Profile = () => {
     const methods = useForm();
@@ -313,6 +314,11 @@ const Profile = () => {
                         {(activeTab === 'pricingAvailability' && activeSubTab === 'pricing') && (
                             <div className="w-full pb-24 md:pl-8 space-y-6">
                                 <PricingDetails profile={profile?profile:undefined}/>
+                            </div>
+                        )}
+                        {(activeTab === 'pricingAvailability' && activeSubTab === 'availability') && (
+                            <div className="w-full pb-24 md:pl-8 space-y-6">
+                                <AvailabilitySettings profile={profile?profile:undefined}/>
                             </div>
                         )}
                     </div>
