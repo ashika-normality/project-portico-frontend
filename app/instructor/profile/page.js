@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import PersonalForm from "./PersonalForm";
-import {FormProvider, useForm}  from "react-hook-form";
+import {FormProvider, set, useForm}  from "react-hook-form";
 import { useAppContext } from "@/app/components/AppContext";
 import { useRouter } from "next/navigation";
 
@@ -39,46 +39,47 @@ const Profile = () => {
     const { setProfile, setProfileLoading, profile } = useAppContext();
 
     useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    
-    const getUser = async () => {
-        try {
-            const response = await axiosInstance.get('/instructor-profile/me', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            return response;    
-        } catch (error) {
-            console.error('Error fetching user:', error);
-            return null;
-        }
-    };
-    
-    const fetchUserData = async () => {
-        const user = await getUser();
-        console.log("User Data:", user);
+        const token = localStorage.getItem('accessToken');
         
-        if (user && user.data) {
-            console.log("User response data:", user.data);
-            // setProfile(user.data); // Uncomment this when ready
-            setProfile(user.data);
-            setProfileLoading(false);
-            setIsAuthorized(true);
-        } else {
+        // If no token, immediately set unauthorized and stop loading
+        if (!token) {
             setIsAuthorized(false);
+            setLoading(false);
+            return; // Exit early
         }
-        setLoading(false);
-    };
-    
-    // Only fetch if token exists
-    if (token) {
+        
+        // Only proceed if token exists
+        const getUser = async () => {
+            try {
+                const response = await axiosInstance.get('/instructor-profile/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                return response;
+            } catch (error) {
+                console.error('Error fetching user:', error);
+                return null;
+            }
+        };
+        
+        const fetchUserData = async () => {
+            const user = await getUser();
+            console.log("User Data:", user);
+            
+            if (user && user.data) {
+                console.log("User response data:", user.data);
+                setProfile(user.data);
+                setProfileLoading(false);
+                setIsAuthorized(true);
+            } else {
+                setIsAuthorized(false);
+            }
+            setLoading(false);
+        };
+        
         fetchUserData();
-    } else {
-        setIsAuthorized(false);
-        setLoading(false);
-    }
-}, []);
+    }, []);
 
     const handleTabChange = (tab) => {
         if(tab === 'pricingAvailability' && activeSubTab === ''){
@@ -102,7 +103,7 @@ const Profile = () => {
         console.log('Form Errors:', errors);
     };
 
-    if (loading || !profile) {
+    if (loading && !profile) {
         return (
             <SpinnerComponent text={"Loading..."} />
         );

@@ -100,13 +100,16 @@ const TopBar = () => {
         
         {/* Desktop Profile/Login - Hidden on mobile */}
         <div className="hidden lg:flex items-center space-x-4">
-          <Image 
-            src={notifIcon} 
-            alt="Notifications" 
-            width={15} 
-            height={15} 
-            className="cursor-pointer hover:scale-110"
-          />
+          {profile?(
+            <Image 
+              src={notifIcon} 
+              alt="Notifications" 
+              width={15} 
+              height={15} 
+              className="cursor-pointer hover:scale-110"
+            />
+          ): null
+          }
           
           {profileLoading ? (
             <PrimaryButton text={"Login"} onClick={() => {router.push('/instructor/login')}} />
@@ -245,18 +248,20 @@ const TopBar = () => {
         {/* Profile and Notification Section at Bottom */}
         <div className="border-t border-gray-200 p-6">
           {/* Notifications */}
-          <div className="flex items-center space-x-3 mb-6">
-            <Image 
-              src={notifIcon} 
-              alt="Notifications" 
-              width={18} 
-              height={18} 
-              className="cursor-pointer hover:scale-110"
-            />
-            <span className="text-gray-700 font-medium cursor-pointer hover:text-primary">
-              Notifications
-            </span>
-          </div>
+          {profile?(
+            <div className="flex items-center space-x-3 mb-6">
+              <Image 
+                src={notifIcon} 
+                alt="Notifications" 
+                width={18} 
+                height={18} 
+                className="cursor-pointer hover:scale-110"
+              />
+              <span className="text-gray-700 font-medium cursor-pointer hover:text-primary">
+                Notifications
+              </span>
+            </div>
+          ):null}
 
           {/* Profile/Login Section */}
           {profileLoading ? (
