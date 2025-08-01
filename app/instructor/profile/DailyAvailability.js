@@ -22,7 +22,7 @@ function DailyAvailability({ day }) {
 
     return (
         <div className="flex flex-col items-start md:flex-row w-full space-y-4 md:space-y-0 space-x-4">
-            <div className="flex items-center mt-8">
+            <div className="flex items-center md:mt-8">
                 <input
                     type="checkbox"
                     name="daySelection"
