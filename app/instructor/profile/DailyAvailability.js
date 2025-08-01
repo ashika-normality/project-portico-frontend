@@ -15,14 +15,14 @@ function DailyAvailability({ day }) {
         }
     };
 
-    const duplicateSession = (sessionId) => {
-        const newSession = { id: Date.now() };
-        setSessions(prev => [...prev, newSession]);
-    };
+    // const duplicateSession = (sessionId) => {
+    //     const newSession = { id: Date.now() };
+    //     setSessions(prev => [...prev, newSession]);
+    // };
 
     return (
         <div className="flex flex-col items-start md:flex-row w-full space-y-4 md:space-y-0 space-x-4">
-            <div className="flex items-center mt-3">
+            <div className="flex items-center mt-8">
                 <input
                     type="checkbox"
                     name="daySelection"
@@ -43,7 +43,7 @@ function DailyAvailability({ day }) {
                         day={day}
                         onAddSession={addSession}
                         onRemoveSession={removeSession}
-                        onDuplicateSession={duplicateSession}
+                        //onDuplicateSession={duplicateSession}
                         canRemove={sessions.length > 1}
                     />
                 ))}
