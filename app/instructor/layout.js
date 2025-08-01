@@ -4,9 +4,11 @@ import TopBar from "../components/TopBar";
 
 export default function InstructorLayout({children}) {
   return (
-    <div className="bg-background">
+    <div className="min-h-screen flex flex-col bg-background">
       <TopBar />
-        {children}
+        <div className="flex-grow m-0 p-0">
+          {children}
+        </div>
       <Footer />
     </div>
   );

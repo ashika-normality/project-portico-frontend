@@ -24,6 +24,7 @@ import Image from "next/image";
   greyforline: "text-greyforline",
   greyfortext: "text-greyfortext",
   greydarker: "text-greydarker",
+  white: "text-white",
 };
 
 const hoverColorMap = {

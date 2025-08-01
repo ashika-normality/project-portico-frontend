@@ -32,8 +32,8 @@ const Profile = () => {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('personalDetails');  
-    const [activeSubTab, setActiveSubTab] = useState('');
+    const [activeTab, setActiveTab] = useState('pricingAvailability');  
+    const [activeSubTab, setActiveSubTab] = useState('availability');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const { setProfile, setProfileLoading, profile } = useAppContext();
@@ -103,10 +103,21 @@ const Profile = () => {
         console.log('Form Errors:', errors);
     };
 
-    if (loading && !profile) {
+    if (loading) {
         return (
-            <SpinnerComponent text={"Loading..."} />
+            <SpinnerComponent text={"Setting up your profile..."} />
         );
+    }
+
+    if(!profile){
+        return(
+            <div className="w-full h-full py-16 flex justify-center items-center bg-gray-100">
+                <div className="text-center p-8 bg-white rounded-lg shadow-md max-w-md">
+                    <h1 className="text-2xl font-bold text-primary mb-4">Oops!!! Something broke</h1>
+                    <p className="text-greyfortext mb-6">This might be because of bad network connection from your side or a server side error.</p>
+                </div>
+            </div>
+        )
     }
 
     if (!isAuthorized) {

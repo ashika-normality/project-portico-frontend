@@ -31,18 +31,18 @@ const LabeledInput = ({
       <div className="w-full flex items-center space-x-2">
         {preText && <span className="text-greyfortext">{preText}</span>}
         <input
-        required={required}
-        type={type}
-        name={name}
-        id={name}
-        style={style}
-        disabled={disabled}
-        {...(register ? register(name) : {})}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        className="w-full border border-greyforoutline font-source-sans rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary"
-      />
+          required={required}
+          type={type}
+          name={name}
+          id={name}
+          style={style}
+          disabled={disabled}
+          {...(register ? register(name) : {})}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          className="w-full border border-greyforoutline bg-white font-source-sans rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
       {postText && <span className="text-greyfortext">{postText}</span>}
       </div>
     </div>

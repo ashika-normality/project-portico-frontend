@@ -47,7 +47,7 @@ export default function InstructorHome() {
     }
 
     return (
-        <div>
+        <div className="flex-grow">
             <h1 className="text-2xl font-bold">Instructor Home Page</h1>
             <p>Welcome to the instructor dashboard.</p>
         </div>
