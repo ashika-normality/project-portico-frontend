@@ -27,12 +27,12 @@ function AvailabilitySettings({profile}) {
                     <DailyAvailability
                         key={day}
                         day={day}
-                        //dayIndex={index}
+                        dayIndex={index}
                         // pass down register/setValue and existing sessions if any
-                        //sessions={availability[index]?.sessions || [{ label: "", startTime: "", endTime: "" }]}
-                        //enabled={availability[index]?.enabled || false}
-                        //register={register}
-                        //setValue={setValue}
+                        sessions={availability[index]?.sessions || [{ label: "", startTime: "", endTime: "" }]}
+                        enabled={availability[index]?.enabled || false}
+                        register={register}
+                        setValue={setValue}
                     />
                 ))}
             </div>
