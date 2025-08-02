@@ -21,32 +21,34 @@ function DailyAvailability({ day }) {
     // };
 
     return (
-        <div className="flex flex-col items-start md:flex-row w-full space-y-4 md:space-y-0 space-x-4">
-            <div className="flex items-center md:mt-8">
-                <input
-                    type="checkbox"
-                    name="daySelection"
-                    id="daySelection"
-                    value={day}
-                    className="mr-2"
-                />
-                <label htmlFor="daySelection" className="uppercase">
-                    {day ? day.slice(0, 3) : ""}
-                </label>
-            </div>
-            <div className="w-full pt-5 flex-grow space-y-4">
-                {sessions.map((session, index) => (
-                    <DailySessionSingle
-                        key={session.id}
-                        sessionId={session.id}
-                        sessionIndex={index}
-                        day={day}
-                        onAddSession={addSession}
-                        onRemoveSession={removeSession}
-                        //onDuplicateSession={duplicateSession}
-                        canRemove={sessions.length > 1}
+        <div className='pb-5 border-b border-greyforline'>
+            <div className="flex flex-col items-start md:flex-row w-full space-y-4 md:space-y-0 space-x-4">
+                <div className="flex items-center md:mt-8">
+                    <input
+                        type="checkbox"
+                        name="daySelection"
+                        id="daySelection"
+                        value={day}
+                        className="mr-2"
                     />
-                ))}
+                    <label htmlFor="daySelection" className="uppercase">
+                        {day ? day.slice(0, 3) : ""}
+                    </label>
+                </div>
+                <div className="w-full pt-5 flex flex-col flex-grow space-y-4">
+                    {sessions.map((session, index) => (
+                        <DailySessionSingle
+                            key={session.id}
+                            sessionId={session.id}
+                            sessionIndex={index}
+                            day={day}
+                            onAddSession={addSession}
+                            onRemoveSession={removeSession}
+                            //onDuplicateSession={duplicateSession}
+                            canRemove={sessions.length > 1}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );

@@ -109,17 +109,6 @@ const Profile = () => {
         );
     }
 
-    if(!profile){
-        return(
-            <div className="w-full h-full py-16 flex justify-center items-center bg-gray-100">
-                <div className="text-center p-8 bg-white rounded-lg shadow-md max-w-md">
-                    <h1 className="text-2xl font-bold text-primary mb-4">Oops!!! Something broke</h1>
-                    <p className="text-greyfortext mb-6">This might be because of bad network connection from your side or a server side error.</p>
-                </div>
-            </div>
-        )
-    }
-
     if (!isAuthorized) {
         return (
             <div className="w-full h-full py-16 flex justify-center items-center bg-gray-100">
@@ -132,8 +121,18 @@ const Profile = () => {
             </div>
         );
     }
-
-    return (
+    else if(isAuthorized && !profile){
+        return(
+            <div className="w-full h-full py-16 flex  justify-center items-center bg-gray-100">
+                <div className="text-center p-8 flex-grow bg-white rounded-lg shadow-md max-w-md">
+                    <h1 className="text-2xl font-bold text-primary mb-4">Oops!!! Something broke</h1>
+                    <p className="text-greyfortext mb-6">This might be because of bad network connection from your side or a server side error.</p>
+                </div>
+            </div>
+        )
+    }
+    else{
+        return (
         <FormProvider {...methods}>
             <Toaster />
             <form onSubmit={methods.handleSubmit(onSubmit, onError)} className="w-full h-full flex flex-col justify-center items-center bg-gray-100">
@@ -338,6 +337,7 @@ const Profile = () => {
             </form>
         </FormProvider>  
     );
+    }  
 }
 
 export default Profile;

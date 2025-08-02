@@ -36,7 +36,7 @@ function DailySessionSingle({
     const endTimeField = `${day}_session_${sessionIndex}_endTime`;
 
     return (
-        <div className='p-4 w-full rounded-xl bg-[#F7F7F7] flex flex-col md:flex-row space-x-4 justify-center items-center space-y-3 md:space-y-0'>
+        <div className='p-4 w-full rounded-lg bg-[#F7F7F7] flex flex-col md:flex-row space-x-4 justify-center items-center space-y-3 md:space-y-0'>
             <LabeledInput
                 type='text'
                 name={sessionNameField}
