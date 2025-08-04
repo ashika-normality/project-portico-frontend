@@ -36,6 +36,7 @@ function AvailabilitySettings({profile}) {
                     />
                 ))}
             </div>
+            
         </div>
     )
 }

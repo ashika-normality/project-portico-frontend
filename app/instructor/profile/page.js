@@ -26,6 +26,8 @@ import SpinnerComponent from "@/app/components/SpinnerComponent";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 import PricingDetails from "./pricingDetails";
 import AvailabilitySettings from "./AvailabilitySettings";
+import ClassSettingsMain from "./ClassSettingsMain";
+import CopyWeeklySchedule from "./CopyWeeklySchedule";
 
 const Profile = () => {
     const methods = useForm();
@@ -330,6 +332,8 @@ const Profile = () => {
                         {(activeTab === 'pricingAvailability' && activeSubTab === 'availability') && (
                             <div className="w-full pb-24 md:pl-8 space-y-6">
                                 <AvailabilitySettings profile={profile?profile:undefined}/>
+                                <ClassSettingsMain />
+                                <CopyWeeklySchedule />
                             </div>
                         )}
                     </div>
