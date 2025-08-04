@@ -28,7 +28,7 @@ function CopyWeeklySchedule({}) {
                     <div className="flex items-center space-x-2 mt-2">
                         <input type="checkbox" name="includeExistingBookings" 
                             className="form-checkbox rounded-sm mr-2 hover:cursor-pointer outline-none checked:focus:outline-none focus:outline-none focus:ring-0  hover:bg-primary checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary" 
-                            style={{zoom: "150%"}} 
+                            style={{zoom: "120%"}} 
                         />
                         <label htmlFor="includeExistingBookings" className="text-tonedblack">Include Existing Bookings</label>
                     </div>
