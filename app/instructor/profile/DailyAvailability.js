@@ -27,7 +27,7 @@ function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValu
                 {...register(`availability.${dayIndex}.enabled`)}
                 checked={enabled}
                 onChange={handleToggleEnabled}
-                className="form-checkbox rounded-sm mr-2 hover:cursor-pointer outline-none checked:focus:outline-none focus:outline-none focus:ring-0 focus:bg-primary hover:bg-primary checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary" 
+                className="form-checkbox rounded-sm mr-2 hover:cursor-pointer outline-none checked:focus:outline-none focus:outline-none focus:ring-0  hover:bg-primary checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary" 
                 style={{zoom: "150%"}}
             />
             <label forhtml={`availability.${dayIndex}.enabled`}>
