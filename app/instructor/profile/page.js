@@ -336,6 +336,13 @@ const Profile = () => {
                                 <CopyWeeklySchedule />
                             </div>
                         )}
+                        {(activeTab === 'pricingAvailability' && activeSubTab === 'offDaySettings') && (
+                            <div className="w-full pb-24 md:pl-8 space-y-6">
+                                <AvailabilitySettings profile={profile?profile:undefined}/>
+                                <ClassSettingsMain />
+                                <CopyWeeklySchedule />
+                            </div>
+                        )}
                     </div>
                 </div>
             </form>

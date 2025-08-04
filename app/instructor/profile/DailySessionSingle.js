@@ -39,7 +39,7 @@ function DailySessionSingle({ dayIndex, sessionIndex, removeSession, onAddSessio
         placeholder='Morning Session'
         register={register}
         setValue={setValue}
-        required
+        //required
         style={{ bgColor: 'white' }}
       />
       <div className='w-full flex justify-between items-center'>
@@ -74,7 +74,7 @@ function DailySessionSingle({ dayIndex, sessionIndex, removeSession, onAddSessio
           <button 
             type="button"
             className='cursor-pointer'
-            onClick={handleDuplicateSession}
+            //onClick={handleDuplicateSession}
           >
             <LuCopy color='#FF7000' size={20} />
           </button>

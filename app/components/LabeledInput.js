@@ -13,6 +13,7 @@ const LabeledInput = ({
   style,
   disabled,
   onChange,
+  wholeBg,
   required = false,
   preText,
   postText
@@ -24,7 +25,7 @@ const LabeledInput = ({
   }, [setValue, defaultValue, name]);
 
   return (
-    <div className="flex flex-col space-y-1.5 w-full">
+<div className={`flex flex-col ${wholeBg} space-y-1.5 w-full`}>
       <label htmlFor={name} className="text-sm font-source-sans font-semibold">
         {label}{required ? <span className="text-redimportant">*</span> : ""}
       </label>
