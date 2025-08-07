@@ -1,292 +1,272 @@
+import { useState, useEffect, useRef } from "react";
+import { useFormContext } from "react-hook-form";
 import LabeledDatePicker from "@/app/components/LabeledDatePicker";
 import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
-import { useAppContext } from "@/app/components/AppContext";
-import { useState, useEffect } from "react";
 import LabeledTextbox from "@/app/components/LabeledTextbox";
-import { useFormContext } from "react-hook-form";
+import { useAppContext } from "@/app/components/AppContext";
 
-const PersonalForm = ({profile}) => {
-    const { countries, states, cities, fetchStates, fetchCities, selectedCountry, setSelectedCountry, selectedState, setSelectedState, selectedCity, setSelectedCity } = useAppContext();
-    const { register, setValue, watch } = useFormContext();
+const PersonalForm = ({ profile }) => {
+  const {
+    countries,
+    states,
+    cities,
+    fetchStates,
+    fetchCities,
+    selectedCountry,
+    setSelectedCountry,
+    selectedState,
+    setSelectedState,
+    selectedCity,
+    setSelectedCity,
+  } = useAppContext();
 
-    // Sync react-hook-form values with context state for selects
-    // useEffect(() => {
-    //     fetchStates(selectedCountry || "AU");
-    //     setSelectedState("");
-    //     setSelectedCity("");
-    //     setValue("country", selectedCountry || "AU");
-    // }, [selectedCountry]);
+  const { register, setValue, watch } = useFormContext();
 
-    
+  const isInitialLoad = useRef(true);
 
-    useEffect(() => {
-        if (!profile?.user) return; // Guard clause if profile is not yet loaded
+  // Initialize form from profile
+  useEffect(() => {
+    if (!profile?.user) return;
 
-        const profileCountry = profile.user.address?.country || "AU";
-        const profileState = profile.user.address?.state || "";
-        const profileCity = profile.user.address?.city || "";
+    const country = profile.user.address?.country || "AU";
+    const state = profile.user.address?.state || "";
+    const city = profile.user.address?.city || "";
 
-        // 1. Set the context state for all location fields
-        setSelectedCountry(profileCountry);
-        setSelectedState(profileState);
-        setSelectedCity(profileCity);
+    // Update selected and form state
+    setSelectedCountry(country);
+    setValue("country", country);
 
-        // 2. Set the react-hook-form values for all location fields
-        setValue("country", profileCountry);
-        setValue("state", profileState);
-        setValue("city", profileCity);
-        
-        // 3. Fetch the dropdown options based on the profile data
-        fetchStates(profileCountry);
-        if (profileState) {
-            fetchCities(profileCountry, profileState);
+    fetchStates(country).then(() => {
+        setSelectedState(state);
+        setValue("state", state);
+
+        fetchCities(country, state).then(() => {
+        setSelectedCity(city);
+        setValue("city", city);
+        });
+    });
+
+    // Set mobile code
+    const countryData = countries.find((c) => c.iso2 === country);
+    const code = countryData?.phonecode ? `+${countryData.phonecode}` : "";
+    const currentMobile = watch("mobile") || profile.user.mobile || "";
+    if (!currentMobile.match(/^\+\d+/)) {
+        setValue("mobile", code + currentMobile);
+    }
+
+    // Set DOB
+    if (profile.user.dob) {
+        const dobDate = new Date(profile.user.dob);
+        if (!isNaN(dobDate.getTime())) {
+        setValue("dob", dobDate.toISOString().split("T")[0]);
         }
+    }
 
-        // 4. Handle mobile country code
-        const countryData = countries.find(c => c.iso2 === profileCountry);
-        if (countryData?.phonecode) {
-            const code = `+${countryData.phonecode}`;
-            const currentMobile = watch("mobile") || profile.user.mobile || "";
-            if (!currentMobile.match(/^\+\d+/)) {
-                setValue("mobile", code + currentMobile);
-            }
-        }
-
-        if (profile.user.dob) {
-            const dobDate = new Date(profile.user.dob);
-            if (!isNaN(dobDate.getTime())) {
-            const dobStr = dobDate.toISOString().split('T')[0]; // "YYYY-MM-DD"
-            // Don't call setValue here — let `value={watch("dob") || dobStr}` handle it
-        }
-  }
-
+    isInitialLoad.current = false;
     }, [profile, countries]);
-    // --- End country code logic ---
 
-    const gender = watch("gender") || "";
 
-    return(
-        <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
-            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
-                <LabeledInput
-                    label="First Name"
-                    name="firstName"
-                    type="text"
-                    required={true}
-                    register={register}
-                    setValue={setValue}
-                    defaultValue={profile.user.firstName}
-                />
-                <LabeledInput
-                    label={"Last Name"}
-                    name="lastName"
-                    type="text"
-                    required={true}
-                    register = {register}
-                    setValue={setValue}
-                    defaultValue={profile.user.lastName}
-                    
-                />
+  // When selectedCountry changes
+  useEffect(() => {
+    if (isInitialLoad.current) return;
+    if (!selectedCountry) return;
 
-            </div> 
-            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
-                
-                <LabeledInput
-                    label={"Nick Name"}
-                    name="nickName"
-                    type="text"
-                    required={false}
-                    register = {register}
-                    setValue={setValue}
-                    defaultValue={profile.user.nickName}
-                    
-                />
-            </div> 
-            <div className="flex flex-col md:flex-row space-y-2 space-x-3">  
-                <LabeledInput
-                    label={"Email Address"}
-                    name="email"
-                    type="email"
-                    required={true}
-                    register = {register}
-                    setValue={setValue}
-                    defaultValue={profile.user.email}
-                />
-                
-                <LabeledSelect
-                    label={"Gender"}
-                    name={"gender"}
-                    value={watch("gender") || profile?.user?.gender || ""}
-                    onChange={(e) => setValue("gender", e.target.value, { shouldValidate: true })}
-                    required={true}
-                    options={[
-                        {value: "male", label:"Male"},
-                        {value: "female", label:"Female"},
-                        {value: "not_to_say", label:"Prefer not to say"}
-                    ]}
-                />
-            </div>
-            <div className="flex flex-col md:flex-row space-y-2 space-x-3">
-                <div className="w-full md:w-1/2">
-                    <LabeledInput
-                        label={"Mobile"}
-                        name="mobile"
-                        type="tel"
-                        required={true}
-                        register={register}
-                        setValue={setValue}
-                        defaultValue={(() => {
-                        // Get profile mobile (might not have country code)
-                        const profileMobile = profile?.user?.mobile || "";
-                        
-                        // Get current country code
-                        const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
-                        const countryCode = country?.phonecode ? `+${country.phonecode}` : '';
-                        
-                        // If profile mobile already has a country code, use as-is
-                        if (profileMobile && profileMobile.match(/^\+\d+/)) {
-                            return profileMobile;
-                        }
-                        
-                        // Otherwise prepend current country code
-                        return countryCode + profileMobile.replace(/^\+\d+/, '');
-                        })()}
-                        onChange={(e) => {
-                        const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
-                        const countryCode = country?.phonecode ? `+${country.phonecode}` : '';
-                        
-                        // Prevent deleting country code if it exists
-                        if (countryCode && !e.target.value.startsWith(countryCode)) {
-                            // But allow if they're typing a different valid country code
-                            if (!e.target.value.match(/^\+\d+/)) {
-                            setValue("mobile", countryCode + e.target.value.replace(/^\+\d+/, ''));
-                            return;
-                            }
-                        }
-                        
-                        setValue("mobile", e.target.value);
-                        }}
-                        placeholder={(() => {
-                        const country = countries.find(c => c.iso2 === (selectedCountry || "AU"));
-                        return country?.phonecode ? `+${country.phonecode} Enter phone number` : "Enter phone number";
-                        })()}
-                    />
-                </div>
-                <div className="w-full md:w-1/2">
-                    <LabeledDatePicker
-                        label={"Date of Birth"}
-                        name="dob"
-                        register = {register}
-                        value={watch('dob') || profile?.user?.dob || ""}
-                        setValue={setValue}
-                        showDay={true}
-                        showMonth={true}
-                        showYear={true}
-                        required={true}
-                        //{...register("dob", { required: true })}
-                    />
-                </div>
-            </div>
-            <LabeledInput 
-                label={"Address Line 1"}
-                name="address1"
-                register = {register}
-                type="text"
-                required={true}
-                placeholder={"Street Address"}
-                setValue={setValue}
-                defaultValue={profile.user.address.line1}
-                //{...register("address1", { required: true })}
-            />
-            <LabeledInput 
-                label={"Address Line 2"}
-                name="address2"
-                type="text"
-                register = {register}
-                required={false}
-                placeholder={"Apartment, Suite, Unit, Building, Floor"}
-                //{...register("address2")}
-                setValue={setValue}
-                defaultValue={profile.user.address.line2}
-            />
-            <div className="full flex justify-between items-center space-x-4">
-                <div className="w-1/2">
-                <LabeledInput 
-                    label={"Postcode"}
-                    name="postcode"
-                    register = {register}
-                    type="text"
-                    required={true}
-                    setValue={setValue}
-                    defaultValue={profile.user.address.line1}
-                    //{...register("postcode", { required: true })}
-                />
-                </div>
-                <div className="w-1/2">
-                <LabeledSelect
-                    label={"Country"}
-                    name="country"
-                    register = {register}
-                    options={countries.map(c => ({ value: c.iso2, label: c.name }))}
-                    value={selectedCountry || "AU"}
-                    setValue={setValue}
-                    onChange={e => {
-                        setSelectedCountry(e.target.value);
-                        setValue("country", e.target.value); // keep form state in sync
-                      }}
-                    required={true}
-                    placeholder="Select Country"
-                />
-                </div>
-            </div>
-            <div className="full flex justify-between items-center space-x-4">
-                <div className="w-1/2">
-                <LabeledSelect
-                    label={"State"}
-                    name="state"
-                    register = {register}
-                    options={states.map(s => ({ value: s.iso2, label: s.name }))}
-                    value={selectedState}
-                    setValue={setValue}
-                    onChange={e => {
-                        setSelectedState(e.target.value);
-                        setValue("state", e.target.value); // keep form state in sync
-                      }}
-                    required={true}
-                    placeholder="Select State"
-                />
-                </div>
-                <div className="w-1/2">
-                <LabeledSelect
-                    label={"City/Suburb"}
-                    name="city"
-                    register = {register}
-                    options={cities.map(city => ({ value: city.name, label: city.name }))}
-                    value={selectedCity}
-                    setValue={setValue}
-                    onChange={e => {
-                        setSelectedCity(e.target.value);
-                        setValue("city", e.target.value); // keep form state in sync
-                      }}
-                    required={true}
-                    placeholder="Select City"
-                />
-                </div>
-            </div>
-            <LabeledTextbox
-                label={"About Me"}
-                name="aboutMe"
-                register = {register}
-                required={false}
-                rows={3}
-                setValue={setValue}
-                defaultValue={profile.bio}
-                //{...register("aboutMe")}
-            />
+    setSelectedState("");
+    setSelectedCity("");
+    setValue("state", "");
+    setValue("city", "");
+
+    fetchStates(selectedCountry);
+  }, [selectedCountry]);
+
+  // When selectedState changes
+  useEffect(() => {
+    if (isInitialLoad.current) return;
+    if (!selectedCountry || !selectedState) return;
+
+    setSelectedCity("");
+    setValue("city", "");
+
+    fetchCities(selectedCountry, selectedState);
+  }, [selectedState]);
+
+  // Watch gender
+  const gender = watch("gender") || "";
+
+  return (
+    <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
+      {/* First & Last Name */}
+      <div className="flex flex-col md:flex-row space-y-2 space-x-3">
+        <LabeledInput label="First Name" name="firstName" type="text" required register={register} setValue={setValue} defaultValue={profile.user.firstName} />
+        <LabeledInput label="Last Name" name="lastName" type="text" required register={register} setValue={setValue} defaultValue={profile.user.lastName} />
+      </div>
+
+      {/* Nickname */}
+      <div className="flex flex-col md:flex-row space-y-2 space-x-3">
+        <LabeledInput label="Nick Name" name="nickName" type="text" register={register} setValue={setValue} defaultValue={profile.user.nickName} />
+      </div>
+
+      {/* Email & Gender */}
+      <div className="flex flex-col md:flex-row space-y-2 space-x-3">
+        <LabeledInput label="Email Address" name="email" type="email" required register={register} setValue={setValue} defaultValue={profile.user.email} />
+        <LabeledSelect
+          label="Gender"
+          name="gender"
+          value={gender}
+          onChange={(e) => setValue("gender", e.target.value, { shouldValidate: true })}
+          required
+          options={[
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+            { value: "not_to_say", label: "Prefer not to say" },
+          ]}
+        />
+      </div>
+
+      {/* Mobile & DOB */}
+      <div className="flex flex-col md:flex-row space-y-2 space-x-3">
+        <div className="w-full md:w-1/2">
+          <LabeledInput
+            label="Mobile"
+            name="mobile"
+            type="tel"
+            required
+            register={register}
+            setValue={setValue}
+            defaultValue={(() => {
+              const mobile = profile?.user?.mobile || "";
+              const code = countries.find((c) => c.iso2 === selectedCountry)?.phonecode || "61";
+              return mobile.startsWith("+") ? mobile : `+${code}${mobile}`;
+            })()}
+            onChange={(e) => {
+              const code = countries.find((c) => c.iso2 === selectedCountry)?.phonecode || "61";
+              const val = e.target.value;
+              if (!val.startsWith(`+${code}`)) {
+                if (!val.match(/^\+\d+/)) {
+                  setValue("mobile", `+${code}${val}`);
+                  return;
+                }
+              }
+              setValue("mobile", val);
+            }}
+          />
         </div>
-        
-    )
-}
+        <div className="w-full md:w-1/2">
+          <LabeledDatePicker
+            label="Date of Birth"
+            name="dob"
+            register={register}
+            setValue={setValue}
+            value={watch("dob")}
+            showDay
+            showMonth
+            showYear
+            required
+          />
+        </div>
+      </div>
+
+      {/* Address Line 1 & 2 */}
+      <LabeledInput
+        label="Address Line 1"
+        name="address1"
+        type="text"
+        register={register}
+        setValue={setValue}
+        required
+        defaultValue={profile.user.address.line1}
+      />
+      <LabeledInput
+        label="Address Line 2"
+        name="address2"
+        type="text"
+        register={register}
+        setValue={setValue}
+        defaultValue={profile.user.address.line2}
+      />
+
+      {/* Postcode & Country */}
+      <div className="full flex justify-between items-center space-x-4">
+        <div className="w-1/2">
+          <LabeledInput
+            label="Postcode"
+            name="postcode"
+            register={register}
+            type="text"
+            required
+            setValue={setValue}
+            defaultValue={profile.user.address.postcode}
+          />
+        </div>
+        <div className="w-1/2">
+          <LabeledSelect
+            label="Country"
+            name="country"
+            register={register}
+            options={countries.map((c) => ({ value: c.iso2, label: c.name }))}
+            value={selectedCountry}
+            setValue={setValue}
+            onChange={(e) => {
+              const val = e.target.value;
+              setSelectedCountry(val);
+              setValue("country", val);
+            }}
+            required
+            placeholder="Select Country"
+          />
+        </div>
+      </div>
+
+      {/* State & City */}
+      <div className="full flex justify-between items-center space-x-4">
+        <div className="w-1/2">
+          <LabeledSelect
+            label="State"
+            name="state"
+            register={register}
+            options={states.map((s) => ({ value: s.iso2, label: s.name }))}
+            value={selectedState}
+            setValue={setValue}
+            onChange={(e) => {
+              const val = e.target.value;
+              setSelectedState(val);
+              setValue("state", val);
+            }}
+            required
+            placeholder="Select State"
+          />
+        </div>
+        <div className="w-1/2">
+          <LabeledSelect
+            label="City/Suburb"
+            name="city"
+            register={register}
+            options={cities.map((c) => ({ value: c.name, label: c.name }))}
+            value={selectedCity}
+            setValue={setValue}
+            onChange={(e) => {
+              const val = e.target.value;
+              setSelectedCity(val);
+              setValue("city", val);
+            }}
+            required
+            placeholder="Select City"
+          />
+        </div>
+      </div>
+
+      {/* About Me */}
+      <LabeledTextbox
+        label="About Me"
+        name="aboutMe"
+        register={register}
+        setValue={setValue}
+        rows={3}
+        defaultValue={profile.bio}
+      />
+    </div>
+  );
+};
 
 export default PersonalForm;

@@ -28,6 +28,7 @@ import PricingDetails from "./pricingDetails";
 import AvailabilitySettings from "./AvailabilitySettings";
 import ClassSettingsMain from "./ClassSettingsMain";
 import CopyWeeklySchedule from "./CopyWeeklySchedule";
+import OffDaySettings from "./OffDaySettings";
 
 const Profile = () => {
     const methods = useForm();
@@ -35,7 +36,7 @@ const Profile = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('pricingAvailability');  
-    const [activeSubTab, setActiveSubTab] = useState('availability');
+    const [activeSubTab, setActiveSubTab] = useState('pricing');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const { setProfile, setProfileLoading, profile } = useAppContext();
@@ -338,9 +339,7 @@ const Profile = () => {
                         )}
                         {(activeTab === 'pricingAvailability' && activeSubTab === 'offDaySettings') && (
                             <div className="w-full pb-24 md:pl-8 space-y-6">
-                                <AvailabilitySettings profile={profile?profile:undefined}/>
-                                <ClassSettingsMain />
-                                <CopyWeeklySchedule />
+                                <OffDaySettings profile={profile?profile:undefined} />
                             </div>
                         )}
                     </div>

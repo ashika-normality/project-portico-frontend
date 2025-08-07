@@ -19,7 +19,7 @@ function AvailabilitySettings({profile}) {
             <div className="flex items-center justify-between">
                 <h1 className="flex-grow text-primary text-lg font-bold font-raleway">Availability</h1>
                 <div>
-                    <MildOrangeButton text={'Goto Calender View'} bgColor={'primary'} textColor={'white'}/>
+                    <MildOrangeButton text={'Go to Calender View'} bgColor={'primary'} textColor={'white'}/>
                 </div>
             </div>
             <div className="w-full flex flex-col space-y-3 space-x-3">

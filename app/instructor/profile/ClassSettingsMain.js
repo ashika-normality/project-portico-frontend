@@ -137,15 +137,15 @@ function BreakSetting({ availability }) {
     return (
         <div className="w-full">
             <h1 className="text-primary text-lg font-bold font-raleway">Break Timings</h1>
-            <div className="mt-4">
+            <div className="mt-3 md:mt-6">
                 {availability.length === 0 ? (
                     <span className="text-gray-500">No availability data.</span>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-2">
                         {availability.map((day, idx) => {
                             const breaks = getBreakTimingsForDay(day);
                             return (
-                                <div key={idx} className="mb-2 flex justify-start md:justify-between items-start bg-footerorange text-sm rounded-lg p-4">
+                                <div key={idx} className="mb-1 flex justify-start md:justify-between items-start bg-footerorange text-[14px] rounded-lg p-4">
                                     <h2 className="font-semibold text-tonedblack mb-1">{days[idx]}: </h2>
                                     {breaks.length === 0 ? (
                                         <span className="text-tonedblack">No breaks found (sessions cover all working hours or not enabled).</span>
@@ -172,9 +172,13 @@ function ClassSettingsMain({}) {
     const availability = watch("availability") || [];
 
     return (
-        <div className="flex flex-col md:flex-row w-full bg-white rounded-xl shadow-equal p-8 space-y-8 space-x-12">
-            <ClassSettings />
-            <BreakSetting availability={availability} />
+        <div className="flex flex-col md:flex-row w-full bg-white rounded-xl shadow-equal p-8 space-y-8 space-x-6">
+            <div className="md:w-2/5">
+                <ClassSettings />
+            </div>
+            <div className="md:w-3/5">
+                <BreakSetting availability={availability} />
+            </div>
         </div>
     );
 }
