@@ -111,10 +111,12 @@ function OffDaySettings({profile}) {
 
     const handleConfirmation = useCallback(() => {
         if (selectedDate) {
+            
             // Add the confirmed date to the offDates array
             setOffDates(prev => [...prev, selectedDate]);
             setShowConfirmation(false);
             setSelectedDate(null);
+            
         }
     }, [selectedDate]);
 

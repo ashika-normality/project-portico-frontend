@@ -49,6 +49,7 @@ function PublicHolidays({ publicHolidays }) {
     const holidaysInMonth = publicHolidays?.filter(holiday => {
         if (!holiday || !holiday.date) return false; // Add safety check
         const holidayDate = new Date(holiday.date);
+        
         // Ensure the holiday date is valid
         if (isNaN(holidayDate.getTime())) return false;
         return (
