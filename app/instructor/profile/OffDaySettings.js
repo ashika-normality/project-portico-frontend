@@ -8,6 +8,7 @@ import { Calendar } from "@/app/components/ui/calendar"; // Ensure correct path
 import calenderVector from "@/public/Assets/calender-vector.svg"; // Ensure correct path
 import { IoClose } from "react-icons/io5";
 import PublicHolidays from "./PublicHolidays";
+import toast, { Toaster } from "react-hot-toast";
 
 function OffDaySettings({profile}) {
 
@@ -86,6 +87,8 @@ function OffDaySettings({profile}) {
 
     // Handle date click on the calendar
     const handleSelectDate = useCallback((date) => {
+
+        console.log("Selected date:", date);
         // Check if the clicked date is in the future and not already an off date
         if (date) {
             const today = new Date();
@@ -104,6 +107,7 @@ function OffDaySettings({profile}) {
                 }
             } else {
                  // Optionally, provide feedback for past dates
+                 toast.error("Cannot select a past date.");
                  console.log("Cannot select a past date.");
             }
         }
@@ -155,6 +159,7 @@ function OffDaySettings({profile}) {
 
     return (
         <div className="flex flex-col md:flex-row w-full space-y-8 md:space-y-0 md:space-x-6">
+            <Toaster />
             <div className="flex flex-col md:flex-row w-full md:w-5/9 bg-white rounded-xl shadow-equal p-8 space-y-8 md:space-y-0 md:space-x-12">
                 <div className="w-full flex flex-col space-y-6">
                     <div className="w-full flex flex-col space-y-1">
@@ -257,18 +262,8 @@ function OffDaySettings({profile}) {
                 ) : publicHolidays.length > 0 ? (
                     <PublicHolidays publicHolidays={publicHolidays} 
                         offDates={offDates}
-                        onToggleHoliday={(holidayDate) => {
-                            const dateObj = new Date(holidayDate);
-                            const exists = offDates.some(
-                            (d) => d.toDateString() === dateObj.toDateString()
-                            );
-                            setOffDates((prev) =>
-                            exists
-                                ? prev.filter((d) => d.toDateString() !== dateObj.toDateString())
-                                : [...prev, dateObj]
-                            );
-                        }}
-                                            />
+                        onToggleHoliday={handleSelectDate}
+                    />
                 ) : (
                     <div className="bg-white rounded-xl shadow-equal p-6">
                     <p className="text-sm text-greyfortext">No public holidays found for this country.</p>

@@ -159,9 +159,6 @@ const SignupForm = () => {
       errors.wwccNumber = "Please enter a valid WWCC number";
     }
 
-    if (formData.website && !validateWebsite(formData.website)) {
-      errors.website = "Please enter a valid website URL";
-    }
 
     // File validations
     if (!photoFile) {
@@ -210,7 +207,7 @@ const SignupForm = () => {
       instructorLicenseNumber: e.target.instructor_license_number.value,
       wwccNumber: e.target.wwcc_number.value,
       drivingSchoolName: e.target.driving_school_name.value,
-      website: e.target.website.value,
+      //website: e.target.website.value,
       bio: e.target.bio.value,
     };
 
