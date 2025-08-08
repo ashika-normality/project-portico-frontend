@@ -26,14 +26,6 @@ function OffDaySettings({profile}) {
     // --- Fetch Public Holidays ---
     useEffect(() => {
         // Ensure selectedCountry is available and API key exists
-        const API_KEY = process.env.NEXT_PUBLIC_HOLIDAYS_API_KEY;
-        console.log("API Key:", API_KEY); // Debugging line to check if API key is set
-        if (!API_KEY) {
-            console.warn("NEXT_PUBLIC_HOLIDAYS_API_KEY is not set. Skipping public holidays fetch.");
-            setPublicHolidays([]); // Ensure holidays list is empty
-            return;
-        }
-
         // Use selectedCountry from context. If it's not set, we might not fetch yet or use a default.
         // Let's assume we wait for a valid country selection.
         const countryIso2 = selectedCountry?selectedCountry:profile.user.address.country; // Get the ISO2 code from the context
