@@ -112,6 +112,7 @@ function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValu
               onAddSession={addSession}
               sessions={sessions}
               setValue={setValue}
+              requiredOn={enabled} //I want to pass true or flase according to the enabled prop
               onTimeChange={(field, value) => updateSession(i, field, value)}
             />
           ))}

@@ -5,7 +5,7 @@ import { BsTrashFill } from "react-icons/bs";
 import { LuCopy, LuPlus } from "react-icons/lu";
 import { useEffect } from 'react';
 
-function DailySessionSingle({ dayIndex, sessionIndex, removeSession, onAddSession, onDuplicateSession, onTimeChange }) {
+function DailySessionSingle({requiredOn = false, dayIndex, sessionIndex, removeSession, onAddSession, onDuplicateSession, onTimeChange }) {
   const { register, setValue, watch } = useFormContext();
 
   const labelField = `availability.${dayIndex}.sessions.${sessionIndex}.label`;
@@ -42,7 +42,7 @@ function DailySessionSingle({ dayIndex, sessionIndex, removeSession, onAddSessio
             label='Start Time'
             register={register}
             setValue={setValue}
-            required
+            required = {requiredOn}
           />   
           <span>
             <div className='mt-6 w-3 border-1 border-tonedblack'></div>
@@ -52,7 +52,7 @@ function DailySessionSingle({ dayIndex, sessionIndex, removeSession, onAddSessio
             label='End Time'
             register={register}
             setValue={setValue}
-            required
+            required = {requiredOn}
           />
         </div>  
         <div className='px-4 flex space-x-4 md:space-x-9 justify-between items-center mt-6'>
