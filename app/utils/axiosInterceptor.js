@@ -11,7 +11,8 @@ function isAuthRoute(url) {
   return (
     url.includes('/login') ||
     url.includes('/register-learner') ||
-    url.includes('/register-instructor')
+    url.includes('/register-instructor')||
+    url.includes('/verify-token')
   );
 }
 
