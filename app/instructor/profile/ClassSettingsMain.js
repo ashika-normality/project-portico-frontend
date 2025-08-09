@@ -2,7 +2,7 @@ import LabeledInput from "@/app/components/LabeledInput";
 import LabeledSelect from "@/app/components/LabeledSelect";
 import { useFormContext } from "react-hook-form";
 
-function ClassSettings({}) {
+function ClassSettings({availability}) {
     return (
         <div className="w-full">
             <h1 className="text-primary text-lg font-bold font-raleway">Class Duration Settings</h1>
@@ -86,11 +86,15 @@ function ClassSettings({}) {
     );
 }
 
-function BreakSetting({ availability }) {
+function BreakSetting({availability}) {
+    // const { watch } = useFormContext();
+    // const availability = watch("availability") || [];
+
     // Utility to convert time string (e.g. "08:00") to minutes
     function timeStrToMinutes(str) {
+        if (!str) return null;
         const [h, m] = str.split(":").map(Number);
-        return h * 60 + m;
+        return isNaN(h) || isNaN(m) ? null : h * 60 + m;
     }
 
     // Utility to convert minutes to time string (e.g. 480 -> "08:00")
@@ -100,32 +104,40 @@ function BreakSetting({ availability }) {
         return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
     }
 
+    // Get break timings based on actual session times for a given day
     function getBreakTimingsForDay(day) {
-        const WORK_START = 480;
-        const WORK_END = 1080;
-        let sessions = [];
-        if (day?.enabled && Array.isArray(day.sessions)) {
-            for (const session of day.sessions) {
-                if (session.startTime && session.endTime) {
-                    sessions.push({
-                        start: timeStrToMinutes(session.startTime),
-                        end: timeStrToMinutes(session.endTime)
-                    });
-                }
+        // Skip if day is not enabled or no sessions
+        if (!day?.enabled || !Array.isArray(day.sessions)) return null;
+
+        const validSessions = day.sessions
+            .map(s => ({
+                start: timeStrToMinutes(s.startTime),
+                end: timeStrToMinutes(s.endTime)
+            }))
+            .filter(s => s.start !== null && s.end !== null && s.start < s.end);
+
+        // If no valid sessions, no breaks to show
+        if (validSessions.length === 0) return null;
+
+        // Sort by start time
+        validSessions.sort((a, b) => a.start - b.start);
+
+        // Determine working window: from first session start to last session end
+        const workStart = validSessions[0].start;
+        const workEnd = Math.max(...validSessions.map(s => s.end));
+
+        // Now calculate gaps between sessions within that window
+        const breaks = [];
+        let currentEnd = workStart;
+
+        for (const session of validSessions) {
+            if (session.start > currentEnd) {
+                breaks.push({ start: currentEnd, end: session.start });
             }
+            currentEnd = Math.max(currentEnd, session.end);
         }
-        sessions.sort((a, b) => a.start - b.start);
-        let breaks = [];
-        let prevEnd = WORK_START;
-        for (const s of sessions) {
-            if (s.start > prevEnd) {
-                breaks.push({ start: prevEnd, end: s.start });
-            }
-            prevEnd = Math.max(prevEnd, s.end);
-        }
-        if (prevEnd < WORK_END) {
-            breaks.push({ start: prevEnd, end: WORK_END });
-        }
+
+        // Convert to time strings
         return breaks.map(b => ({
             start: minutesToTimeStr(b.start),
             end: minutesToTimeStr(b.end)
@@ -141,24 +153,42 @@ function BreakSetting({ availability }) {
                 {availability.length === 0 ? (
                     <span className="text-gray-500">No availability data.</span>
                 ) : (
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {availability.map((day, idx) => {
                             const breaks = getBreakTimingsForDay(day);
+
+                            // Only render if the day is enabled and has sessions
+                            if (!day?.enabled || breaks === null) {
+                                return null; // Skip disabled or empty days
+                            }
+
                             return (
-                                <div key={idx} className="mb-1 flex justify-start md:justify-between items-start bg-footerorange text-[14px] rounded-lg p-4">
-                                    <h2 className="font-semibold text-tonedblack mb-1">{days[idx]}: </h2>
+                                <div
+                                    key={idx}
+                                    className="flex justify-between bg-footerorange text-[14px] rounded-lg p-4"
+                                >
+                                    <h2 className="font-semibold text-tonedblack mb-2">{days[idx]}</h2>
                                     {breaks.length === 0 ? (
-                                        <span className="text-tonedblack">No breaks found (sessions cover all working hours or not enabled).</span>
+                                        <span className="text-tonedblack text-sm">No breaks</span>
                                     ) : (
-                                        <ul className="list-none pl-4">
+                                        <ul className="list-none pl-0 space-y-1">
                                             {breaks.map((b, i) => (
-                                                <li key={i} className="pb-2 text-tonedblack">{b.start} - {b.end}</li>
+                                                <li key={i} className="text-tonedblack">
+                                                    {b.start} – {b.end}
+                                                </li>
                                             ))}
                                         </ul>
                                     )}
                                 </div>
                             );
                         })}
+
+                        {/* Optional: Show message if no enabled days */}
+                        {availability.every(day => !day?.enabled || getBreakTimingsForDay(day) === null) && (
+                            <span className="text-gray-500 col-span-1 md:col-span-2">
+                                No enabled days with valid sessions.
+                            </span>
+                        )}
                     </div>
                 )}
             </div>

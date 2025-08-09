@@ -1,6 +1,8 @@
 import { useEffect, useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import DailySessionSingle from './DailySessionSingle';
+import MildOrangeButton from '@/app/components/MildOrangeButton';
+import PrimaryButton from '@/app/components/PrimaryButton';
 import { IoWarningOutline } from 'react-icons/io5';
 
 function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValue }) {
@@ -92,7 +94,7 @@ function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValu
             {...register(`availability.${dayIndex}.enabled`)}
             checked={enabled}
             onChange={handleToggleEnabled}
-            className="form-checkbox rounded-sm mr-2 hover:cursor-pointer"
+            className="form-checkbox rounded-xs mr-2 hover:cursor-pointer outline-none checked:focus:outline-none focus:outline-none focus:ring-0 hover:bg-primary checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary"
             style={{ zoom: '120%' }}
           />
           <label>{day}</label>
@@ -201,31 +203,33 @@ const OverlapConfirmationPopup = ({ day, handleClose, handleConfirmation }) => {
       aria-describedby="overlap-desc"
     >
       <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
-        <h2 id="overlap-title" className="text-xl font-bold text-primary flex items-center">
-          <IoWarningOutline className="text-red-500 mr-2" size={24} />
+        <h2 id="overlap-title" className="text-xl font-regular text-primary flex items-center">
+          <IoWarningOutline className="text-primary mr-2" size={24} />
           Schedule Overlap
         </h2>
 
-        <p id="overlap-desc" className="text-gray-700 mt-4 mb-6">
-          The new session on <strong>{day}</strong> overlaps with an existing session.
+        <p id="overlap-desc" className="text-greyfortext mt-4 mb-6">
+          The current days you have selected already consists of existing schedules for the same time durations. 
+          If you wish to proceed, it will replace the current schedules with new ones.
+        </p>
+        <p className='text-gray-700 mb-6'>
+          Do you want still want to copy your new schedule to the selected days?
         </p>
 
         <div className="flex justify-end gap-3">
-          <button
-            type="button"
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          <MildOrangeButton 
+            text="Cancel"
+            border='primary'
+            textColor='tonedblack'
             onClick={handleClose}
-          >
-            Discard New
-          </button>
-          <button
-            type="button"
-            className="px-4 py-2 text-sm font-medium text-white bg-primary rounded hover:bg-footerorange focus:outline-none focus:ring-0"
+            alignment='center'
+          />
+          <PrimaryButton
+            text="Confirm"
             onClick={handleConfirmation}
-            data-confirm-button
-          >
-            Keep New
-          </button>
+            bgColor='primary'
+            textColor='white'
+          />
         </div>
       </div>
     </div>
