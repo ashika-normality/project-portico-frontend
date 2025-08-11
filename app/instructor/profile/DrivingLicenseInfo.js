@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { PiUploadFill } from "react-icons/pi";
 
@@ -12,13 +12,26 @@ import { useAppContext } from "@/app/components/AppContext";
 import { useFormContext } from "react-hook-form";
 
 function DrivingLicenseInfo({profile}) {
+
+
+    useEffect(() => {
+        if (profile.drivingLicenseExpiry) {
+            const expiryDate = new Date(profile.drivingLicenseExpiry);
+            if (!isNaN(expiryDate.getTime())) {
+                setValue("drivingLicenseExpiry", expiryDate.toISOString().split("T")[0]);
+            }
+        }
+
+        setValue('stateIssued', profile.stateIssued);
+    }, [profile]);
+
     const { states } = useAppContext();
     const [licensePhoto, setLicensePhoto] = useState(null);
 
     const { register, setValue, watch } = useFormContext();
 
     const expiry = watch('drivingLicenseExpiry')
-    const stateIssued = watch('stateIssued')
+    const stateIssued = watch('stateIssued') || profile?.stateIssued || ""; 
 
     function handlePhotoChange(e) {
         setLicensePhoto(e.target.files[0]);
@@ -45,7 +58,7 @@ function DrivingLicenseInfo({profile}) {
                         register={register}
                         setValue={setValue}
                         // ✅ Critical: Pass value from watch() OR profile
-                        value={expiry || profile?.user?.drivingLicenseExpiry || ""}
+                        value={expiry || profile?.drivingLicenseExpiry || ""}
                         showDay={true}
                         showMonth={true}
                         showYear={true}
@@ -59,8 +72,10 @@ function DrivingLicenseInfo({profile}) {
                     <LabeledInput
                         label="Card Stock Number"
                         name="cardStockNumber"
+                        defaultValue={profile.cardStockNumber || ""}
                         required={true}
                         register={register}
+                        setValue={setValue}
                     />
                 </div>
                 <div className="w-1/2">
@@ -72,7 +87,8 @@ function DrivingLicenseInfo({profile}) {
                         placeholder="Select State"
                         register={register}
                         setValue={setValue}
-                        value={stateIssued || profile?.user?.stateIssued || ""}
+                        onChange={e => setValue("stateIssued", e.target.value)}
+                        value={stateIssued}
                     />
                 </div>
             </div>

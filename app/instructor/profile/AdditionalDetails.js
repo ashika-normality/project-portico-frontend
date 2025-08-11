@@ -11,6 +11,18 @@ function AdditionalDetails({profile}) {
     // const [totalExperience, setTotalExperience] = useState("");
 
     // Calculate years of experience when experienceDate changes
+
+
+
+    useEffect(() => {
+        if (profile.experienceDate) {
+            const experienceDate = new Date(profile.experienceDate);
+            if (!isNaN(experienceDate.getTime())) {
+                setValue("experienceDate", experienceDate.toISOString().split("T")[0]);
+            }
+        }
+    }, [profile]);
+
     function calculateExperience(dateStr) {
         if (!dateStr) return "";
         const [year, month] = dateStr.split("-").map(Number);
@@ -28,8 +40,8 @@ function AdditionalDetails({profile}) {
         // setValue("totalExperience", calculateExperience(value));
     }
 
-    const watchedExperienceDate = watch("experienceDate") || "";
-    const totalExperience = watch("totalExperience") || "";
+    const watchedExperienceDate = watch("experienceDate") || profile.experienceDate || "";
+    const totalExperience = watch("totalExperience") || profile.totalExperience || "";
 
     useEffect(() => {
         if (watchedExperienceDate) {
@@ -50,7 +62,7 @@ function AdditionalDetails({profile}) {
                         required={true}
                         showMonth={true}
                         showYear={true}
-                        value={experienceDate}
+                        value={watch("experienceDate")}
                         onChange={handleExperienceDateChange}
                         register={register}
                         {...register("experienceDate", { required: true })}
@@ -99,6 +111,7 @@ function AdditionalDetails({profile}) {
                     label="Australia Business Number(ABN)"
                     name="abn"
                     type="text"
+                    value={watch("abn") || profile.abn || ""}
                     required={true}
                     register={register}
                     {...register("abn", { required: true })}
@@ -107,7 +120,7 @@ function AdditionalDetails({profile}) {
                     label="Languages"
                     name="languages"
                     setValue={setValue}
-                    value={watch("languages") || ""}
+                    value={watch("languages") || profile.languages || ""}
                     register={register}
                     onChange={(e) => {
                         setValue("languages", e.target.value);

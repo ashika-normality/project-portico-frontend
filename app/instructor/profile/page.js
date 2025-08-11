@@ -35,7 +35,7 @@ const Profile = () => {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('pricingAvailability');  
+    const [activeTab, setActiveTab] = useState('personalDetails');  
     const [activeSubTab, setActiveSubTab] = useState('pricing');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 

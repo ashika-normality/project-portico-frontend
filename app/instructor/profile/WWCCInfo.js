@@ -15,15 +15,27 @@ function WWCCInfo({profile}) {
         { value: "self-employed", label: "Self-Employed" },
     ];
 
+     useEffect(() => {
+                if (profile.wwccExpiry) {
+                    const expiryDate = new Date(profile.wwccExpiry);
+                    if (!isNaN(expiryDate.getTime())) {
+                        setValue("wwccExpiry", expiryDate.toISOString().split("T")[0]);
+                    }
+                }
+    
+                setValue('instructorLicenseStateIssued', profile.instructorLicenseStateIssued);
+            }, [profile]);
+
     useEffect(() => {
         if (selectedCountry) {
             fetchStates(selectedCountry);
         }
     }, [selectedCountry, fetchStates]);
 
-    const wwccStateIssuedValue = watch("wwccStateIssued");
-    const wwccTypeValue = watch("wwccType");
-    const WWCCExpiry = watch("WWCCExpiry");
+    const wwccExpiry = watch("wwccExpiry");
+    const wwccStateIssuedValue = watch("wwccStateIssued") || profile.wwccStateIssued || "";
+    const wwccTypeValue = watch("wwccType") ;
+    //const WWCCExpiry = watch("wwccExpiry");
 
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
@@ -42,15 +54,15 @@ function WWCCInfo({profile}) {
                 <div className="w-full md:w-1/2">
                 <LabeledDatePicker
                         label={"Expiry"}
-                        name="WWCCExpiry"
+                        name="wwccExpiry"
                         register={register}
                         setValue={setValue}
-                        value={WWCCExpiry || profile.WWCCExpiry || ""}
+                        value={wwccExpiry || profile.wwccExpiry || ""}
                         showDay={true}
                         showMonth={true}
                         showYear={true}
                         required={true}
-                        {...register("WWCCExpiry", { required: true })}
+                        //{...register("wwccExpiry", { required: true })}
                     />
                 </div>
             </div>
@@ -75,7 +87,7 @@ function WWCCInfo({profile}) {
                         options={typeOptions}
                         required={false}
                         register={register}
-                        value={wwccTypeValue}
+                        value={wwccTypeValue || profile.wwccType}
                         setValue={setValue}
                         onChange={e => setValue("wwccType", e.target.value)}
                     />

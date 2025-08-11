@@ -11,11 +11,16 @@ function InstructorLicenseInfo({profile}) {
     const { states, fetchStates, selectedCountry } = useAppContext();
     const { register, setValue, watch } = useFormContext();
 
-    useEffect(() => {
-        if (selectedCountry) {
-            fetchStates(selectedCountry);
-        }
-    }, [selectedCountry, fetchStates]);
+        useEffect(() => {
+            if (profile.instructorLicenseExpiry) {
+                const expiryDate = new Date(profile.instructorLicenseExpiry);
+                if (!isNaN(expiryDate.getTime())) {
+                    setValue("instructorLicenseExpiry", expiryDate.toISOString().split("T")[0]);
+                }
+            }
+
+            setValue('instructorLicenseStateIssued', profile.instructorLicenseStateIssued);
+        }, [profile]);
 
     const instructorLicenseStateIssuedValue = watch("instructorLicenseStateIssued");
     const instructorLicenseExpiry = watch("instructorLicenseExpiry");
@@ -68,8 +73,10 @@ function InstructorLicenseInfo({profile}) {
                     <LabeledInput
                         label="Conditions (If applicable)"
                         name="instructorLicenseConditions"
+                        defaultValue={profile.instructorLicenseCondition || ""}
                         required={false}
                         register={register}
+                        setValue={setValue}
                         {...register("instructorLicenseConditions")}
                     />
                 </div>

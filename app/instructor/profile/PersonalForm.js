@@ -113,7 +113,7 @@ const PersonalForm = ({ profile }) => {
         <LabeledSelect
           label="Gender"
           name="gender"
-          value={gender}
+          value={gender || profile.user.gender}
           onChange={(e) => setValue("gender", e.target.value, { shouldValidate: true })}
           required
           options={[
