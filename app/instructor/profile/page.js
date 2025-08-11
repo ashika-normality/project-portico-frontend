@@ -21,7 +21,7 @@ import DrivingLicenseInfo from "./DrivingLicenseInfo";
 import VehicleInformation from "./VehicleInformation";
 import InstructorLicenseInfo from "./InstructorLicenseInfo";
 import WWCCInfo from "./WWCCInfo";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import SpinnerComponent from "@/app/components/SpinnerComponent";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 import PricingDetails from "./pricingDetails";
@@ -97,10 +97,25 @@ const Profile = () => {
         setDropdownOpen(false);
     };
 
-    const onSubmit = (data) => {
-        console.log("✅ Form submitted successfully:");
-        console.log('Form Data:', data);
-    };
+    const onSubmit = async (data) => {
+        console.log("Form Data:", data);
+        try {
+            toast.loading("Saving your profile...", { id: "saveProfile" });
+            const response = await axiosInstance.post('/instructor-profile/save-profile', {
+                ...data,
+                // Include any other necessary fields here
+            });
+            toast.success("Profile saved successfully!", { id: "saveProfile" });
+            // Optionally update context/profile state here
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message || "Failed to save profile. Please try again.",
+                { id: "saveProfile" }
+            );
+            // Optionally handle error state here
+        }
+    }
+
 
     const onError = (errors) => {
         console.log('Form Errors:', errors);
