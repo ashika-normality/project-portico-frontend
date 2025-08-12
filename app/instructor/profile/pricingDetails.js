@@ -29,6 +29,7 @@ export default function PricingDetails({ profile }) {
       packageName: packageData.packageName.trim(),
       ratePerHour: parseFloat(packageData.ratePerHour) || 0,
       numberOfHours: parseInt(packageData.numberOfHours, 10),
+      discount: packageData.discount ? parseFloat(packageData.discount) : 0,
       description: packageData.description.trim(),
     });
     setShowPackagePopup(false);
@@ -58,27 +59,6 @@ export default function PricingDetails({ profile }) {
           />
         </div>
 
-        {/* Bulk Booking Discount */}
-        <div className="w-full md:w-1/2">
-          <LabeledMultiInput
-            label="Bulk Booking Discount"
-            name1="bulkBookingDiscountPercentage"
-            name2="bulkBookingDiscountHours"
-            pretext1=""
-            posttext1="% discount"
-            pretext2="for "
-            posttext2="hours or more"
-            placeholder1="10"
-            placeholder2="4"
-            type1="text"
-            type2="text"
-            register={register}
-            setValue={setValue}
-            value1={watch('bulkBookingDiscountPercentage')}
-            value2={watch('bulkBookingDiscountHours')}
-          />
-        </div>
-
         {/* Other Packages Label */}
         <div>
           <span className="text-sm font-source-sans font-semibold">Other Packages:</span>
@@ -99,6 +79,9 @@ export default function PricingDetails({ profile }) {
                       <strong>{pkg.packageName}</strong> - {pkg.numberOfHours} hour
                       {pkg.numberOfHours > 1 ? 's' : ''} at ${pkg.ratePerHour}/hr
                     </div>
+                    {pkg.discount && (
+                      <p className="text-gray-600 italic">Discount: {pkg.discount}%</p>
+                    )}
                     {pkg.description && (
                       <p className="text-gray-600 italic">{pkg.description}</p>
                     )}
@@ -137,6 +120,7 @@ export default function PricingDetails({ profile }) {
         <AddPackagePopup
           onClose={() => setShowPackagePopup(false)}
           onAddPackage={handleAddPackage}
+          hourlyRate={watch('hourlyRate')}
         />
       )}
     </div>

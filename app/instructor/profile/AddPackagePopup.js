@@ -7,12 +7,13 @@ import PrimaryButton from '@/app/components/PrimaryButton';
 import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
-const AddPackagePopup = ({ onClose, onAddPackage }) => {
+const AddPackagePopup = ({ onClose, onAddPackage, hourlyRate }) => {
   const [errors, setErrors] = useState({});
   const [packageName, setPackageName] = useState('');
-  const [ratePerHour, setRatePerHour] = useState('');
+  const [ratePerHour, setRatePerHour] = useState(hourlyRate);
   const [numberOfHours, setNumberOfHours] = useState('1');
   const [description, setDescription] = useState('');
+  const [discount, setDiscount] = useState('');
 
   // Validate inputs
   const validate = () => {
@@ -21,6 +22,7 @@ const AddPackagePopup = ({ onClose, onAddPackage }) => {
     if (!ratePerHour.trim()) newErrors.ratePerHour = 'Rate per hour is required';
     if (!/^\d*\.?\d+$/.test(ratePerHour)) newErrors.ratePerHour = 'Must be a valid number';
     if (!numberOfHours) newErrors.numberOfHours = 'Number of hours is required';
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -32,6 +34,7 @@ const AddPackagePopup = ({ onClose, onAddPackage }) => {
         packageName: packageName.trim(),
         ratePerHour: ratePerHour,
         numberOfHours: numberOfHours,
+        discount: discount.trim(),
         description: description.trim(),
       };
 
@@ -42,9 +45,10 @@ const AddPackagePopup = ({ onClose, onAddPackage }) => {
 
       // Reset form
       setPackageName('');
-      setRatePerHour('');
+      //setRatePerHour('');
       setNumberOfHours('1');
       setDescription('');
+      setDiscount('');
     }
   };
 
@@ -98,10 +102,11 @@ const AddPackagePopup = ({ onClose, onAddPackage }) => {
               value={ratePerHour}
               required={true}
               error={errors.ratePerHour}
-              onChange={(e) => {
-                setRatePerHour(e.target.value);
-                if (errors.ratePerHour) setErrors(prev => ({ ...prev, ratePerHour: '' }));
-              }}
+              disabled={true}
+              // onChange={(e) => {
+              //   setRatePerHour(e.target.value);
+              //   if (errors.ratePerHour) setErrors(prev => ({ ...prev, ratePerHour: '' }));
+              // }}
             />
           </div>
 
@@ -128,6 +133,13 @@ const AddPackagePopup = ({ onClose, onAddPackage }) => {
                 setNumberOfHours(e.target.value);
                 if (errors.numberOfHours) setErrors(prev => ({ ...prev, numberOfHours: '' }));
               }}
+            />
+            <LabeledInput
+              name="discount"
+              label="Discount"
+              value={discount}
+              postText={'%'}
+              onChange={(e) => setDiscount(e.target.value)}
             />
           </div>
 
