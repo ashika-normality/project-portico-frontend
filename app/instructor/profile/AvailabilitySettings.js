@@ -9,10 +9,16 @@ import DailySessionSingle from "./DailySessionSingle";
 import DailyAvailability from "./DailyAvailability";
 
 function AvailabilitySettings({profile}) {
+
+    
     const { register, setValue, watch } = useFormContext();
     const availability = watch("availability") || [];
 
     const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+
+    const handleClose = () => {
+        setShowCopyDay(false);
+    };
 
     return(
         <div className="flex flex-col w-full bg-white rounded-xl shadow-equal p-8 space-y-4">
@@ -28,6 +34,7 @@ function AvailabilitySettings({profile}) {
                         key={day}
                         day={day}
                         dayIndex={index}
+                        
                         // pass down register/setValue and existing sessions if any
                         sessions={availability[index]?.sessions || [{ label: "", startTime: "", endTime: "" }]}
                         enabled={availability[index]?.enabled || false}

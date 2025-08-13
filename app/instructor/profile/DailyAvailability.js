@@ -106,6 +106,7 @@ function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValu
             <DailySessionSingle
               key={i}
               dayIndex={dayIndex}
+              currentDay={day}
               sessionIndex={i}
               register={register}
               removeSession={() => removeSession(i)}

@@ -3,9 +3,14 @@ import LabeledTimePicker from '@/app/components/LabeledTimePicker';
 import { useFormContext } from 'react-hook-form';
 import { BsTrashFill } from "react-icons/bs";
 import { LuCopy, LuPlus } from "react-icons/lu";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import CopyScheduleDays from './CopyScheduleDays';
+import { toast } from 'react-hot-toast';
 
-function DailySessionSingle({requiredOn = false, dayIndex, sessionIndex, removeSession, onAddSession, onDuplicateSession, onTimeChange }) {
+function DailySessionSingle({ requiredOn = false, dayIndex, sessionIndex, removeSession, onAddSession, onTimeChange, currentDay }) {
+
+  const [showCopyDay, setShowCopyDay] = useState(false);
+
   const { register, setValue, watch } = useFormContext();
 
   const labelField = `availability.${dayIndex}.sessions.${sessionIndex}.label`;
@@ -17,6 +22,9 @@ function DailySessionSingle({requiredOn = false, dayIndex, sessionIndex, removeS
   const endTime = watch(endTimeField);
 
   const canRemove = sessions.length > 1;
+  
+  // Check if both start and end times are provided
+  const isTimeValid = startTime && endTime;
 
   useEffect(() => {
     if (startTime && endTime) {
@@ -24,13 +32,42 @@ function DailySessionSingle({requiredOn = false, dayIndex, sessionIndex, removeS
     }
   }, [startTime, endTime]); // check when times change
 
+  const handleShowCopy = () => {
+    if (!isTimeValid) return; // Prevent opening if times are invalid
+    setShowCopyDay(true);
+  };
+
+  const handleCloseCopy = () => {
+    setShowCopyDay(false);
+  };
+
+  // Copy session to selected days
+  const handleCopySession = (selectedDays) => {
+    const sessionToCopy = sessions[sessionIndex];
+    if (!sessionToCopy) return;
+
+    selectedDays.forEach((targetDayId) => {
+      // Find index of target day
+      const targetDayIndex = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].indexOf(targetDayId);
+      if (targetDayIndex === -1) return;
+
+      // Get current sessions for target day
+      const targetSessions = watch(`availability.${targetDayIndex}.sessions`) || [];
+      // Add the session to target day
+      setValue(`availability.${targetDayIndex}.sessions`, [{ ...sessionToCopy }, ...targetSessions]);
+      setValue(`availability.${targetDayIndex}.enabled`, true); // Enable the day if not already
+    });
+
+    toast.success("Session copied to selected days!");
+  };
+
   return (
     <div className='p-4 w-full rounded-lg bg-[#F7F7F7] flex flex-col md:flex-row space-x-4 justify-center items-center space-y-3 md:space-y-0'>
       <LabeledInput
         type='text'
         name={labelField}
         label='Name'
-        placeholder='Morning Session'
+        placeholder={`Session ${sessionIndex + 1}`}
         register={register}
         setValue={setValue}
         style={{ bgColor: 'white' }}
@@ -66,9 +103,12 @@ function DailySessionSingle({requiredOn = false, dayIndex, sessionIndex, removeS
           </button>
           <button 
             type="button"
-            className='cursor-pointer'
+            className={`cursor-pointer relative ${!isTimeValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+            onClick={handleShowCopy}
+            disabled={!isTimeValid}
+            title={!isTimeValid ? "Please set both start and end times" : "Copy schedule to other days"}
           >
-            <LuCopy color='#FF7000' size={20} />
+            <LuCopy  color='#FF7000' size={20}/>
           </button>
           <button 
             type="button"
@@ -79,6 +119,13 @@ function DailySessionSingle({requiredOn = false, dayIndex, sessionIndex, removeS
           </button>
         </div>   
       </div>
+      {showCopyDay && (
+        <CopyScheduleDays
+          onClose={handleCloseCopy}
+          currentDay={currentDay}
+          onCopy={handleCopySession}
+        />
+      )}
     </div>
   );
 }

@@ -16,7 +16,7 @@ function ClassSettings() {
     }));
 
     // Dynamically filter based on latest minDuration
-    const maxHoursOptions = hoursOptions.filter(opt => Number(opt.value) > minDuration);
+    const maxHoursOptions = hoursOptions.filter(opt => Number(opt.value) >= minDuration);
 
     return (
         <div className="w-full">
@@ -139,9 +139,9 @@ function BreakSetting({availability}) {
                             return (
                                 <div
                                     key={idx}
-                                    className="flex justify-between bg-footerorange text-[14px] rounded-lg p-4"
+                                    className="flex justify-between bg-mildorange text-[14px] items-center rounded-lg p-3"
                                 >
-                                    <h2 className="font-semibold text-tonedblack mb-2">{days[idx]}</h2>
+                                    <h2 className="font-base text-tonedblack">{`${days[idx]}:`}</h2>
                                     {breaks.length === 0 ? (
                                         <span className="text-tonedblack text-sm">No breaks</span>
                                     ) : (
