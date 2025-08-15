@@ -1,0 +1,115 @@
+export const docsConfig = {
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Project Portico",
+  "colors": {
+    "primary": "#16A34A",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "favicon": "/public/favicon.ico",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "index",
+              "installation",
+              "development",
+              "deployment"
+            ]
+          },
+          {
+            "group": "Authentication",
+            "pages": [
+              "auth/login",
+              "auth/signup",
+              "auth/profile"
+            ]
+          },
+          {
+            "group": "Instructor Features",
+            "pages": [
+              "instructor/profile",
+              "instructor/schedule",
+              "instructor/availability"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Components",
+        "groups": [
+          {
+            "group": "UI Components",
+            "pages": [
+              "components/button",
+              "components/input",
+              "components/datepicker",
+              "components/image-upload"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "API",
+            "pages": [
+              "api/endpoints",
+              "api/examples"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Live App",
+          "href": "https://project-portico-frontend.vercel.app/",
+          "icon": "window"
+        },
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/roshith-normality/Project-Portico-Frontend",
+          "icon": "github"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/public/Assets/logo-light.svg",
+    "dark": "/public/Assets/logo-dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:projectportico@gmail.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Live Demo",
+      "href": "https://project-portico-frontend.vercel.app/"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/roshith-normality/Project-Portico-Frontend"
+    }
+  }
+};
