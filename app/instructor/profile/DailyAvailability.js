@@ -2,11 +2,13 @@ import { useEffect, useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import DailySessionSingle from './DailySessionSingle';
 import MildOrangeButton from '@/app/components/MildOrangeButton';
+import CopyScheduleDays from './CopyScheduleDays';
 import PrimaryButton from '@/app/components/PrimaryButton';
 import { IoWarningOutline } from 'react-icons/io5';
 
 function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValue }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showCopyDay, setShowCopyDay] = useState(false);
   const [pendingChangeIndex, setPendingChangeIndex] = useState(null); // Track which session triggered the change
 
   const handleToggleEnabled = (e) => {
@@ -84,9 +86,28 @@ function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValu
     setPendingChangeIndex(null);
   };
 
+  const handleCopyDay = (selectedDays) => {
+      if (!sessions || sessions.length === 0) {
+        toast.error("No sessions to copy from this day!");
+        return;
+      }
+
+      selectedDays.forEach((targetDayId) => {
+        const targetDayIndex = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].indexOf(targetDayId);
+        if (targetDayIndex === -1) return;
+
+        // Overwrite sessions of target day with current sessions
+        setValue(`availability.${targetDayIndex}.sessions`, [...sessions]);
+        setValue(`availability.${targetDayIndex}.enabled`, true);
+      });
+
+      toast.success("Day schedule copied to selected days!");
+      setShowCopyDay(false);
+    };
+
   return (
     <div className="border-b border-greyforline py-4">
-      <div className="flex flex-col items-start md:flex-row w-full space-y-4 md:space-y-0 space-x-4">
+      <div className="flex flex-col md:items-center md:justify-center md:flex-row w-full space-y-4 md:space-y-0 space-x-4">
         {/* Day checkbox */}
         <div className="flex w-1/9 items-center space-x-2 md:mt-8">
           <input
@@ -118,6 +139,7 @@ function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValu
             />
           ))}
 
+
           {/* Confirmation Popup */}
           {showConfirmation && (
             <OverlapConfirmationPopup
@@ -127,6 +149,25 @@ function DailyAvailability({ day, dayIndex, sessions, enabled, register, setValu
             />
           )}
         </div>
+         <div className=''>
+            <MildOrangeButton 
+              onClick={() => setShowCopyDay(true)} 
+              text={"Copy Day"}
+              bgColor={"primary"}
+              textColor={"white"}
+              hoverColor={"primaryOverlay"}
+              alignment={"center"}
+            />
+            {showCopyDay && (
+              <CopyScheduleDays
+                onClose={() => setShowCopyDay(false)}
+                currentDay={day}
+                onCopy={handleCopyDay}
+              />
+            )}
+
+
+          </div>
       </div>
     </div>
   );

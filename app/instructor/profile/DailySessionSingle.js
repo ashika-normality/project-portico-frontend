@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import CopyScheduleDays from './CopyScheduleDays';
 import { toast } from 'react-hot-toast';
 
+
 function DailySessionSingle({ requiredOn = false, dayIndex, sessionIndex, removeSession, onAddSession, onTimeChange, currentDay }) {
 
   const [showCopyDay, setShowCopyDay] = useState(false);
