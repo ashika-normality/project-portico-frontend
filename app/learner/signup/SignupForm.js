@@ -1,101 +1,122 @@
-'use client'
-import { useState } from "react";
-import LabeledInput from "@/app/components/LabeledInput";
-import PrimaryButton from "@/app/components/PrimaryButton";
-import { Toaster, toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+"use client";
 
-const SignupForm = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+import { useForm } from "react-hook-form";
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+export default function SignupForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    const formData = {
-      firstName: e.target.first_name.value,
-      lastName: e.target.last_name.value,
-      email: e.target.email.value,
-      phone: e.target.phone.value,
-      terms: e.target.terms.checked,
-    };
-
-    if (!formData.terms) {
-      toast.error("You must accept the terms and conditions.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      // Temporary mock until backend is ready
-      console.log("Learner signup data:", formData);
-
-      // Example API call (replace endpoint later)
-      // await axiosInstance.post("/auth/register-learner", formData);
-
-      toast.success("Signup successful!");
-      router.push("/learner/login");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Signup failed.");
-    } finally {
-      setLoading(false);
-    }
+  const onSubmit = (data) => {
+    console.log("Learner Signup Data:", data);
   };
 
   return (
-    <div className="w-full max-w-md">
-      <Toaster toastOptions={{ duration: 4000 }} />
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col space-y-4 w-full py-6 px-6 bg-white rounded-lg shadow-md"
-      >
-        {/* First name / Last name */}
-        <div className="flex flex-col md:flex-row gap-4">
-          <LabeledInput label="First Name" name="first_name" type="text" required />
-          <LabeledInput label="Last Name" name="last_name" type="text" required />
-        </div>
-
-        {/* Email */}
-        <LabeledInput label="Email Address" name="email" type="email" required />
-
-        {/* Phone number */}
-        <LabeledInput
-          label="Phone Number"
-          name="phone"
-          type="tel"
-          placeholder="+61 412 345 678"
-          required
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full flex flex-col space-y-4"
+    >
+      {/* First Name */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          First Name
+        </label>
+        <input
+          type="text"
+          {...register("firstName", { required: "First name is required" })}
+          className="mt-1 w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
+        {errors.firstName && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.firstName.message}
+          </p>
+        )}
+      </div>
 
-        {/* Terms & conditions */}
-        <div className="flex items-center space-x-2 pt-2">
-          <input type="checkbox" id="terms" name="terms" required />
-          <label htmlFor="terms" className="text-sm">
-            I agree to the{" "}
-            <a href="/terms" className="text-primary hover:underline">Terms</a> and{" "}
-            <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>
-          </label>
-        </div>
-
-        {/* Submit button */}
-        <PrimaryButton
-          text={loading ? "Creating Account..." : "Create Account"}
-          type="submit"
-          disabled={loading}
+      {/* Last Name */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Last Name
+        </label>
+        <input
+          type="text"
+          {...register("lastName", { required: "Last name is required" })}
+          className="mt-1 w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
+        {errors.lastName && (
+          <p className="text-red-500 text-xs mt-1">{errors.lastName.message}</p>
+        )}
+      </div>
 
-        {/* Login link */}
-        <span className="text-sm text-center">
-          Already have an account?{" "}
-          <a href="/learner/login" className="text-primary hover:underline font-semibold">
-            Log In
+      {/* Email */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Email Address
+        </label>
+        <input
+          type="email"
+          {...register("email", { required: "Email is required" })}
+          className="mt-1 w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        {errors.email && (
+          <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+        )}
+      </div>
+
+      {/* Phone Number (Country Code + Number) */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Phone Number
+        </label>
+        <div className="flex space-x-2">
+          <select
+            {...register("countryCode", { required: true })}
+            className="w-1/3 px-2 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          >
+            <option value="+1">+1 (US)</option>
+            <option value="+44">+44 (UK)</option>
+            <option value="+91">+91 (India)</option>
+          </select>
+          <input
+            type="tel"
+            {...register("phone", { required: "Phone number is required" })}
+            className="flex-1 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        {errors.phone && (
+          <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
+        )}
+      </div>
+
+      {/* Terms & Conditions */}
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          {...register("terms", {
+            required: "You must accept the terms and conditions",
+          })}
+          className="w-4 h-4 text-primary border-gray-300 rounded"
+        />
+        <label className="text-sm text-gray-700">
+          I agree to the{" "}
+          <a href="#" className="text-primary hover:underline">
+            Terms and Conditions
           </a>
-        </span>
-      </form>
-    </div>
-  );
-};
+        </label>
+      </div>
+      {errors.terms && (
+        <p className="text-red-500 text-xs mt-1">{errors.terms.message}</p>
+      )}
 
-export default SignupForm;
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="w-full py-2 px-4 bg-primary text-white font-semibold rounded-lg shadow hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        Create Account
+      </button>
+    </form>
+  );
+}
