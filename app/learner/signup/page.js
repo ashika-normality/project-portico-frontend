@@ -17,7 +17,7 @@ const Page = () => (
       <div className="w-1/2 flex flex-col justify-center px-10 py-8">
         <h1 className="font-raleway text-2xl font-bold text-primary text-center">Learner Sign Up</h1>
         <p className="font-source-sans text-greydarker text-center mb-4">
-          Create your account and start learning with us!
+          Create your account here!
         </p>
         <SignupForm />
         <span className="text-sm font-medium font-raleway text-center mt-4">
