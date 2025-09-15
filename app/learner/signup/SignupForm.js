@@ -6,7 +6,6 @@ export default function SignupForm() {
     firstName: "",
     lastName: "",
     email: "",
-    countryCode: "+91",
     phone: "",
     terms: false,
   });
@@ -32,7 +31,7 @@ export default function SignupForm() {
         <input
           type="text"
           name="firstName"
-          placeholder="Oscar"
+          placeholder="John"
           value={formData.firstName}
           onChange={handleChange}
           required
@@ -46,7 +45,7 @@ export default function SignupForm() {
         <input
           type="text"
           name="lastName"
-          placeholder="Gavin"
+          placeholder="Doe"
           value={formData.lastName}
           onChange={handleChange}
           required
@@ -60,7 +59,7 @@ export default function SignupForm() {
         <input
           type="email"
           name="email"
-          placeholder="oscarhenrygavin@gmail.com"
+          placeholder="example@mail.com"
           value={formData.email}
           onChange={handleChange}
           required
@@ -68,25 +67,20 @@ export default function SignupForm() {
         />
       </div>
 
-      {/* Phone with Country Code */}
+      {/* Phone with Fixed Country Code */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
         <div className="flex space-x-2">
-          <select
-            name="countryCode"
-            value={formData.countryCode}
-            onChange={handleChange}
-            className="border rounded-md px-2 py-2 w-28 focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            <option value="+91">+91</option>
-            <option value="+1">+1</option>
-            <option value="+44">+44</option>
-            <option value="+61">+61</option>
-          </select>
+          <input
+            type="text"
+            value="+61"
+            disabled
+            className="border rounded-md px-3 py-2 w-20 bg-gray-100 text-gray-600"
+          />
           <input
             type="tel"
             name="phone"
-            placeholder="9876543210"
+            placeholder="412345678"
             value={formData.phone}
             onChange={handleChange}
             required
@@ -116,7 +110,9 @@ export default function SignupForm() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="bg-primary text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition"
+        className="bg-primary text-white font-semibold py-2 rounded-md transition 
+                   cursor-pointer transform hover:scale-105 hover:bg-opacity-90 
+                   active:bg-black active:bg-opacity-20"
       >
         Create Account
       </button>
