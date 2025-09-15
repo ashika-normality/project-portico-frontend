@@ -25,7 +25,7 @@ const Page = () => (
         <span className="text-sm font-medium font-raleway text-center mt-4">
           Already have an account?{" "}
           <a href="login" className="text-primary hover:underline font-semibold">
-            Login
+            Log in
           </a>
         </span>
       </div>
