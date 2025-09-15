@@ -7,7 +7,7 @@ const Page = () => (
       {/* Left Image Section */}
       <div className="w-1/2 hidden md:flex items-center justify-center">
         <img
-          src="/Assets/background-image-signup.webp"
+          src="/Assets/Signup-image.webp"
           alt="Signup Illustration"
           className="w-full h-full object-cover"
         />
