@@ -2,10 +2,10 @@ import SignupForm from "./SignupForm";
 
 const Page = () => (
   <div className="w-full min-h-screen flex justify-center items-center bg-gray-100">
-    <div className="flex w-full max-w-6xl min-h-[550px] bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="flex flex-col md:flex-row w-full max-w-6xl min-h-[500px] bg-white rounded-lg shadow-lg overflow-hidden">
       
-      {/* Left Image Section */}
-      <div className="w-1/2 hidden md:flex items-center justify-center">
+      {/* Image Section (on mobile it shows above content) */}
+      <div className="w-full md:w-1/2 flex items-center justify-center">
         <img
           src="/Assets/Signup-image.webp"
           alt="Signup Illustration"
@@ -13,8 +13,8 @@ const Page = () => (
         />
       </div>
 
-      {/* Right Form Section */}
-      <div className="w-1/2 flex flex-col justify-center px-10 py-6">
+      {/* Form Section */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center px-8 py-6">
         <h1 className="font-raleway text-2xl font-bold text-primary text-center mb-3">
           Learner Sign Up
         </h1>

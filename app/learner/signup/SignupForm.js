@@ -26,7 +26,7 @@ export default function SignupForm() {
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col space-y-4">
       {/* First Name & Last Name Row */}
-      <div className="flex space-x-4">
+      <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
         {/* First Name */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -81,12 +81,12 @@ export default function SignupForm() {
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Phone Number
         </label>
-        <div className="flex space-x-2">
+        <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0">
           <input
             type="text"
             value="+61"
             disabled
-            className="border rounded-md px-3 py-2 w-20 bg-gray-100 text-gray-600"
+            className="border rounded-md px-3 py-2 w-full sm:w-20 bg-gray-100 text-gray-600"
           />
           <input
             type="tel"
@@ -95,7 +95,7 @@ export default function SignupForm() {
             value={formData.phone}
             onChange={handleChange}
             required
-            className="border rounded-md px-3 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
@@ -123,7 +123,7 @@ export default function SignupForm() {
         type="submit"
         className="bg-primary text-white font-semibold py-2 rounded-md transition 
                    cursor-pointer transform hover:scale-105 hover:bg-opacity-90 
-                   active:bg-black active:bg-opacity-20 mt-4"
+                   active:bg-black active:bg-opacity-20 mt-6"
       >
         Create Account
       </button>
