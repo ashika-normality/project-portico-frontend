@@ -1,34 +1,39 @@
-import SignupForm from "./SignupForm";
-
-const Page = () => (
-  <div className="w-full min-h-screen flex justify-center items-center bg-gray-100">
-    <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden">
+const SignupForm = () => {
+  return (
+    <form className="space-y-4">
       
-      {/* Left Image Section */}
-      <div className="w-1/2 hidden md:flex items-center justify-center">
-        <img
-          src="/Assets/Signup-image.webp"
-          alt="Signup Illustration"
-          className="w-full h-full object-cover"
+      {/* First + Last Name Row */}
+      <div className="flex flex-col md:flex-row gap-4">
+        <input
+          type="text"
+          placeholder="First Name"
+          className="w-full md:w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          className="w-full md:w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
         />
       </div>
 
-      {/* Right Form Section */}
-      <div className="w-1/2 flex flex-col justify-center px-10 py-8">
-        <h1 className="font-raleway text-2xl font-bold text-primary text-center">Learner Sign Up</h1>
-        <p className="font-source-sans text-greydarker text-center mb-4">
-          Create your account here!
-        </p>
-        <SignupForm />
-        <span className="text-sm font-medium font-raleway text-center mt-4">
-          Already have an account?{" "}
-          <a href="login" className="text-primary hover:underline font-semibold">
-            Login
-          </a>
-        </span>
-      </div>
-    </div>
-  </div>
-);
+      {/* Other Inputs */}
+      <input
+        type="email"
+        placeholder="Email"
+        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      />
 
-export default Page;
+      <button
+        type="submit"
+        className="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90 transition"
+      >
+        Sign Up
+      </button>
+    </form>
+  );
+};
