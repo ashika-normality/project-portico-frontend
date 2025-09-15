@@ -67,10 +67,10 @@ export default function SignupForm() {
           onChange={handleChange}
           className="border rounded-md px-2 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-primary"
         >
-          <option value="+91">+91 (India)</option>
-          <option value="+1">+1 (USA)</option>
-          <option value="+44">+44 (UK)</option>
-          <option value="+61">+61 (Australia)</option>
+          <option value="+91">+91</option>
+          <option value="+1">+1</option>
+          <option value="+44">+44</option>
+          <option value="+61">+61</option>
         </select>
         <input
           type="tel"
@@ -94,7 +94,7 @@ export default function SignupForm() {
           className="w-4 h-4"
         />
         <span>
-          I agree to the{" "}
+          I have read and agreed to the{" "}
           <a href="/terms" className="text-primary hover:underline">
             Terms and Conditions
           </a>
