@@ -1,8 +1,8 @@
-import SignupForm from "./SignupForm";
+import SignupForm from "./SignupForm"; 
 
 const Page = () => (
   <div className="w-full min-h-screen flex justify-center items-center bg-gray-100">
-    <div className="flex w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="flex w-full max-w-6xl min-h-[650px] bg-white rounded-lg shadow-lg overflow-hidden">
       
       {/* Left Image Section */}
       <div className="w-1/2 hidden md:flex items-center justify-center">
