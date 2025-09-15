@@ -62,7 +62,9 @@ export default function SignupForm() {
 
       {/* Email */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Email Address
+        </label>
         <input
           type="email"
           name="email"
@@ -76,7 +78,9 @@ export default function SignupForm() {
 
       {/* Phone with Fixed Country Code */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Phone Number
+        </label>
         <div className="flex space-x-2">
           <input
             type="text"
@@ -108,7 +112,7 @@ export default function SignupForm() {
         />
         <span>
           I have read and agreed to the{" "}
-          <a href="/terms" className="text-primary hover:underline">
+          <a href="/terms" className="text-teal-600 hover:underline">
             Terms and Conditions
           </a>
         </span>
