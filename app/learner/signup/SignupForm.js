@@ -32,7 +32,7 @@ export default function SignupForm() {
         <input
           type="text"
           name="firstName"
-          placeholder="John"
+          placeholder="Oscar"
           value={formData.firstName}
           onChange={handleChange}
           required
@@ -46,7 +46,7 @@ export default function SignupForm() {
         <input
           type="text"
           name="lastName"
-          placeholder="Doe"
+          placeholder="Gavin"
           value={formData.lastName}
           onChange={handleChange}
           required
@@ -60,7 +60,7 @@ export default function SignupForm() {
         <input
           type="email"
           name="email"
-          placeholder="example@mail.com"
+          placeholder="oscarhenrygavin@gmail.com"
           value={formData.email}
           onChange={handleChange}
           required
