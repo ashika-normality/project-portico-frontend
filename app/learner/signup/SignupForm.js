@@ -25,32 +25,39 @@ export default function SignupForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col space-y-4">
-      {/* First Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-        <input
-          type="text"
-          name="firstName"
-          placeholder="John"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-          className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      </div>
+      {/* First Name & Last Name Row */}
+      <div className="flex space-x-4">
+        {/* First Name */}
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            First Name
+          </label>
+          <input
+            type="text"
+            name="firstName"
+            placeholder="Oscar"
+            value={formData.firstName}
+            onChange={handleChange}
+            required
+            className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
 
-      {/* Last Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-        <input
-          type="text"
-          name="lastName"
-          placeholder="Doe"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-          className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
-        />
+        {/* Last Name */}
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Last Name
+          </label>
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Gavin"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
+            className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
       </div>
 
       {/* Email */}
@@ -59,7 +66,7 @@ export default function SignupForm() {
         <input
           type="email"
           name="email"
-          placeholder="example@mail.com"
+          placeholder="oscarhenrygavin@gmail.com"
           value={formData.email}
           onChange={handleChange}
           required
