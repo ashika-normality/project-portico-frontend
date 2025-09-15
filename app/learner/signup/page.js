@@ -1,7 +1,7 @@
 import SignupForm from "./SignupForm"; 
 
 const Page = () => (
-  <div className="w-full min-h-screen flex justify-center items-center bg-gray-100">
+  <div className="w-full min-h-screen flex justify-center items-center bg-gray-200">
     <div className="flex flex-col md:flex-row w-full max-w-6xl min-h-[500px] bg-white rounded-lg shadow-lg overflow-hidden">
       
       {/* Image Section (on mobile it shows above content) */}
