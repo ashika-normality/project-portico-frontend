@@ -123,7 +123,7 @@ export default function SignupForm() {
         type="submit"
         className="bg-primary text-white font-semibold py-2 rounded-md transition 
                    cursor-pointer transform hover:scale-105 hover:bg-opacity-90 
-                   active:bg-black active:bg-opacity-20"
+                   active:bg-black active:bg-opacity-20 mt-4"
       >
         Create Account
       </button>
