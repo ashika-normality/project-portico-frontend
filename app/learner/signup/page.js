@@ -1,4 +1,4 @@
-import SignupForm from "./SignupForm"; 
+import SignupForm from "./SignupForm";
 
 const Page = () => (
   <div className="w-full min-h-screen flex justify-center items-center bg-gray-50">
@@ -13,8 +13,8 @@ const Page = () => (
         />
       </div>
 
-      {/* Form Section */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center px-8 py-6">
+      {/* Right Form Section */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center px-10 py-6">
         <h1 className="font-raleway text-2xl font-bold text-primary text-center mb-3">
           Learner Sign Up
         </h1>
