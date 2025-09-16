@@ -42,7 +42,7 @@ const LearnerLoginForm = () => {
           label="Email"
           name="email"
           type="text"
-          placeholder="johndoe@example.com"
+          placeholder="Enter your email"
           value={email}
           onChange={handleEmailChange}
           required

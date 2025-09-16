@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import LabeledInput from "../../components/LabeledInput";
+import PrimaryButton from "../../components/PrimaryButton";
 
 export default function SignupForm() {
   const [formData, setFormData] = useState({
@@ -27,67 +29,55 @@ export default function SignupForm() {
     <form onSubmit={handleSubmit} className="w-full flex flex-col space-y-4">
       {/* First Name & Last Name Row */}
       <div className="flex space-x-4">
-        {/* First Name */}
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            First Name
-          </label>
-          <input
-            type="text"
+          <LabeledInput
+            label="First Name"
             name="firstName"
+            type="text"
             placeholder="Oscar"
             value={formData.firstName}
             onChange={handleChange}
             required
-            className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
-
-        {/* Last Name */}
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Last Name
-          </label>
-          <input
-            type="text"
+          <LabeledInput
+            label="Last Name"
             name="lastName"
+            type="text"
             placeholder="Gavin"
             value={formData.lastName}
             onChange={handleChange}
             required
-            className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
 
       {/* Email */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Email Address
-        </label>
-        <input
-          type="email"
-          name="email"
-          placeholder="oscarhenrygavin@gmail.com"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      </div>
+      <LabeledInput
+        label="Email Address"
+        name="email"
+        type="email"
+        placeholder="oscarhenrygavin@gmail.com"
+        value={formData.email}
+        onChange={handleChange}
+        required
+      />
 
-      {/* Phone with Fixed Country Code */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Phone Number
+      {/* Phone Number with Country Code */}
+      <div className="flex flex-col">
+        <label className="block text-sm font-medium text-black mb-1">
+          Phone Number<span className="text-red-600">*</span>
         </label>
         <div className="flex space-x-2">
+          {/* Country Code */}
           <input
             type="text"
             value="+61"
             disabled
             className="border rounded-md px-3 py-2 w-16 bg-gray-100 text-gray-600"
           />
+          {/* Phone Number */}
           <input
             type="tel"
             name="phone"
@@ -119,14 +109,11 @@ export default function SignupForm() {
       </label>
 
       {/* Submit Button */}
-      <button
+      <PrimaryButton
         type="submit"
-        className="bg-primary text-white font-semibold py-2 rounded-md transition 
-                   cursor-pointer transform hover:scale-105 hover:bg-opacity-90 
-                   active:bg-orange-700 mt-4"
-      >
-        Create Account
-      </button>
+        text="Create Account"
+        className="mt-4"
+      />
     </form>
   );
 }
