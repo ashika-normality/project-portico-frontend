@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 
-import LoginForm from "./LearnerLoginForm";
+import LearnerLoginForm from "./LoginForm";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 
 const LearnerLogin = () => {
