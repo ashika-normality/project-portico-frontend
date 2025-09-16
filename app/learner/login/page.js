@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 
+import LearnerLoginForm from "./LoginForm";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 
 const LearnerLogin = () => {
@@ -55,7 +56,7 @@ const LearnerLogin = () => {
         {/* Form section */}
         <div className="w-full md:w-3/5 flex items-start justify-center py-8">
           <div className="w-3/4 mx-auto">
-            <LoginForm placeholderEmail="Enter your email" />
+            <LearnerLoginForm placeholderEmail="Enter your email" />
           </div>
         </div>
       </div>
