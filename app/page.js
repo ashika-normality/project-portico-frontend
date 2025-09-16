@@ -13,6 +13,7 @@ export default function Home() {
         <a href="/instructor/signup " className="hover:text-primary">Signup</a>
         <a href="/instructor/profile " className="hover:text-primary">Profile</a>
         <a href="/learner/signup " className="hover:text-primary">Learner Signup</a>
+        <a href="/learner/login " className="hover:text-primary">Learner Login</a>
       </div>
       <Footer />
     </div>
