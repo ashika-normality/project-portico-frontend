@@ -1,5 +1,5 @@
 import Footer from "../components/Footer";
-import TopBar from "../components/TopBar";
+import TopBar from "../components/LearnerTopBar";
 
 export default function LearnerLayout({ children }) {
   return (

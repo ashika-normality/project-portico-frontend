@@ -9,7 +9,7 @@ export default function LearnerHome() {
     useEffect(() => {
         let token;
         if (typeof window !== "undefined") {
-            token = localStorage.getItem("learnerAccessToken");
+            token = localStorage.getItem("accessToken");
         }
 
         if (!token) {

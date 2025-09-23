@@ -8,15 +8,17 @@ const LabeledInput = ({
   placeholder,
   value,
   register,
-  setValue, // expects a function
-  defaultValue, // expects the value to set
+  setValue,
+  defaultValue,
   style,
   disabled,
   onChange,
   wholeBg,
   required = false,
   preText,
-  postText
+  postText,
+  rules = {},
+  error, // <-- added
 }) => {
   useEffect(() => {
     if (setValue && defaultValue !== undefined) {
@@ -25,7 +27,7 @@ const LabeledInput = ({
   }, [setValue, defaultValue, name]);
 
   return (
-<div className={`flex flex-col ${wholeBg} space-y-1.5 w-full`}>
+    <div className={`flex flex-col ${wholeBg} space-y-1.5 w-full`}>
       <label htmlFor={name} className="text-sm font-source-sans font-semibold">
         {label}{required ? <span className="text-redimportant">*</span> : ""}
       </label>
@@ -38,14 +40,20 @@ const LabeledInput = ({
           id={name}
           style={style}
           disabled={disabled}
-          {...(register ? register(name) : {})}
+          {...(register ? register(name, rules) : {})}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className="w-full border border-greyforoutline bg-white font-source-sans rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          className={`w-full border border-greyforoutline font-source-sans rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary
+            ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}
+            ${error ? 'border-red-500' : ''}
+          `}
         />
-      {postText && <span className="text-greyfortext">{postText}</span>}
+        {postText && <span className="text-greyfortext">{postText}</span>}
       </div>
+
+      {/* Inline error message */}
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   );
 };
