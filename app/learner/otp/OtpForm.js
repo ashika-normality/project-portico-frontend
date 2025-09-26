@@ -6,7 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import LabeledInput from "@/app/components/LabeledInput";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import SpinnerComponent from "@/app/components/SpinnerComponent";
-import otpSideImage from "../../../public/Assets/login-learner-image.avif"; 
+import otpSideImage from "../../../public/Assets/login-learner-image.avif";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 
 const OtpForm = () => {
@@ -20,7 +20,7 @@ const OtpForm = () => {
   useEffect(() => {
     const storedEmail = sessionStorage.getItem("emailForOtp");
     if (!storedEmail) {
-      router.push("/learner/login"); 
+      router.push("/learner/login");
     } else {
       setEmail(storedEmail);
     }
@@ -47,6 +47,9 @@ const OtpForm = () => {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
       }
+
+      if (response.data.firstName) localStorage.setItem("otpFirstName", response.data.firstName);
+      if (response.data.lastName) localStorage.setItem("otpLastName", response.data.lastName);
 
       toast.success(response.data.message || "OTP verified successfully!");
       sessionStorage.removeItem("emailForOtp"); // clear email after login

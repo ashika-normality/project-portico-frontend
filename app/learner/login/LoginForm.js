@@ -47,37 +47,44 @@ const LoginForm = () => {
 
   // ------------------- SOCIAL LOGIN -------------------
   const handleSocialLogin = async (provider, token) => {
-  setLoading(true);
-  try {
-    const response = await axiosInstance.post("/auth/social-login", { provider, token });
-    if (response.status === 200) {
-      const { accessToken, refreshToken, role, profilePhotoUrl } = response.data;
+    setLoading(true);
+    try {
+      // Decode the base64 payload manually
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      const decoded = JSON.parse(jsonPayload);
 
-      console.log("=== Social login response ===", response.data); // Debug log
+      const fullName = decoded.name || `${decoded.given_name} ${decoded.family_name}`;
+      const profilePic = decoded.picture;
 
-      // Save tokens
+      // Save name and profile pic to localStorage
+      localStorage.setItem("socialProfileName", fullName);
+      localStorage.setItem("socialProfileImageUrl", profilePic);
+
+      // Optionally call your backend to log in
+      const response = await axiosInstance.post("/auth/social-login", { provider, token });
+      const { accessToken, refreshToken, role } = response.data;
+
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
 
-      // Save profile image URL
-      if (profilePhotoUrl) {
-        console.log("=== Saving profile URL to localStorage ===", profilePhotoUrl);
-        localStorage.setItem("socialProfileImageUrl", profilePhotoUrl);
-      } else {
-        console.log("=== No profile URL found ===");
-        localStorage.removeItem("socialProfileImageUrl");
-      }
-
       toast.success("Login successful!");
       router.push(`/${role}/profile`);
+    } catch (err) {
+      console.error("Social login error:", err);
+      toast.error("Social login failed.");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("Social login error:", err.response?.data || err.message);
-    toast.error(err.response?.data?.message || "Social login failed.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
+
+
 
 
   const handleFacebookLogin = async () => {

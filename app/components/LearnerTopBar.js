@@ -20,17 +20,12 @@ export default function LearnerTopBar() {
     if (token) {
       setIsAuthenticated(true);
 
-      // Get social profile image URL from localStorage
-      const socialProfileUrl = localStorage.getItem("socialProfileImageUrl");
-      console.log("=== Retrieved from localStorage ===", socialProfileUrl);
-      
-      if (socialProfileUrl && socialProfileUrl !== "null" && socialProfileUrl !== "") {
-        setProfileImageUrl(socialProfileUrl);
-        console.log("=== Setting profile image URL ===", socialProfileUrl);
-      } else {
-        setProfileImageUrl("");
-        console.log("=== No social profile URL found, using default ===");
-      }
+      // Get profile image from localStorage
+      const savedProfile = localStorage.getItem("headerProfilePhoto")
+        || localStorage.getItem("socialProfileImageUrl")
+        || "";
+
+      setProfileImageUrl(savedProfile);
     } else {
       setIsAuthenticated(false);
       setProfileImageUrl("");
@@ -39,6 +34,7 @@ export default function LearnerTopBar() {
     setShowProfileDropdown(false);
     setShowNotifications(false);
   }, [pathname]);
+
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -53,14 +49,14 @@ export default function LearnerTopBar() {
   // Define leftLinks inside the component function but before return
   const leftLinks = ["/learner/signup", "/learner/login", "/learner/otp"].includes(pathname)
     ? [
-        { name: "Home", href: "/" },
-        { name: "For Learners", href: "/" },
-        { name: "For Instructors", href: "/" },
-      ]
+      { name: "Home", href: "/" },
+      { name: "For Learners", href: "/" },
+      { name: "For Instructors", href: "/" },
+    ]
     : [
-        { name: "Dashboard", href: "#" },
-        { name: "Find Instructors", href: "#" },
-      ];
+      { name: "Dashboard", href: "#" },
+      { name: "Find Instructors", href: "#" },
+    ];
 
   return (
     <header className="w-full bg-white shadow-md px-6 py-3 flex items-center justify-between">
